@@ -1,10 +1,11 @@
 {
-  "compression": "gzip",
-  "downloadUrl": "https://raw.githubusercontent.com/Somethinglikeu-hub/MobileInv-feed/gh-pages/mobile_snapshot.db.gz",
-  "exportedAt": "2026-05-21T10:44:40+00:00",
-  "feedVersion": 1,
-  "sha256": "3d80fd7df9e9753eba2d1acb5967ee37a555dd88169f746f541979e7b09dac4a",
-  "sizeBytes": 9999708,
-  "snapshotDate": "2026-05-21",
-  "snapshotSchemaVersion": 1
+  "snapshot_version": 12,
+  "exported_at": "2026-05-21T21:05:41.934346+00:00",
+  "snapshot": {
+    "filename": "mobile_snapshot.db.gz",
+    "url": "https://raw.githubusercontent.com/Somethinglikeu-hub/MobileInv-feed/gh-pages/mobile_snapshot.db.gz",
+    "sha256": "e22d27149d0955728d276d46fb579f1de563d922546654bbc10b474ecdb5b091",
+    "size_bytes": 9907292,
+    "compression": "gzip"
+  }
 }

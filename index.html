@@ -1501,7 +1501,8 @@
     <div>
       <div class="loader"></div>
       <h2 style="font-size: 24px; font-weight: 800; background: linear-gradient(135deg, #3b82f6, #00f2fe); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">BIST Picker</h2>
-      <p id="splash-status" style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">Uygulama hazırlanıyor...</p>
+      <p id="splash-status" style="font-size: 12px; color: var(--text-muted); margin-top: 8px; padding: 0 8px; text-align: center; line-height: 1.6;">Uygulama hazırlanıyor...</p>
+      <button id="splash-retry-btn" onclick="window.location.reload()" style="display:none; margin-top: 20px; padding: 12px 28px; background: linear-gradient(135deg, #3b82f6, #00f2fe); color: white; border: none; border-radius: 20px; font-size: 14px; font-weight: 700; cursor: pointer;">🔄 Yeniden Dene</button>
     </div>
   </div>
 
@@ -1948,7 +1949,7 @@
     // --- Application Initialization & Load ---
     async function initApp() {
       try {
-        splashStatusEl.textContent = 'Veri paketi sorgulanıyor...';
+        splashStatusEl.textContent = '🔍 Manifest sorgulanıyor...';
         
         let manifest = null;
         try {
@@ -1966,10 +1967,10 @@
         let manifestToSave = manifest;
 
         if (cached && manifest && cached.sha256 === manifest.snapshot.sha256) {
-          splashStatusEl.textContent = 'Önbellekteki veritabanı açılıyor...';
+          splashStatusEl.textContent = '✅ Önbellekten yükleniyor...';
           rawBytes = cached.db_blob;
         } else if (cached && !manifest) {
-          splashStatusEl.textContent = 'Çevrimdışı modda önbellekten açılıyor...';
+          splashStatusEl.textContent = '📴 Çevrimdışı: Önbellekten yükleniyor...';
           rawBytes = cached.db_blob;
           manifestToSave = {
             exported_at: cached.exported_at,
@@ -1981,18 +1982,19 @@
             throw new Error('Manifest alınamadı ve önbellekte kayıtlı veri yok!');
           }
           const downloadUrl = './' + (manifest.snapshot.filename || 'mobile_snapshot.db.gz');
-          splashStatusEl.textContent = 'Yeni veri tabanı indiriliyor (yaklaşık 10MB)...';
+          splashStatusEl.textContent = '⬇️ Veritabanı indiriliyor (~10MB)... Lütfen bekleyin';
           
-          const response = await fetchWithTimeout(downloadUrl, { cache: 'no-store', timeout: 45000 });
-          if (!response.ok) throw new Error('Veri tabanı indirme hatası: HTTP ' + response.status);
+          const response = await fetchWithTimeout(downloadUrl, { cache: 'no-store', timeout: 60000 });
+          if (!response.ok) throw new Error('İndirme hatası: HTTP ' + response.status + ' — ' + downloadUrl);
           
+          splashStatusEl.textContent = '⬇️ Veri alınıyor...';
           const arrayBuffer = await response.arrayBuffer();
-          splashStatusEl.textContent = 'Sıkıştırılmış veri açılıyor...';
+          splashStatusEl.textContent = '📦 Arşiv açılıyor...';
           
           const gzBytes = new Uint8Array(arrayBuffer);
           rawBytes = pako.ungzip(gzBytes);
           
-          splashStatusEl.textContent = 'Tarayıcı önbelleğine kaydediliyor...';
+          splashStatusEl.textContent = '💾 Önbelleğe kaydediliyor...';
           await setCachedSnapshot({
             db_blob: rawBytes,
             sha256: manifest.snapshot.sha256,
@@ -2001,10 +2003,17 @@
           });
         }
 
-        splashStatusEl.textContent = 'SQL motoru başlatılıyor...';
-        SQL = await initSqlJs({ locateFile: () => SQL_WASM_URL });
+        splashStatusEl.textContent = '⚙️ SQL motoru yükleniyor... (5-15 sn sürebilir)';
         
+        // Race sql.js init against a timeout — WASM fetch can silently hang
+        SQL = await Promise.race([
+          initSqlJs({ locateFile: () => SQL_WASM_URL }),
+          new Promise((_, reject) => setTimeout(() => reject(new Error('SQL motoru zaman aşımına uğradı (WASM yüklenemedi). İnternet bağlantınızı kontrol edin.')), 30000))
+        ]);
+        
+        splashStatusEl.textContent = '🗄️ Veritabanı açılıyor...';
         db = new SQL.Database(rawBytes);
+        rawBytes = null; // free memory after DB is open
         
         splashEl.style.display = 'none';
 
@@ -2019,7 +2028,8 @@
 
       } catch (err) {
         console.error('Initialization failed:', err);
-        splashStatusEl.innerHTML = `<span style="color:var(--danger)">Hata: ${err.message || err}</span><br/><br/>Lütfen internet bağlantınızı kontrol edip sayfayı yenileyin.`;
+        splashStatusEl.innerHTML = `<span style="color:#ef4444">❌ ${err.message || err}</span><br/><br/>İnternet bağlantınızı kontrol edip yeniden deneyin.`;
+        document.getElementById('splash-retry-btn').style.display = 'block';
       }
     }
 
@@ -3191,13 +3201,22 @@
       });
     }
 
-    // Launch Application safely checking document readyState to avoid load event race conditions
-    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    // Launch Application — MUST use window load event so CDN scripts (pako, sql.js, apexcharts)
+    // are fully executed before initApp runs. DOMContentLoaded fires too early for external scripts.
+    function launchApp() {
+      // Verify that required CDN libraries are loaded
+      if (typeof pako === 'undefined' || typeof initSqlJs === 'undefined') {
+        splashStatusEl.innerHTML = '<span style="color:#ef4444">❌ Hata: Kütüphaneler yüklenemedi.<br>İnternet bağlantınızı kontrol edip yeniden deneyin.</span>';
+        document.getElementById('splash-retry-btn').style.display = 'block';
+        return;
+      }
       initApp();
+    }
+    
+    if (document.readyState === 'complete') {
+      launchApp();
     } else {
-      window.addEventListener('DOMContentLoaded', () => {
-        initApp();
-      });
+      window.addEventListener('load', launchApp);
     }
   </script>
 </body>

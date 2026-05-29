@@ -26,21 +26,28 @@
   <!-- Premium Dark Theme CSS -->
   <style>
     :root {
-      --bg: #090d16;
-      --card-bg: rgba(17, 24, 39, 0.7);
-      --card-border: rgba(255, 255, 255, 0.08);
-      --card-border-glow: rgba(59, 130, 246, 0.25);
-      --primary: #3b82f6;
-      --primary-rgb: 59, 130, 246;
-      --primary-grad: linear-gradient(135deg, #3b82f6, #1d4ed8);
-      --accent-purple: linear-gradient(135deg, #e91e63, #5e3dbf);
-      --success: #10b981;
-      --danger: #ef4444;
-      --warning: #f59e0b;
-      --text: #f8fafc;
-      --text-muted: #94a3b8;
-      --text-gold: #f59e0b;
-      --nav-bg: rgba(13, 18, 30, 0.85);
+      --bg: #0E0E10;
+      --surface: #141416;
+      --surface-variant: #1F1F23;
+      --surface-container-high: #26262B;
+      --primary: #FFB48A;
+      --primary-container: #3D2A1A;
+      --on-primary-container: #FFE0CB;
+      --secondary: #7DD3FC;
+      --secondary-container: #003B5C;
+      --tertiary: #A78BFA;
+      --tertiary-container: #341E66;
+      --outline: #3A3A3F;
+      --outline-variant: #26262B;
+      --text: #F5F5F4;
+      --text-muted: #B5B5B2;
+      --success: #22C55E;
+      --danger: #EF4444;
+      --warning: #EAB308;
+      --nav-bg: #1F1F23;
+      
+      --card-bg: var(--surface);
+      --card-border: var(--outline-variant);
       
       --font-display: 'Outfit', sans-serif;
       --font-body: 'Inter', sans-serif;
@@ -55,19 +62,48 @@
     }
 
     body {
-      background-color: var(--bg);
+      background-color: #080809; /* Deep outer dark background */
       color: var(--text);
       font-family: var(--font-body);
       font-size: 14px;
       line-height: 1.5;
-      overflow-x: hidden;
-      /* Prevent scrolling body bounce on iOS */
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      min-height: -webkit-fill-available;
+      overflow: hidden;
+    }
+
+    /* Container simulating a phone layout on desktop */
+    .mobile-frame {
+      width: 100%;
+      height: 100vh;
+      height: -webkit-fill-available;
+      background-color: var(--bg);
+      position: relative;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
-      padding-top: env(safe-area-inset-top);
-      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    @media (min-width: 480px) {
+      .mobile-frame {
+        max-width: 450px;
+        height: 92vh;
+        max-height: 920px;
+        border-radius: 40px;
+        border: 10px solid #232328;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75);
+      }
+    }
+
+    /* Tabular figures for financial numbers alignment */
+    .tnum {
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: "tnum";
     }
 
     /* Container holding all active content */
@@ -115,15 +151,13 @@
 
     /* Bottom Navigation Tab Bar */
     nav.bottom-nav {
-      position: fixed;
+      position: absolute;
       bottom: 0;
       left: 0;
       right: 0;
       height: 65px;
       background: var(--nav-bg);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-top: 1px solid var(--card-border);
+      border-top: 1px solid var(--outline);
       display: flex;
       justify-content: space-around;
       align-items: center;
@@ -163,12 +197,10 @@
     .card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 20px;
+      border-radius: 12px;
       padding: 16px;
-      margin-bottom: 16px;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      transition: border 0.3s ease, box-shadow 0.3s ease;
+      margin-bottom: 12px;
+      transition: border-color 0.2s ease;
     }
 
     .card:active {
@@ -230,7 +262,7 @@
 
     /* Loader / Splash Screen */
     #splash-screen {
-      position: fixed;
+      position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
       background: var(--bg);
       display: flex;
@@ -431,20 +463,20 @@
 
     /* Detail overlay bottom sheet */
     #detail-overlay {
-      position: fixed;
+      position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
       background: var(--bg);
       z-index: 500;
       display: flex;
       flex-direction: column;
-      transform: translateY(100%);
+      transform: translateX(100%);
       transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
       padding-top: env(safe-area-inset-top);
       padding-bottom: env(safe-area-inset-bottom);
     }
 
     #detail-overlay.open {
-      transform: translateY(0);
+      transform: translateX(0);
     }
 
     #detail-scrollable {
@@ -526,14 +558,319 @@
       background: transparent;
     }
     ::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.1);
       border-radius: 3px;
+    }
+
+    /* Browse page search row */
+    .search-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .icon-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: var(--primary-container);
+      border: 1px solid rgba(255, 180, 138, 0.2);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .icon-btn:active {
+      opacity: 0.8;
+    }
+
+    /* Compose ScrollableTabRow style */
+    .tab-row {
+      display: flex;
+      overflow-x: auto;
+      scrollbar-width: none;
+      border-bottom: 1px solid var(--outline);
+      margin-bottom: 16px;
+      background-color: var(--bg);
+    }
+    .tab-row::-webkit-scrollbar { display: none; }
+
+    .tab-button {
+      padding: 12px 18px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 500;
+      white-space: nowrap;
+      position: relative;
+      cursor: pointer;
+      font-family: var(--font-body);
+    }
+
+    .tab-button.active {
+      color: var(--primary);
+      font-weight: 800;
+    }
+
+    .tab-button.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 12px;
+      right: 12px;
+      height: 2.5px;
+      background-color: var(--primary);
+      border-radius: 2px;
+    }
+
+    /* Modal Bottom Sheet Filter */
+    .filter-sheet-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 590;
+      display: none;
+      backdrop-filter: blur(2px);
+    }
+
+    .filter-sheet-overlay.open {
+      display: block;
+    }
+
+    .filter-sheet {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: var(--surface);
+      border-top: 1px solid var(--outline);
+      border-top-left-radius: 28px;
+      border-top-right-radius: 28px;
+      padding: 24px 20px;
+      z-index: 600;
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+    }
+
+    .filter-sheet.open {
+      transform: translateY(0);
+    }
+
+    .filter-section-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    select.filter-select {
+      width: 100%;
+      padding: 12px;
+      background: var(--surface-variant);
+      border: 1px solid var(--outline);
+      border-radius: 12px;
+      color: var(--text);
+      font-size: 13px;
+      outline: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23B5B5B2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      background-size: 14px;
+    }
+
+    .chip-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .filter-chip {
+      padding: 8px 16px;
+      border-radius: 20px;
+      background: var(--surface-variant);
+      border: 1px solid var(--outline);
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .filter-chip.active {
+      background: var(--primary-container);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .switch-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 52px;
+      height: 32px;
+    }
+
+    .switch input { 
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: var(--surface-variant);
+      border: 2px solid var(--outline);
+      transition: .3s;
+      border-radius: 32px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 4px;
+      bottom: 4px;
+      background-color: var(--text-muted);
+      transition: .3s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--primary-container);
+      border-color: var(--primary);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(20px);
+      background-color: var(--primary);
+    }
+
+    .radio-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .radio-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .radio-item input[type="radio"] {
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--outline);
+      border-radius: 50%;
+      outline: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .radio-item input[type="radio"]:checked {
+      border-color: var(--primary);
+    }
+
+    .radio-item input[type="radio"]:checked::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: var(--primary);
+    }
+
+    .action-btn {
+      width: 100%;
+      padding: 12px;
+      background: var(--primary);
+      color: #2A1B0A;
+      font-weight: 800;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .action-btn:active {
+      opacity: 0.9;
+    }
+
+    /* Custom visual Stop-Target Price Lane Bar */
+    .price-lane-bar-container {
+      margin: 16px 0;
+    }
+    .price-lane-bar-track {
+      height: 8px;
+      border-radius: 4px;
+      position: relative;
+      background: var(--outline-variant);
+      display: flex;
+      overflow: hidden;
+    }
+    .price-lane-bar-current-marker {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--primary);
+      position: absolute;
+      top: 0;
+      transform: translateX(-50%);
+    }
+
+    /* Slide overlay page styles */
+    .overlay-page {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: var(--bg);
+      z-index: 500;
+      display: flex;
+      flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .overlay-page.open {
+      transform: translateX(0);
+    }
+
+    /* Advanced parameter sub-cards */
+    .metric-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--outline-variant);
+      font-size: 13px;
+    }
+    .metric-row:last-child {
+      border-bottom: none;
     }
   </style>
 </head>
 <body>
+  <div class="mobile-frame">
 
-  <!-- Top Header -->
+    <!-- Top Header -->
   <header>
     <h1>BIST Picker</h1>
     <div class="meta-badge" id="app-exported-date">Yükleniyor...</div>
@@ -574,39 +911,102 @@
     </div>
 
     <!-- PAGE 2: LISTE (SCORING) -->
+    <!-- PAGE 2: BROWSE (SCORING) -->
     <div id="page-list" class="tab-page" style="display: none;">
-      <!-- Search Input -->
-      <div class="search-box">
-        <span class="material-symbols-rounded">search</span>
-        <input type="text" id="search-input" class="search-input" placeholder="Hisse kodu veya adı ara...">
+      <!-- Search Input & Tune button -->
+      <div class="search-row">
+        <div class="search-box">
+          <span class="material-symbols-rounded">search</span>
+          <input type="text" id="search-input" class="search-input" placeholder="Hisse ara...">
+        </div>
+        <button id="btn-filter-scoring" class="icon-btn">
+          <span class="material-symbols-rounded">tune</span>
+        </button>
       </div>
 
-      <!-- Scoring View Mode Chips -->
-      <div class="chip-filters">
-        <button class="chip-btn active" data-mode="ALPHA_CORE">ALPHA Core</button>
-        <button class="chip-btn" data-mode="ALPHA_X">ALPHA-X</button>
-        <button class="chip-btn" data-mode="MODEL">Hisse Modeli</button>
-        <button class="chip-btn" data-mode="RESEARCH">İzleme Listesi</button>
-        <button class="chip-btn" data-mode="ALL">Tüm Hisseler</button>
-      </div>
-
-      <!-- Filter Grid -->
-      <div class="filters-grid">
-        <select id="sector-filter" class="filter-select">
-          <option value="">Tüm Sektörler</option>
-        </select>
-        <select id="risk-filter" class="filter-select">
-          <option value="">Tüm Riskler</option>
-          <option value="LOW">Düşük Risk</option>
-          <option value="MEDIUM">Orta Risk</option>
-          <option value="HIGH">Yüksek Risk</option>
-        </select>
+      <!-- Scoring View Mode TabRow -->
+      <div class="tab-row" id="scoring-tab-row">
+        <button class="tab-button active" data-mode="ALPHA_CORE">ALPHA Core</button>
+        <button class="tab-button" data-mode="ALPHA_X">ALPHA X</button>
+        <button class="tab-button" data-mode="RESEARCH">Arastirma</button>
+        <button class="tab-button" data-mode="MODEL">Model</button>
+        <button class="tab-button" data-mode="ALL">Hepsi</button>
       </div>
 
       <!-- Scrollable Scoring Rows -->
       <div class="card" style="padding: 0; overflow: hidden;">
         <div id="scoring-list">
           <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Bottom Sheet Filter Modal -->
+      <div id="filter-sheet-overlay" class="filter-sheet-overlay"></div>
+      <div id="filter-sheet" class="filter-sheet">
+        <div class="row" style="margin-bottom: 20px;">
+          <h3 style="font-size: 16px; font-weight: 800;">Filtrele ve Sirala</h3>
+          <span id="btn-reset-filters" style="font-size: 13px; color: var(--danger); font-weight: bold; cursor: pointer;">Sıfırla</span>
+        </div>
+        
+        <div class="spaced-y">
+          <div>
+            <div class="filter-section-title">Sektör</div>
+            <select id="sector-filter" class="filter-select">
+              <option value="">Tüm Sektörler</option>
+            </select>
+          </div>
+          
+          <div>
+            <div class="filter-section-title">Risk Seviyesi</div>
+            <div class="chip-group" id="risk-chip-group">
+              <div class="filter-chip active" data-risk="">Tümü</div>
+              <div class="filter-chip" data-risk="LOW">Düşük</div>
+              <div class="filter-chip" data-risk="MEDIUM">Orta</div>
+              <div class="filter-chip" data-risk="HIGH">Yüksek</div>
+            </div>
+          </div>
+
+          <div class="switch-row" style="padding: 4px 0; margin-top: 4px;">
+            <span style="font-weight: bold; font-size: 13px;">Sadece BIST 100</span>
+            <label class="switch">
+              <input type="checkbox" id="bist100-filter">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <hr style="border: none; border-top: 1px solid var(--outline-variant); margin: 8px 0;">
+
+          <div>
+            <div class="filter-section-title">Sıralama Ölçütü</div>
+            <div class="radio-group">
+              <label class="radio-item">
+                <input type="radio" name="sort-order" value="SCORE_DESC" checked>
+                <span>Model Skoru (Yüksekten Düşüğe)</span>
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="sort-order" value="SCORE_ASC">
+                <span>Model Skoru (Düşükten Yükseğe)</span>
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="sort-order" value="TICKER_ASC">
+                <span>Hisse Adı (A-Z)</span>
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="sort-order" value="TICKER_DESC">
+                <span>Hisse Adı (Z-A)</span>
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="sort-order" value="RISK_ASC">
+                <span>Risk (Düşükten Yükseğe)</span>
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="sort-order" value="RISK_DESC">
+                <span>Risk (Yüksekten Düşüğe)</span>
+              </label>
+            </div>
+          </div>
+
+          <button id="btn-apply-filters" class="action-btn" style="margin-top: 16px;">Uygula</button>
         </div>
       </div>
     </div>
@@ -737,108 +1137,362 @@
       <div id="weekly-history-list" class="spaced-y"></div>
     </div>
 
+    <!-- PAGE 5: HAKKINDA (ABOUT) -->
+    <div id="page-about" class="tab-page" style="display: none;">
+      <h2 style="font-size: 22px; font-weight: 800; color: var(--primary); margin-bottom: 4px;">BIST Picker Hakkında</h2>
+      <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 20px;">Zeki Yatırım Metodolojisi</p>
+      
+      <div class="card">
+        <h3 style="font-size: 15px; color: var(--primary); margin-bottom: 8px;">ALPHA Seçim Algoritması Nasıl Çalışır?</h3>
+        <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">
+          BIST Picker, duygulardan arınmış, tamamen nicel finansal verilere dayanan çok faktörlü bir puanlama algoritması (ALPHA Skoru) kullanır. Bu algoritma, Türkiye'nin yüksek enflasyon ve dalgalı faiz ortamına özel olarak tasarlanmış olup, hisseleri hem global ölçekte hem de kendi sektörüyle kıyaslayarak değerlendirir.
+        </p>
+      </div>
+
+      <div class="card" style="background: rgba(255, 180, 138, 0.05); border-color: rgba(255, 180, 138, 0.2);">
+        <h3 style="font-size: 15px; color: var(--primary); margin-bottom: 12px;">Model Ağırlıkları</h3>
+        <div class="spaced-y" style="font-size: 13px;">
+          <div class="row"><span>Buffett Kalite Modeli</span><strong style="color:var(--primary)">25%</strong></div>
+          <div class="row"><span>Graham Değer Modeli</span><strong style="color:var(--primary)">20%</strong></div>
+          <div class="row"><span>Piotroski Mali Güç</span><strong style="color:var(--primary)">15%</strong></div>
+          <div class="row"><span>DCF Güvenlik Marjı (MOS)</span><strong style="color:var(--primary)">10%</strong></div>
+          <div class="row"><span>Momentum Gücü & Hacim</span><strong style="color:var(--primary)">20%</strong></div>
+          <div class="row"><span>Teknik Trend Takibi</span><strong style="color:var(--primary)">10%</strong></div>
+        </div>
+        <hr style="border:none; border-top:1px solid var(--outline-variant); margin:12px 0;">
+        <p style="font-size: 11px; color: var(--text-muted); line-height: 1.5;">
+          Not: Hesaplanan ham puanlar, sektör medyanlarına (Sector Benchmarks) göre normalize edilir. Örneğin, bir bankanın kârlılık rasyoları doğrudan sanayi şirketiyle değil, bankacılık sektörü medyanıyla karşılaştırılarak puanlanır.
+        </p>
+      </div>
+
+      <h3 style="font-size: 15px; margin-bottom: 12px; margin-top: 24px; font-weight: 800;">Finansal Modeller ve Hesaplama Kuralları</h3>
+      <div class="spaced-y" style="font-size: 13px; line-height: 1.6;">
+        <div style="display:flex; gap:12px; align-items:flex-start;">
+          <span class="material-symbols-rounded" style="color:var(--primary); font-size:24px;">emoji_events</span>
+          <div>
+            <h4 style="color:var(--primary); font-size:14px; font-weight:700;">1. Buffett (Kalite Modeli)</h4>
+            <p style="color:var(--text-muted); font-size:12px; margin-top:4px;">
+              • Özkaynak Kârlılığı (ROE) > %25<br>
+              • Aktif Kârlılığı (ROA) > %7<br>
+              • Net Borç / VÖKÖK (EBITDA) &lt; 2.0<br>
+              • Sürdürülebilir Serbest Nakit Akışı (FCF) üretimi.<br>
+              • Amacı: Rekabet avantajı (Moat) yüksek, kâr üreten kaliteli şirketleri seçer.
+            </p>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:12px; align-items:flex-start; margin-top:16px;">
+          <span class="material-symbols-rounded" style="color:var(--primary); font-size:24px;">insights</span>
+          <div>
+            <h4 style="color:var(--primary); font-size:14px; font-weight:700;">2. Graham (Değer Modeli)</h4>
+            <p style="color:var(--text-muted); font-size:12px; margin-top:4px;">
+              • Fiyat / Kazanç (F/K) &lt; 15<br>
+              • PD / DD &lt; 1.5<br>
+              • Graham Çarpanı (F/K * PD/DD) &lt; 22.5<br>
+              • Reel Faiz İskontosu: Şirketin kârlılık verimi güncel politika faiziyle karşılaştırılarak iskonto hesaplanır.<br>
+              • Amacı: Değerinin altında fiyatlanan 'kelepir' hisseleri yakalar.
+            </p>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:12px; align-items:flex-start; margin-top:16px;">
+          <span class="material-symbols-rounded" style="color:var(--primary); font-size:24px;">health_and_safety</span>
+          <div>
+            <h4 style="color:var(--primary); font-size:14px; font-weight:700;">3. Piotroski (Mali Güç - F-Score)</h4>
+            <p style="color:var(--text-muted); font-size:12px; margin-top:4px;">
+              • 9 Maddelik Check-list:<br>
+              &nbsp;&nbsp;- Kârlılık (Net Kâr > 0, FCF > 0, ROA Artışı vb.) - 4 Puan<br>
+              &nbsp;&nbsp;- Kaldıraç & Likidite (Borç Oranı Azalışı, Cari Oran Artışı vb.) - 3 Puan<br>
+              &nbsp;&nbsp;- Operasyonel Etkinlik (Brüt Marj Artışı, Varlık Devir Artışı) - 2 Puan<br>
+              • Puanlama: 7-9 Puan = Güçlü, 4-6 Puan = Nötr, 0-3 Puan = Riskli.
+            </p>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:12px; align-items:flex-start; margin-top:16px;">
+          <span class="material-symbols-rounded" style="color:var(--primary); font-size:24px;">show_chart</span>
+          <div>
+            <h4 style="color:var(--primary); font-size:14px; font-weight:700;">4. DCF & Güvenlik Marjı (MOS)</h4>
+            <p style="color:var(--text-muted); font-size:12px; margin-top:4px;">
+              • İndirgenmiş Nakit Akışı (DCF) Değerlemesi:<br>
+              &nbsp;&nbsp;- 10 yıllık Serbest Nakit Akış projeksiyonu.<br>
+              &nbsp;&nbsp;- Türkiye ülke risk primine göre ayarlanmış Ağırlıklı Ortalama Sermaye Maliyeti (WACC) iskonto oranı.<br>
+              &nbsp;&nbsp;- İçsel Değer (Intrinsic Value) hesaplanır.<br>
+              &nbsp;&nbsp;- Güvenlik Marjı (MOS) = (İçsel Değer / Güncel Fiyat - 1) * 100<br>
+              • Hedef: En az %20-30 güvenlik marjına sahip hisselere odaklanır.
+            </p>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:12px; align-items:flex-start; margin-top:16px;">
+          <span class="material-symbols-rounded" style="color:var(--primary); font-size:24px;">auto_graph</span>
+          <div>
+            <h4 style="color:var(--primary); font-size:14px; font-weight:700;">5. Momentum & Teknik Güç</h4>
+            <p style="color:var(--text-muted); font-size:12px; margin-top:4px;">
+              • Göreceli Momentum: Hisse fiyatının 3, 6 ve 12 aylık periyotlarda endeks üzerindeki rölatif performansı.<br>
+              • Teknik İvme: Fiyatın 200 günlük hareketli ortalamanın (MA200) üzerinde olması ve işlem hacmindeki artış ivmesi.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="background: rgba(125, 211, 252, 0.05); border-color: rgba(125, 211, 252, 0.2); margin-top: 24px;">
+        <h4 style="font-weight: bold; font-size: 13px; color: var(--secondary); margin-bottom: 4px;">Haftalık Portföy Disiplini</h4>
+        <p style="font-size: 12px; color: var(--text-muted);">
+          Veritabanı her hafta sonu cuma kapanış verileriyle güncellenir. Pazartesi sabahı ALPHA skoru en yüksek olan 5 hisse model portföye dahil edilir. Hafta içinde manuel alım-satım yapılmaz ve disipline sadık kalınır.
+        </p>
+      </div>
+
+      <p style="font-size: 10px; color: var(--text-muted); text-align: justify; line-height: 1.5; margin-top: 24px; margin-bottom: 16px;">
+        Yasal Uyarı: BIST Picker tarafından sunulan puanlar, analizler ve sinyaller tamamen matematiksel algoritmalara dayanmaktadır ve yatırım tavsiyesi niteliği taşımaz. Yatırım kararlarının sorumluluğu tamamen kullanıcıya aittir.
+      </p>
+    </div>
+
   </div>
 
   <!-- Bottom Sheet/Detail View Overlay -->
-  <div id="detail-overlay">
+  <div id="detail-overlay" class="overlay-page">
     <div class="detail-top-bar">
       <div>
-        <h2 id="det-ticker" style="font-size: 22px; color: var(--primary);">THYAO</h2>
-        <p id="det-fullname" style="font-size: 11px; color: var(--text-muted);">TURK HAVA YOLLARI A.O.</p>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <h2 id="det-ticker" style="font-size: 22px; color: var(--primary); font-weight:800;">THYAO</h2>
+          <span id="det-portfolio-badge" class="badge badge-buy" style="display:none; font-size:10px;">PORTFÖYDE</span>
+        </div>
+        <p id="det-fullname" style="font-size: 11px; color: var(--text-muted); margin-top:2px;">TURK HAVA YOLLARI A.O.</p>
       </div>
       <div class="close-btn" id="btn-close-detail">
         <span class="material-symbols-rounded">close</span>
       </div>
     </div>
     
-    <div id="detail-scrollable">
+    <div id="detail-scrollable" style="flex:1; overflow-y:auto; padding:16px; padding-bottom:90px;">
       
       <!-- Performance Quick Stats -->
       <div class="card">
         <div class="row">
           <div>
-            <div style="font-size: 10px; color: var(--text-muted);">CANLI FİYAT</div>
-            <div id="det-current-price" style="font-family: var(--font-display); font-weight: 800; font-size: 28px;">--</div>
+            <div style="font-size: 10px; color: var(--text-muted); letter-spacing:0.5px;">CANLI FİYAT</div>
+            <div id="det-current-price" style="font-family: var(--font-display); font-weight: 800; font-size: 28px; line-height:34px;">--</div>
           </div>
           <div style="text-align: right;">
-            <div style="font-size: 10px; color: var(--text-muted);">SİNYAL DURUMU</div>
+            <div style="font-size: 10px; color: var(--text-muted); letter-spacing:0.5px;">SİNYAL DURUMU</div>
             <div id="det-signal-action" style="margin-top: 4px;"><span class="badge badge-action badge-hold">TUT</span></div>
           </div>
         </div>
-        <div id="det-port-stats" style="margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--card-border); display: none;">
+        
+        <!-- Live position info block -->
+        <div id="det-port-stats" style="margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--outline-variant); display: none;">
           <div class="row">
             <div>
               <div style="font-size: 10px; color: var(--text-muted);">Giriş Fiyatı</div>
-              <div id="det-entry-price" style="font-weight: bold;">--</div>
+              <div id="det-entry-price" style="font-weight: bold; font-size: 13px;" class="tnum">--</div>
             </div>
             <div>
               <div style="font-size: 10px; color: var(--text-muted);">Güncel Getiri</div>
-              <div id="det-pnl-pct" style="font-weight: 800; font-size: 15px;">--</div>
+              <div id="det-pnl-pct" style="font-weight: 800; font-size: 15px;" class="tnum">--</div>
             </div>
             <div style="text-align: right;">
               <div style="font-size: 10px; color: var(--text-muted);">Elde Tutma Gün</div>
-              <div id="det-days-held" style="font-weight: bold;">--</div>
+              <div id="det-days-held" style="font-weight: bold; font-size: 13px;">--</div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- DCF Valuation -->
-      <div class="card">
-        <div class="card-title">DCF İskonto Değerlemesi</div>
-        <div class="row">
+      <!-- Smart Signal Banner if SELL action -->
+      <div id="det-sell-warning" class="card" style="display:none; background:rgba(239,68,68,0.08); border-color:rgba(239,68,68,0.25);">
+        <div style="display:flex; gap:10px; align-items:flex-start;">
+          <span class="material-symbols-rounded" style="color:var(--danger)">warning</span>
           <div>
-            <div style="font-size: 11px; color: var(--text-muted);">DCF İçsel Değeri</div>
-            <div id="det-dcf-val" style="font-family: var(--font-display); font-weight: 800; font-size: 20px; color: var(--primary);">--</div>
+            <h4 style="font-size:13px; font-weight:bold; color:var(--danger)">Zeki Sinyal: SAT Uyarısı</h4>
+            <p id="det-sell-warning-text" style="font-size:11px; color:var(--text-muted); margin-top:2px; line-height:1.4;"></p>
           </div>
-          <div style="text-align: right;">
-            <div style="font-size: 11px; color: var(--text-muted);">Güvenlik Marjı (MoS)</div>
-            <div id="det-dcf-mos" style="font-family: var(--font-display); font-weight: 800; font-size: 20px; color: var(--success);">--</div>
-          </div>
-        </div>
-        <div class="fin-grid" style="margin-top: 12px; font-size: 11px;">
-          <div class="fin-item"><span style="color:var(--text-muted);">Büyüme Hızı:</span> <strong id="det-dcf-growth">--</strong></div>
-          <div class="fin-item"><span style="color:var(--text-muted);">İndirgeme Katsayısı:</span> <strong id="det-dcf-discount">--</strong></div>
-          <div class="fin-item"><span style="color:var(--text-muted);">Terminal Büyüme:</span> <strong id="det-dcf-terminal">--</strong></div>
-          <div class="fin-item"><span style="color:var(--text-muted);">Hedef / Stop Limit:</span> <strong id="det-det-limits">--</strong></div>
         </div>
       </div>
 
+      <!-- Stop/Target Price Lane Bar -->
+      <div class="card">
+        <div class="price-lane-bar-container">
+          <div class="row" style="font-size:10px; font-weight:bold; color:var(--text-muted); margin-bottom:4px; letter-spacing:0.5px;">
+            <span style="color:var(--danger)">STOP LIMIT</span>
+            <span id="det-lane-price-type" style="color:var(--text-muted)">CANLI FIYAT</span>
+            <span style="color:var(--success)">HEDEF FIYAT</span>
+          </div>
+          <div class="price-lane-bar-track" style="margin: 6px 0;">
+            <div style="width:20%; background:rgba(239,68,68,0.25);"></div>
+            <div style="width:60%; background:rgba(255,255,255,0.03);"></div>
+            <div style="width:20%; background:rgba(34,197,94,0.25);"></div>
+            <div id="det-lane-pin" class="price-lane-bar-current-marker" style="left:50%;"></div>
+          </div>
+          <div class="row" style="font-size:12px;">
+            <span id="det-lane-stop" style="color:var(--danger); font-weight:600;" class="tnum">-- TL</span>
+            <strong id="det-lane-current" class="tnum">-- TL</strong>
+            <span id="det-lane-target" style="color:var(--success); font-weight:600;" class="tnum">-- TL</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Investment Thesis Card -->
+      <div class="card" style="background: rgba(255, 180, 138, 0.04); border-color: rgba(255, 180, 138, 0.2);">
+        <div class="card-title" id="det-thesis-title" style="color:var(--primary); font-size:14px; margin-bottom:8px;">Yatırım Tezi (Analiz)</div>
+        <div id="det-thesis-list" class="spaced-y" style="font-size:12px;">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Deep Financial Insights -->
+      <div style="margin-bottom: 24px;">
+        <h3 style="font-size: 15px; font-weight: 800; margin-bottom: 12px;">Derin Finansal Analiz</h3>
+        <div class="spaced-y" id="det-insights-cards">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Sector Benchmark Card -->
+      <div class="card" id="det-benchmark-card" style="background: rgba(125, 211, 252, 0.03); display:none;">
+        <div class="card-title" id="det-benchmark-title" style="font-size: 13px; color:var(--secondary); margin-bottom:10px;">SEKTÖR KIYASLAMA</div>
+        <div class="spaced-y" style="font-size: 12px;">
+          <div class="row"><span style="color:var(--text-muted)">Özkaynak Kârlılığı (ROE Medyan):</span><strong id="det-bm-roe" class="tnum">--</strong></div>
+          <div class="row"><span style="color:var(--text-muted)">Aktif Kârlılığı (ROA Medyan):</span><strong id="det-bm-roa" class="tnum">--</strong></div>
+          <div class="row"><span style="color:var(--text-muted)">Sektör Şirket Sayısı:</span><strong id="det-bm-count">--</strong></div>
+        </div>
+      </div>
+
+      <!-- Model Detail Scores -->
+      <div class="card">
+        <div class="card-title" style="font-size:14px; margin-bottom:10px;">Model Skorları</div>
+        <div class="spaced-y" id="det-scores-list" style="font-size:12px;">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Toggle Advanced Parameters -->
+      <button id="btn-toggle-advanced" class="action-btn" style="background:var(--surface-variant); color:var(--text); border:1px solid var(--outline); margin-top:8px; margin-bottom:16px;">Gelişmiş Verileri Göster</button>
+
+      <!-- Advanced Details Container -->
+      <div id="det-advanced-container" style="display:none;" class="spaced-y">
+        
+        <!-- Inflation accounting TAS 29 -->
+        <div class="card">
+          <div class="card-title" style="font-size:13px; color:var(--primary); margin-bottom:10px;">Enflasyon Muhasebesi (TAS 29) & Reel Karlılık</div>
+          <div class="spaced-y">
+            <div class="metric-row"><span style="color:var(--text-muted)">Raporlanan Net Kar:</span><strong id="det-adv-reported-net" class="tnum">--</strong></div>
+            <div class="metric-row"><span style="color:var(--text-muted)">Düzeltilmiş Net Kar:</span><strong id="det-adv-adjusted-net" class="tnum">--</strong></div>
+            <div class="metric-row"><span style="color:var(--text-muted)">Parasal Kazanç/Kayıp:</span><strong id="det-adv-monetary" class="tnum">--</strong></div>
+            <div class="metric-row"><span style="color:var(--text-muted)">Reel EPS Büyümesi:</span><strong id="det-adv-eps-growth" class="tnum">--</strong></div>
+            <div class="metric-row"><span style="color:var(--text-muted)">Düzeltilmiş ROA:</span><strong id="det-adv-roa" class="tnum">--</strong></div>
+          </div>
+        </div>
+
+        <!-- Warren Buffett Owner Earnings -->
+        <div class="card">
+          <div class="card-title" style="font-size:13px; color:var(--primary); margin-bottom:10px;">Warren Buffett - Patron Karı (Owner Earnings)</div>
+          <div class="spaced-y">
+            <div class="metric-row"><span style="color:var(--text-muted)">Patron Karı (Owner Earnings):</span><strong id="det-adv-owner-earnings" class="tnum">--</strong></div>
+            <div class="metric-row"><span style="color:var(--text-muted)">Serbest Nakit Akışı (FCF):</span><strong id="det-adv-fcf" class="tnum">--</strong></div>
+          </div>
+          <p style="font-size: 10px; color: var(--text-muted); line-height: 1.5; margin-top: 10px;">
+            Not: Patron kârı, şirketin net kârına nakit dışı giderlerin (amortisman vb.) eklenip, koruma/bakım amaçlı yatırım harcamalarının çıkarılmasıyla bulunur. Warren Buffett'a göre bir şirketin gerçek nakit üretim gücünü gösteren en güvenilir metriktir.
+          </p>
+        </div>
+
+        <!-- DCF Calculation details -->
+        <div class="card">
+          <div class="card-title" style="font-size:13px; color:var(--primary); margin-bottom:10px;">DCF (İndirgenmiş Nakit Akışı) Hesap Detayları</div>
+          <div class="spaced-y">
+            <div class="metric-row"><span style="color:var(--text-muted)">İçsel Değer (DCF):</span><strong id="det-adv-dcf-val" class="tnum">--</strong></div>
+            <div class="metric-row"><span style="color:var(--text-muted)">DCF Büyüme Hızı Projeksiyonu:</span><strong id="det-adv-dcf-growth" class="tnum">--</strong></div>
+            <div class="metric-row"><span style="color:var(--text-muted)">Kullanılan İskonto Oranı (WACC):</span><strong id="det-adv-dcf-wacc" class="tnum">--</strong></div>
+            <div class="metric-row"><span style="color:var(--text-muted)">Uç Büyüme Hızı (Terminal Rate):</span><strong id="det-adv-dcf-terminal" class="tnum">--</strong></div>
+            <div class="metric-row"><span style="color:var(--text-muted)">Güvenlik Marjı (MOS):</span><strong id="det-adv-dcf-mos" class="tnum">--</strong></div>
+          </div>
+        </div>
+
+        <!-- Audit & Risk Flags -->
+        <div class="card">
+          <div class="card-title" style="font-size:13px; color:var(--primary); margin-bottom:10px;">Denetim & Risk İşaretleri</div>
+          <div class="spaced-y">
+            <div id="det-related-party-container" class="spaced-y" style="padding: 10px; border-radius: 8px;">
+              <div class="row">
+                <span style="font-weight:600; font-size:13px;">İlişkili Taraf Gelir Oranı</span>
+                <strong id="det-adv-related-pct" class="tnum">--</strong>
+              </div>
+              <p id="det-related-party-warning" style="font-size:10px; line-height:1.4; font-weight:bold; display:none;"></p>
+            </div>
+            <div class="metric-row"><span style="color:var(--text-muted)">Piotroski F-Skoru (Ham Puan):</span><strong id="det-adv-piotroski" class="tnum">--</strong></div>
+            <div class="metric-row"><span style="color:var(--text-muted)">Lynch PEG Oranı:</span><strong id="det-adv-peg" class="tnum">--</strong></div>
+            <div class="metric-row"><span style="color:var(--text-muted)">Magic Formula Skoru:</span><strong id="det-adv-magic" class="tnum">--</strong></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Financial Snapshot -->
+      <div class="card">
+        <div class="card-title" style="font-size:14px; margin-bottom:10px;">Finansal Tablo Özetleri (Enflasyondan Arındırılmış)</div>
+        <div class="fin-grid" id="det-finances-grid" style="font-size: 11px;"></div>
+      </div>
+      
       <!-- Charts Tab -->
       <div class="card" style="padding: 12px;">
-        <div class="card-title">Fiyat Grafiği (Son 2 Yıl)</div>
+        <div class="card-title" style="font-size:13px; margin-bottom:8px;">Fiyat Grafiği (Son 2 Yıl)</div>
         <div id="price-chart"></div>
       </div>
 
       <!-- Model Skor Geçmişi Grafiği -->
       <div class="card" style="padding: 12px;">
-        <div class="card-title">Model Skor Geçmişi (Çeyrekler)</div>
+        <div class="card-title" style="font-size:13px; margin-bottom:8px;">Model Skor Geçmişi (Çeyrekler)</div>
         <div id="factor-chart"></div>
       </div>
 
-      <!-- Score Breakdown -->
-      <div class="card">
-        <div class="card-title">Model Faktör Puanları</div>
-        <div class="factor-grid" id="det-factors-grid"></div>
+    </div>
+  </div>
+
+  <!-- Backtesting Modal View Overlay -->
+  <div id="backtest-overlay" class="overlay-page">
+    <div class="detail-top-bar">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <div class="close-btn" id="btn-close-backtest" style="width:32px; height:32px;">
+          <span class="material-symbols-rounded" style="font-size:20px;">arrow_back</span>
+        </div>
+        <h2 style="font-size: 16px; color: var(--text); font-weight:800;">Model Backtesting (10 Yıl)</h2>
+      </div>
+    </div>
+    
+    <div id="backtest-scrollable" style="flex:1; overflow-y:auto; padding:16px; padding-bottom:90px;">
+      <!-- Statistics Detail Card -->
+      <div class="card" style="background: rgba(255, 180, 138, 0.03); border-color: var(--outline-variant);">
+        <div class="row">
+          <div>
+            <div style="font-size: 10px; color: var(--text-muted); letter-spacing:0.5px;">MODEL TOPLAM GETİRİ</div>
+            <div id="bt-total-return" style="font-family: var(--font-display); font-weight: 800; font-size: 22px; color: var(--success);" class="tnum">%--</div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 10px; color: var(--text-muted); letter-spacing:0.5px;">BIST100 ENDEKSİ</div>
+            <div id="bt-bench-return" style="font-family: var(--font-display); font-weight: 800; font-size: 22px; color: var(--text-muted);" class="tnum">%--</div>
+          </div>
+        </div>
+        <div style="margin-top: 14px; padding: 6px 10px; background: rgba(16, 185, 129, 0.1); border-radius: 6px; display: inline-block; font-size: 11px; font-weight: bold; color: var(--success);" id="bt-alpha-badge">
+          Alpha: --
+        </div>
+        <p style="font-size: 10px; color: var(--text-muted); margin-top: 12px; line-height: 1.5;">
+          Bu simülasyon, her Pazartesi sabahı o anki en güncel bilançolarla yeniden oluşturulan point-in-time portföylerin getirilerini kümülatif olarak yansıtır. Geleceğe bakma hatası (look-ahead bias) barındırmaz.
+        </p>
       </div>
 
-      <!-- Quality Flags -->
-      <div class="card" id="det-flags-card" style="display: none;">
-        <div class="card-title">Model Kalite Bayrakları</div>
-        <div id="det-flags-list" style="display: flex; flex-wrap: wrap; gap: 8px;"></div>
+      <!-- Performance Chart -->
+      <h3 style="font-size: 14px; margin-bottom: 8px; margin-top: 16px; font-weight: bold;">Performans Grafiği (Kümülatif %)</h3>
+      <div class="card" style="padding: 12px; background: rgba(255, 255, 255, 0.01);">
+        <div id="bt-chart" style="min-height: 180px;"></div>
       </div>
 
-      <!-- AI Insights -->
-      <div class="card" id="det-insight-card" style="display: none;">
-        <div class="card-title">Yapay Zeka Analiz Notu</div>
-        <div id="det-insight-text" style="font-size: 12px; color: var(--text-muted); line-height: 1.6; padding: 12px; background: rgba(255, 255, 255, 0.02); border-radius: 12px;"></div>
-      </div>
+      <!-- History Points -->
+      <h3 style="font-size: 14px; margin-bottom: 8px; margin-top: 24px; font-weight: bold; color: var(--text-muted);">Geçmiş Model Puan Değişimleri</h3>
+      <div id="bt-history-list" class="spaced-y"></div>
 
-      <!-- Financial Snapshot -->
-      <div class="card">
-        <div class="card-title">Finansal Tablo Özetleri (Enflasyondan Arındırılmış)</div>
-        <div class="fin-grid" id="det-finances-grid" style="font-size: 11px;"></div>
-      </div>
+      <!-- Completed Transactions -->
+      <h3 style="font-size: 14px; margin-bottom: 8px; margin-top: 24px; font-weight: bold; color: var(--text-muted);">Geçmiş Model İşlemleri</h3>
+      <div id="bt-transactions-list" class="spaced-y"></div>
     </div>
   </div>
 
@@ -858,18 +1512,23 @@
       <span>Picks</span>
     </a>
     <a href="#" class="nav-item" data-tab="list">
-      <span class="material-symbols-rounded">bar_chart</span>
-      <span>Liste</span>
+      <span class="material-symbols-rounded">search</span>
+      <span>Browse</span>
     </a>
     <a href="#" class="nav-item" data-tab="macro">
-      <span class="material-symbols-rounded">account_balance</span>
-      <span>Makro</span>
+      <span class="material-symbols-rounded">public</span>
+      <span>Market</span>
     </a>
     <a href="#" class="nav-item" data-tab="history">
       <span class="material-symbols-rounded">history</span>
-      <span>Geçmiş</span>
+      <span>History</span>
+    </a>
+    <a href="#" class="nav-item" data-tab="about">
+      <span class="material-symbols-rounded">info</span>
+      <span>Hakkında</span>
     </a>
   </nav>
+</div>
 
   <!-- External Library CDNs -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
@@ -898,6 +1557,7 @@
     // Chart Handles
     let priceChartInstance = null;
     let factorChartInstance = null;
+    window.backtestChartInstance = null;
 
     // --- IndexedDB Caching Utility ---
     const DB_NAME = 'BistPickerCache';
@@ -1008,6 +1668,231 @@
       return rows[0] || null;
     }
 
+    // --- Turkey Timezone (GMT+3) Components Parser ---
+    function getTurkeyTimeComponents() {
+      const formatter = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'Europe/Istanbul',
+        hour12: false,
+        weekday: 'short',
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric'
+      });
+      const parts = formatter.formatToParts(new Date());
+      const c = {};
+      parts.forEach(p => { c[p.type] = p.value; });
+      
+      const weekdayMap = { 'Sun': 0, 'Mon': 1, 'Tue': 2, 'Wed': 3, 'Thu': 4, 'Fri': 5, 'Sat': 6 };
+      const trDay = weekdayMap[c.weekday];
+      
+      const trHour = parseInt(c.hour, 10);
+      const trMin = parseInt(c.minute, 10);
+      const yyyy = parseInt(c.year, 10);
+      const mm = parseInt(c.month, 10);
+      const dd = parseInt(c.day, 10);
+      
+      const isPastFridayClose = (trDay === 5 && (trHour > 18 || (trHour === 18 && trMin >= 15))) || trDay === 6 || trDay === 0;
+      
+      return { trDay, trHour, trMin, yyyy, mm, dd, isPastFridayClose };
+    }
+
+    function getTurkeyCurrentMonday() {
+      const tc = getTurkeyTimeComponents();
+      const trDate = new Date(tc.yyyy, tc.mm - 1, tc.dd, 12, 0, 0); 
+      
+      const day = tc.trDay; 
+      const diffToMonday = day >= 1 ? 1 - day : -6;
+      
+      const monday = new Date(trDate);
+      monday.setDate(trDate.getDate() + diffToMonday);
+      
+      const y = monday.getFullYear();
+      const m = String(monday.getMonth() + 1).padStart(2, '0');
+      const d = String(monday.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+
+    function areConsecutiveWeeks(dateStr1, dateStr2) {
+      try {
+        const d1 = new Date(dateStr1);
+        const d2 = new Date(dateStr2);
+        const diffMs = d2.getTime() - d1.getTime();
+        const diffDays = diffMs / (1000 * 60 * 60 * 24);
+        return diffDays >= 6 && diffDays <= 8; 
+      } catch (e) {
+        return false;
+      }
+    }
+
+    // --- Weekly Performance Calculations (Matching Android Kotlin Manager) ---
+    function updateActiveWeek(dbPositions, livePrices) {
+      let storageRecords = localStorage.getItem('bist_weekly_records');
+      let records = [];
+      if (storageRecords) {
+        try {
+          records = JSON.parse(storageRecords);
+        } catch(e) {
+          records = seedInitialRecords();
+        }
+      } else {
+        records = seedInitialRecords();
+      }
+
+      const currentMonday = getTurkeyCurrentMonday();
+      const trTime = getTurkeyTimeComponents();
+      const isPastFridayClose = trTime.isPastFridayClose;
+      let updated = false;
+
+      // 1. Mark older uncompleted weeks as completed/frozen
+      for (let i = 0; i < records.length; i++) {
+        if (records[i].weekStartDate !== currentMonday && !records[i].isCompleted) {
+          records[i].isCompleted = true;
+          updated = true;
+        }
+      }
+
+      // Helper to query price on/before Monday from database
+      function getPriceOnOrBefore(ticker, dateStr) {
+        const row = queryOne(`
+          SELECT close FROM price_history_730d 
+          WHERE company_id = (SELECT id FROM companies WHERE ticker = :ticker LIMIT 1) 
+            AND date <= :date 
+          ORDER BY date DESC LIMIT 1
+        `, { ':ticker': ticker, ':date': dateStr });
+        return row ? row.close : null;
+      }
+
+      // 2. Find or create current active week
+      let index = records.findIndex(r => r.weekStartDate === currentMonday);
+
+      if (index === -1) {
+        records.sort((a, b) => a.weekStartDate.localeCompare(b.weekStartDate));
+        const prevRecord = records[records.length - 1];
+        const isConsecutive = prevRecord && areConsecutiveWeeks(prevRecord.weekStartDate, currentMonday);
+        
+        const prevPositionsMap = {};
+        if (isConsecutive && prevRecord && prevRecord.positions) {
+          prevRecord.positions.forEach(pos => {
+            prevPositionsMap[pos.ticker] = pos.exitPrice;
+          });
+        }
+
+        const stockRecords = dbPositions.map(pos => {
+          const mondayPrice = getPriceOnOrBefore(pos.ticker, currentMonday);
+          const entry = prevPositionsMap[pos.ticker] || mondayPrice || pos.entry_price || pos.current_price || 1.0;
+          const live = livePrices[pos.ticker] || entry;
+          return {
+            ticker: pos.ticker,
+            entryPrice: entry,
+            exitPrice: live,
+            returnPct: entry > 0 ? (live / entry - 1.0) : 0.0
+          };
+        });
+
+        const prevBistEnd = (isConsecutive && prevRecord) ? prevRecord.bist100EndPrice : null;
+        const dbBistMonday = getPriceOnOrBefore('XU100', currentMonday) || 13808.20;
+        const startBist100 = prevBistEnd || dbBistMonday;
+        const liveBist100 = livePrices['XU100'] || startBist100;
+
+        const newRecord = {
+          weekStartDate: currentMonday,
+          positions: stockRecords,
+          portfolioReturn: stockRecords.length > 0 ? stockRecords.map(s => s.returnPct).reduce((a, b) => a + b, 0) / stockRecords.length : 0.0,
+          bist100StartPrice: startBist100,
+          bist100EndPrice: liveBist100,
+          bist100Return: startBist100 > 0 ? (liveBist100 / startBist100 - 1.0) : 0.0,
+          isCompleted: isPastFridayClose
+        };
+        records.push(newRecord);
+        updated = true;
+      } else {
+        const rec = records[index];
+        if (!rec.isCompleted) {
+          const shouldPopulate = !rec.positions || rec.positions.length === 0 || rec.positions.every(p => p.entryPrice === 1.0 && p.exitPrice === 1.0);
+          
+          let basePositions = [];
+          if (shouldPopulate) {
+            const prevRecord = index > 0 ? records[index - 1] : null;
+            const isConsecutive = prevRecord && areConsecutiveWeeks(prevRecord.weekStartDate, currentMonday);
+            const prevPositionsMap = {};
+            if (isConsecutive && prevRecord && prevRecord.positions) {
+              prevRecord.positions.forEach(pos => {
+                prevPositionsMap[pos.ticker] = pos.exitPrice;
+              });
+            }
+
+            basePositions = dbPositions.map(pos => {
+              const mondayPrice = getPriceOnOrBefore(pos.ticker, currentMonday);
+              const entry = prevPositionsMap[pos.ticker] || mondayPrice || pos.entry_price || pos.current_price || 1.0;
+              return {
+                ticker: pos.ticker,
+                entryPrice: entry,
+                exitPrice: entry,
+                returnPct: 0.0
+              };
+            });
+          } else {
+            basePositions = rec.positions;
+          }
+
+          const updatedStocks = basePositions.map(stock => {
+            const live = livePrices[stock.ticker];
+            if (live !== undefined && live !== null) {
+              return {
+                ...stock,
+                exitPrice: live,
+                returnPct: stock.entryPrice > 0 ? (live / stock.entryPrice - 1.0) : 0.0
+              };
+            }
+            return stock;
+          });
+
+          const startBist100 = rec.bist100StartPrice || 13808.20;
+          const liveBist100 = livePrices['XU100'] || rec.bist100EndPrice || startBist100;
+          
+          records[index] = {
+            ...rec,
+            positions: updatedStocks,
+            portfolioReturn: updatedStocks.length > 0 ? updatedStocks.map(s => s.returnPct).reduce((a, b) => a + b, 0) / updatedStocks.length : 0.0,
+            bist100EndPrice: liveBist100,
+            bist100Return: startBist100 > 0 ? (liveBist100 / startBist100 - 1.0) : 0.0,
+            isCompleted: isPastFridayClose
+          };
+
+          if (shouldPopulate || isPastFridayClose) {
+            updated = true;
+          }
+        }
+      }
+
+      if (updated || isPastFridayClose) {
+        localStorage.setItem('bist_weekly_records', JSON.stringify(records));
+      }
+      return records;
+    }
+
+    function seedInitialRecords() {
+      return [
+        {
+          weekStartDate: "2026-05-18",
+          positions: [
+            { ticker: "PCILT", entryPrice: 32.48, exitPrice: 33.10, returnPct: 0.0191 },
+            { ticker: "KIMMR", entryPrice: 17.29, exitPrice: 17.19, returnPct: -0.0058 },
+            { ticker: "ASELS", entryPrice: 428.00, exitPrice: 410.00, returnPct: -0.0421 },
+            { ticker: "LILAK", entryPrice: 36.08, exitPrice: 34.30, returnPct: -0.0493 },
+            { ticker: "TCKRC", entryPrice: 111.80, exitPrice: 141.30, returnPct: 0.2639 }
+          ],
+          portfolioReturn: 0.0372,
+          bist100StartPrice: 14029.54,
+          bist100EndPrice: 13808.20,
+          bist100Return: -0.0158,
+          isCompleted: true
+        }
+      ];
+    }
+
     // --- App Navigation Logic ---
     navItems.forEach(item => {
       item.addEventListener('click', (e) => {
@@ -1035,7 +1920,6 @@
       try {
         splashStatusEl.textContent = 'Veri paketi sorgulanıyor...';
         
-        // Fetch manifest to compare versions
         let manifest = null;
         try {
           const res = await fetch('./manifest.json?t=' + Date.now(), { cache: 'no-store' });
@@ -1046,7 +1930,6 @@
           console.warn('Could not fetch manifest.json, falling back to cache if available.', e);
         }
 
-        // Check IndexedDB cache
         const cached = await getCachedSnapshot();
 
         let rawBytes = null;
@@ -1056,7 +1939,6 @@
           splashStatusEl.textContent = 'Önbellekteki veritabanı açılıyor...';
           rawBytes = cached.db_blob;
         } else if (cached && !manifest) {
-          // Offline mode or fetch failed, use cache
           splashStatusEl.textContent = 'Çevrimdışı modda önbellekten açılıyor...';
           rawBytes = cached.db_blob;
           manifestToSave = {
@@ -1065,7 +1947,6 @@
             snapshot: { sha256: cached.sha256 }
           };
         } else {
-          // Download fresh snapshot
           if (!manifest) {
             throw new Error('Manifest alınamadı ve önbellekte kayıtlı veri yok!');
           }
@@ -1095,22 +1976,15 @@
         
         db = new SQL.Database(rawBytes);
         
-        // Hide Splash
         splashEl.style.display = 'none';
 
-        // Load Global Metadata
         loadedMetadata = queryOne('SELECT * FROM snapshot_metadata WHERE id = 1');
         if (loadedMetadata) {
           appExportedDateEl.textContent = 'Veri: ' + (loadedMetadata.snapshot_date || '—');
         }
 
-        // Populate filter selectors
         populateFilters();
-
-        // Render starting tab
         switchTab('picks');
-
-        // Asynchronously fetch Yahoo Live prices
         fetchLivePrices();
 
       } catch (err) {
@@ -1119,25 +1993,22 @@
       }
     }
 
-    // --- Populate filter selects ---
     function populateFilters() {
-      const sectors = queryAll('SELECT DISTINCT sector_custom FROM companies WHERE sector_custom IS NOT NULL AND sector_custom != "" ORDER BY sector_custom ASC');
+      const sectors = queryAll('SELECT DISTINCT sector FROM companies WHERE sector IS NOT NULL AND sector != "" ORDER BY sector ASC');
       const sectorFilter = document.getElementById('sector-filter');
       sectorFilter.innerHTML = '<option value="">Tüm Sektörler</option>';
       sectors.forEach(s => {
         const opt = document.createElement('option');
-        opt.value = s.sector_custom;
-        opt.textContent = s.sector_custom;
+        opt.value = s.sector;
+        opt.textContent = s.sector.toUpperCase();
         sectorFilter.appendChild(opt);
       });
     }
 
-    // --- Yahoo Finance Live Price Fetcher (via CORS proxy) ---
     async function fetchLivePrices() {
       try {
-        // Collect active positions + top 12 scoring tickers to monitor
         const portfolioTickers = queryAll('SELECT ticker FROM open_positions').map(p => p.ticker);
-        const topTickers = queryAll('SELECT ticker FROM scoring_latest ORDER BY ranking_score DESC LIMIT 12').map(p => p.ticker);
+        const topTickers = queryAll('SELECT ticker FROM scoring_latest WHERE alpha_core_eligible = 1 ORDER BY ranking_score DESC LIMIT 12').map(p => p.ticker);
         
         const tickers = [...new Set([...portfolioTickers, ...topTickers, 'XU100'])];
         if (tickers.length === 0) return;
@@ -1145,7 +2016,6 @@
         const yahooSymbols = tickers.map(t => t === 'XU100' ? 'XU100.IS' : t + '.IS').join(',');
         const yahooUrl = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${yahooSymbols}`;
         
-        // CORS Proxy wrapper
         const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(yahooUrl)}`;
         
         const response = await fetch(proxyUrl);
@@ -1167,10 +2037,11 @@
 
         console.log('Successfully updated live prices:', window.livePrices);
 
-        // Re-render current page to apply live prices
+        const dbPos = queryAll('SELECT * FROM open_positions');
+        updateActiveWeek(dbPos, window.livePrices);
+
         renderPage(currentTab);
         
-        // Update detail page live stats if open
         if (activeDetailTicker) {
           updateDetailLiveStats();
         }
@@ -1180,7 +2051,6 @@
       }
     }
 
-    // --- Page Rendering Dispatcher ---
     function renderPage(tab) {
       if (!db) return;
       if (tab === 'picks') renderPicksPage();
@@ -1191,11 +2061,9 @@
 
     // --- 1. PICKS PAGE RENDER ---
     function renderPicksPage() {
-      // Set week range
       const home = queryOne('SELECT * FROM home_summary WHERE id = 1');
       const picksWeekRange = document.getElementById('picks-week-range');
       if (home && home.macro_date) {
-        // Calculate monday/sunday range labels like Kotlin code does
         const dateStr = home.macro_date;
         const parts = dateStr.split('-');
         const date = new Date(parts[0], parts[1]-1, parts[2]);
@@ -1225,7 +2093,7 @@
         positions.forEach(pos => {
           const livePrice = window.livePrices[pos.ticker];
           let currentPrice = pos.current_price;
-          let pnlVal = pos.pnl_pct; // Database holds percentage value, e.g. 11.39
+          let pnlVal = pos.pnl_pct; 
           let isLiveBadge = false;
 
           if (livePrice) {
@@ -1262,9 +2130,8 @@
 
       // Render Suggested Signals
       const signalsListEl = document.getElementById('signals-list');
-      const topScoring = queryAll('SELECT * FROM scoring_latest ORDER BY ranking_score DESC LIMIT 10');
+      const topScoring = queryAll('SELECT * FROM scoring_latest WHERE alpha_core_eligible = 1 ORDER BY ranking_score DESC LIMIT 12');
       
-      // Calculate Suggestions using same Kotlin logic:
       const openTickers = new Set(positions.map(p => p.ticker));
       const top12Tickers = new Set(topScoring.slice(0, 12).map(t => t.ticker));
 
@@ -1290,7 +2157,6 @@
       const currentTargetCount = holds.length + buys.length;
       if (currentTargetCount > 5) {
         const overflow = currentTargetCount - 5;
-        // Sort holds by ranking score
         const holdsWithScores = holds.map(h => {
           const score = topScoring.find(t => t.ticker === h.ticker)?.ranking_score || 0;
           return { item: h, score };
@@ -1340,7 +2206,7 @@
       }
     }
 
-    // --- 2. LIST PAGE RENDER ---
+    // --- 2. LIST (BROWSE) PAGE RENDER ---
     let activeListMode = 'ALPHA_CORE';
     const listModeBtns = document.querySelectorAll('.chip-btn');
     const searchInput = document.getElementById('search-input');
@@ -1367,7 +2233,6 @@
       const sector = sectorFilter.value;
       const risk = riskFilter.value;
 
-      // Construct SQL parameters
       let sql = 'SELECT * FROM scoring_latest WHERE is_active = 1';
       const params = {};
 
@@ -1409,7 +2274,8 @@
         const itemEl = document.createElement('div');
         itemEl.className = 'list-item-row';
         
-        const scoreDisplay = row.ranking_score ? row.ranking_score.toFixed(1) : '—';
+        const alphaDisplay = row.alpha ? row.alpha.toFixed(1) : '—';
+        const riskDisplay = row.risk || '—';
         const rank = idx + 1;
 
         itemEl.innerHTML = `
@@ -1423,8 +2289,8 @@
             </div>
           </div>
           <div style="text-align: right;">
-            <div class="score-val" style="color: ${row.alpha_core_eligible ? 'var(--success)' : 'var(--text)'}">${scoreDisplay}</div>
-            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Model Skoru</div>
+            <div class="score-val" style="color: ${row.alpha_core_eligible ? 'var(--primary)' : 'var(--text)'}">${alphaDisplay}</div>
+            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">${riskDisplay}</div>
           </div>
         `;
         itemEl.addEventListener('click', () => openDetail(row.ticker));
@@ -1432,7 +2298,7 @@
       });
     }
 
-    // --- 3. MACRO PAGE RENDER ---
+    // --- 3. MACRO (MARKET) PAGE RENDER ---
     function renderMacroPage() {
       const home = queryOne('SELECT * FROM home_summary WHERE id = 1');
       if (!home) return;
@@ -1442,7 +2308,6 @@
       const realYield = policyRate - inflation;
       const isPositive = realYield > 0;
 
-      // Real Yield Card elements
       const yieldValEl = document.getElementById('macro-real-yield-val');
       const yieldBadgeEl = document.getElementById('macro-real-yield-badge');
       const yieldPinEl = document.getElementById('macro-real-yield-pin');
@@ -1456,7 +2321,7 @@
         yieldBadgeEl.textContent = 'POZİTİF REEL';
         yieldBadgeEl.style.background = 'rgba(16, 185, 129, 0.15)';
         yieldBadgeEl.style.color = 'var(--success)';
-        yieldDescEl.textContent = 'Pozitif Reel Faiz: Nakit ve risksiz mevduat getirileri enflasyon karşısında değerini korur. Borsa İstanbul\'da seçici olunmalı, çarpanları ucuz ve yüksek büyüme kapasiteli ALPHA Core şirketleri tercih edilmelidir.';
+        yieldDescEl.textContent = 'Pozitif Reel Faiz: Nakit ve risksiz mevduat getirileri enflasyon karşısında değerini korur. Borsa İstanbul'da seçici olunmalı, çarpanları ucuz ve yüksek büyüme kapasiteli ALPHA Core şirketleri tercih edilmelidir.';
       } else {
         yieldValEl.className = 'neg-text';
         yieldBadgeEl.textContent = 'NEGATİF REEL';
@@ -1465,13 +2330,11 @@
         yieldDescEl.textContent = 'Negatif Reel Faiz: Nakit ve mevduat tutmak reel bazda kayıp yaratır. Hisse senetleri ve reel varlıklar enflasyona karşı doğal koruma kalkanıdır. BIST100 endeksi genel olarak desteklenir.';
       }
 
-      // Slider pin placement (-15% to +15% maps to 0% to 100%)
       const clampedYield = Math.max(-0.15, Math.min(0.15, realYield));
       const percentagePosition = ((clampedYield + 0.15) / 0.30) * 100;
       yieldPinEl.style.left = `${percentagePosition}%`;
       yieldPinEl.style.borderColor = isPositive ? 'var(--success)' : 'var(--danger)';
 
-      // Cash strategy elements
       const cashState = home.cash_state || 'NORMAL';
       let stateColor = 'var(--success)';
       let stateLabel = 'NORMAL (Hisse Ağırlıklı)';
@@ -1500,7 +2363,6 @@
         notesEl.style.display = 'none';
       }
 
-      // Macro Stats Grid
       document.getElementById('macro-regime').textContent = home.regime || '—';
       document.getElementById('macro-regime').style.color = home.regime === 'RISK_ON' ? 'var(--success)' : 'var(--danger)';
       document.getElementById('macro-rate').textContent = `${(policyRate * 100).toFixed(1)}%`;
@@ -1508,88 +2370,10 @@
       document.getElementById('macro-usdtry').textContent = `${fmtNum(home.usdtry_rate, 4)} TL`;
     }
 
-    // --- 4. HISTORY PAGE RENDER ---
+    // --- 4. HISTORY PAGE RENDER (Synced calculations with Android App) ---
     function renderHistoryPage() {
-      // 1. Live portfolio performance summary
-      const weeklyPerf = queryAll('SELECT * FROM model_performance ORDER BY date ASC');
-      // If we don't have model_performance history, we fall back to seeds
-      // Seed week starting 2026-05-18
-      const seedWeek = {
-        weekStartDate: "2026-05-18",
-        portfolioReturn: 0.0372,
-        bist100Return: -0.0158
-      };
-
-      // In browser localstorage we can hold weekly records, let's read or write if not present
-      let storageRecords = localStorage.getItem('bist_weekly_records');
-      let records = [];
-      if (storageRecords) {
-        records = JSON.parse(storageRecords);
-      } else {
-        // Create from seed
-        records = [
-          {
-            weekStartDate: "2026-05-18",
-            positions: [
-              { ticker: "PCILT", entryPrice: 32.48, exitPrice: 33.10, returnPct: 0.0191 },
-              { ticker: "KIMMR", entryPrice: 17.29, exitPrice: 17.19, returnPct: -0.0058 },
-              { ticker: "ASELS", entryPrice: 428.00, exitPrice: 410.00, returnPct: -0.0421 },
-              { ticker: "LILAK", entryPrice: 36.08, exitPrice: 34.30, returnPct: -0.0493 },
-              { ticker: "TCKRC", entryPrice: 111.80, exitPrice: 141.30, returnPct: 0.2639 }
-            ],
-            portfolioReturn: 0.0372,
-            bist100StartPrice: 14029.54,
-            bist100EndPrice: 13808.20,
-            bist100Return: -0.0158,
-            isCompleted: true
-          }
-        ];
-        
-        // Dynamically compute the current active week
-        // Get current Monday date
-        const now = new Date();
-        const day = now.getDay();
-        const diff = now.getDate() - day + (day === 0 ? -6 : 1);
-        const monday = new Date(now.setDate(diff));
-        const mondayStr = monday.toISOString().split('T')[0];
-
-        // Ensure current active week is seeded
-        if (mondayStr !== "2026-05-18") {
-          // Query active positions
-          const dbPos = queryAll('SELECT * FROM open_positions');
-          const positionsRecords = dbPos.map(pos => {
-            const live = window.livePrices[pos.ticker] || pos.current_price;
-            return {
-              ticker: pos.ticker,
-              entryPrice: pos.entry_price || pos.current_price,
-              exitPrice: live,
-              returnPct: (live / (pos.entry_price || pos.current_price)) - 1.0
-            };
-          });
-
-          const homeSummary = queryOne('SELECT * FROM home_summary LIMIT 1');
-          const bist100Start = 13808.20;
-          const liveBist100 = window.livePrices['XU100'] || bist100Start;
-
-          // BIST Friday Close check (Friday 18:15 Istanbul time is GMT+3)
-          // We estimate based on client system time
-          const localDay = new Date().getDay();
-          const localHour = new Date().getHours();
-          const localMin = new Date().getMinutes();
-          const isPastFridayClose = (localDay === 5 && (localHour > 18 || (localHour === 18 && localMin >= 15))) || localDay === 6 || localDay === 0;
-
-          records.push({
-            weekStartDate: mondayStr,
-            positions: positionsRecords,
-            portfolioReturn: positionsRecords.length > 0 ? positionsRecords.map(p => p.returnPct).reduce((a,b)=>a+b, 0) / positionsRecords.length : 0.0,
-            bist100StartPrice: bist100Start,
-            bist100EndPrice: liveBist100,
-            bist100Return: (liveBist100 / bist100Start) - 1.0,
-            isCompleted: isPastFridayClose
-          });
-        }
-        localStorage.setItem('bist_weekly_records', JSON.stringify(records));
-      }
+      const dbPos = queryAll('SELECT * FROM open_positions');
+      const records = updateActiveWeek(dbPos, window.livePrices);
 
       // Calculate cumulative returns
       let cumulativePortfolio = 1.0;
@@ -1609,14 +2393,15 @@
       portEl.textContent = `${totalPortfolioReturn >= 0 ? '+' : ''}${totalPortfolioReturn.toFixed(2)}%`;
       portEl.className = totalPortfolioReturn >= 0 ? 'pos-text' : 'neg-text';
 
-      document.getElementById('history-total-bist').textContent = `${totalBist100Return >= 0 ? '+' : ''}${totalBist100Return.toFixed(2)}%`;
+      const bistEl = document.getElementById('history-total-bist');
+      bistEl.textContent = `${totalBist100Return >= 0 ? '+' : ''}${totalBist100Return.toFixed(2)}%`;
+      bistEl.className = totalBist100Return >= 0 ? 'pos-text' : 'neg-text';
       
       const alphaEl = document.getElementById('history-total-alpha');
-      alphaEl.textContent = `Endeks Farkı: ${totalAlpha >= 0 ? '+' : ''}${totalAlpha.toFixed(2)}%`;
+      alphaEl.textContent = `Endekse Karşı Fark: ${totalAlpha >= 0 ? '+' : ''}${totalAlpha.toFixed(2)}%`;
       alphaEl.style.backgroundColor = totalAlpha >= 0 ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)';
       alphaEl.style.color = totalAlpha >= 0 ? 'var(--success)' : 'var(--danger)';
 
-      // 2. Render weekly performance history rows
       const historyListEl = document.getElementById('weekly-history-list');
       historyListEl.innerHTML = '';
 
@@ -1632,37 +2417,38 @@
         const hasPositions = record.positions && record.positions.length > 0;
 
         rowCard.innerHTML = `
-          <div class="collapsible-header">
-            <div>
-              <div style="font-weight: 700; font-size: 14px;">${formatDateToTurkish(record.weekStartDate)} Haftası</div>
-              <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">
-                Haftalık Fark: <span class="${diffClass}" style="font-weight:bold;">${diff >= 0 ? '+' : ''}${diff.toFixed(2)}%</span>
+          <div class="collapsible-header" style="cursor: pointer; padding: 12px 16px;">
+            <div class="row" style="align-items: center;">
+              <div>
+                <div style="font-weight: 700; font-size: 14px;">${formatDateToTurkish(record.weekStartDate)} Haftası</div>
+                <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">
+                  Haftalık Fark: <span class="${diffClass}" style="font-weight:bold;">${diff >= 0 ? '+' : ''}${diff.toFixed(2)}%</span>
+                </div>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                ${!record.isCompleted ? '<span class="badge" style="background:#e91e63; color:white; font-size:8px;">AKTİF</span>' : ''}
+                <span class="material-symbols-rounded collapsible-arrow" style="color:var(--text-muted);">expand_more</span>
               </div>
             </div>
-            <div style="display:flex; align-items:center; gap:8px;">
-              ${!record.isCompleted ? '<span class="badge" style="background:#e91e63; color:white; font-size:8px;">AKTİF</span>' : ''}
-              <span class="material-symbols-rounded collapsible-arrow" style="color:var(--text-muted);">expand_more</span>
-            </div>
           </div>
-          <div class="collapsible-body">
-            <div class="row" style="font-size:11px; margin-bottom:12px;">
+          <div class="collapsible-body" style="padding: 0 16px 12px 16px; border-top: 1px solid var(--outline-variant); display: none;">
+            <div class="row" style="font-size:11px; margin-top:12px; margin-bottom:12px;">
               <div>
                 <span style="color:var(--text-muted)">Haftalık Portföy:</span>
                 <strong class="${record.portfolioReturn >= 0 ? 'pos-text' : 'neg-text'}">${(record.portfolioReturn * 100).toFixed(2)}%</strong>
               </div>
               <div style="text-align:right;">
                 <span style="color:var(--text-muted)">BIST100 Getirisi:</span>
-                <strong>${(record.bist100Return * 100).toFixed(2)}%</strong>
+                <strong class="${record.bist100Return >= 0 ? 'pos-text' : 'neg-text'}">${(record.bist100Return * 100).toFixed(2)}%</strong>
               </div>
             </div>
-            <div style="border-top:1px solid var(--card-border); padding-top:8px;">
+            <div style="border-top:1px solid var(--outline-variant); padding-top:8px;">
               <div style="font-size:10px; font-weight:bold; color:var(--text-muted); margin-bottom:6px;">SEÇİLEN HİSSELER VE GETİRİLERİ</div>
               <div class="spaced-y" id="pos-details-${record.weekStartDate}"></div>
             </div>
           </div>
         `;
 
-        // Populate positions breakdown
         const positionsContainer = rowCard.querySelector(`#pos-details-${record.weekStartDate}`);
         if (hasPositions) {
           record.positions.forEach(stock => {
@@ -1670,11 +2456,12 @@
             const stockRow = document.createElement('div');
             stockRow.className = 'row';
             stockRow.style.fontSize = '12px';
+            stockRow.style.padding = '4px 0';
             stockRow.innerHTML = `
               <span style="font-weight:600; color:var(--primary);">${stock.ticker}</span>
               <div>
-                <span style="color:var(--text-muted); font-size:10px; margin-right:8px;">${stock.entryPrice.toFixed(2)} → ${stock.exitPrice.toFixed(2)} TL</span>
-                <strong class="${stockReturn >= 0 ? 'pos-text' : 'neg-text'}">${stockReturn >= 0 ? '+' : ''}${stockReturn.toFixed(1)}%</strong>
+                <span style="color:var(--text-muted); font-size:10px; margin-right:8px;" class="tnum">${stock.entryPrice.toFixed(2)} → ${stock.exitPrice.toFixed(2)} TL</span>
+                <strong class="${stockReturn >= 0 ? 'pos-text' : 'neg-text'} tnum">${stockReturn >= 0 ? '+' : ''}${stockReturn.toFixed(2)}%</strong>
               </div>
             `;
             positionsContainer.appendChild(stockRow);
@@ -1683,20 +2470,23 @@
           positionsContainer.innerHTML = '<div style="font-size:11px; color:var(--text-muted); font-style:italic;">Hisse verisi yok</div>';
         }
 
-        // Toggle collapsible body
         const header = rowCard.querySelector('.collapsible-header');
         const body = rowCard.querySelector('.collapsible-body');
         const arrow = rowCard.querySelector('.collapsible-arrow');
         
-        // Active week open by default
         if (!record.isCompleted) {
-          body.classList.add('open');
+          body.style.display = 'block';
           arrow.textContent = 'expand_less';
         }
 
         header.addEventListener('click', () => {
-          const isOpen = body.classList.toggle('open');
-          arrow.textContent = isOpen ? 'expand_less' : 'expand_more';
+          if (body.style.display === 'none') {
+            body.style.display = 'block';
+            arrow.textContent = 'expand_less';
+          } else {
+            body.style.display = 'none';
+            arrow.textContent = 'expand_more';
+          }
         });
 
         historyListEl.appendChild(rowCard);
@@ -1724,18 +2514,16 @@
 
       if (!sc) return;
 
-      // Header details
       document.getElementById('det-ticker').textContent = ticker;
       document.getElementById('det-fullname').textContent = sc.name || comp?.name || '—';
 
-      // Live price overlay
       updateDetailLiveStats();
 
-      // DCF Valuation details
+      // DCF values formatting
       document.getElementById('det-dcf-val').textContent = sc.dcf_intrinsic_value ? fmtTry(sc.dcf_intrinsic_value) : '—';
       const mos = sc.dcf_mos || sc.dcf_margin_of_safety_pct || 0;
       const mosEl = document.getElementById('det-dcf-mos');
-      mosEl.textContent = fmtPct(mos);
+      mosEl.textContent = fmtPct(mos / 100);
       mosEl.className = mos >= 0 ? 'pos-text' : 'neg-text';
 
       document.getElementById('det-dcf-growth').textContent = sc.dcf_growth_rate_pct ? fmtPct(sc.dcf_growth_rate_pct / 100) : '—';
@@ -1744,32 +2532,57 @@
       
       const targetP = sc.target_price ? fmtTry(sc.target_price) : '—';
       const stopP = sc.stop_loss_price ? fmtTry(sc.stop_loss_price) : '—';
-      document.getElementById('det-det-limits').textContent = `${targetP} / ${stopP}`;
 
-      // Live position info block
+      // Live price + limit boundaries visual price lane bar
+      const livePrice = window.livePrices[ticker];
+      const dbPrice = queryOne('SELECT close FROM price_history_730d WHERE company_id = :cid ORDER BY date DESC LIMIT 1', { ':cid': sc.company_id })?.close || 0;
+      const currentVal = livePrice || dbPrice || 0;
+
+      const laneRange = (sc.target_price || 0) - (sc.stop_loss_price || 0);
+      let laneProgress = 0.5;
+      if (laneRange > 0) {
+        laneProgress = Math.max(0.0, Math.min(1.0, (currentVal - (sc.stop_loss_price || 0)) / laneRange));
+      }
+
+      document.getElementById('det-lane-pin').style.left = `${laneProgress * 100}%`;
+      document.getElementById('det-lane-price-type').textContent = livePrice ? 'CANLI FİYAT' : 'SNAPSHOT FİYATI';
+      document.getElementById('det-lane-price-type').style.color = livePrice ? '#e91e63' : 'var(--text-muted)';
+      document.getElementById('det-lane-stop').textContent = sc.stop_loss_price ? `${sc.stop_loss_price.toFixed(2)} TL` : '-- TL';
+      document.getElementById('det-lane-target').textContent = sc.target_price ? `${sc.target_price.toFixed(2)} TL` : '-- TL';
+      
+      const laneCurEl = document.getElementById('det-lane-current');
+      laneCurEl.textContent = `${currentVal.toFixed(2)} TL`;
+      laneCurEl.style.color = livePrice ? '#e91e63' : 'var(--text)';
+
+      // In portfolio badge
+      const portBadgeEl = document.getElementById('det-portfolio-badge');
+      if (pos) {
+        portBadgeEl.style.display = 'inline-block';
+      } else {
+        portBadgeEl.style.display = 'none';
+      }
+
+      // Live position details
       const portStatsEl = document.getElementById('det-port-stats');
       if (pos) {
         portStatsEl.style.display = 'block';
         document.getElementById('det-entry-price').textContent = fmtTry(pos.entry_price);
         document.getElementById('det-days-held').textContent = `${pos.days_held} Gün`;
         
-        const livePrice = window.livePrices[ticker];
-        let currentP = pos.current_price;
         let pnlPctVal = pos.pnl_pct;
         if (livePrice) {
-          currentP = livePrice;
-          pnlPctVal = (currentP / pos.entry_price - 1.0) * 100;
+          pnlPctVal = (livePrice / pos.entry_price - 1.0) * 100;
         }
         
         const pnlEl = document.getElementById('det-pnl-pct');
-        pnlEl.textContent = `${pnlPctVal >= 0 ? '+' : ''}${pnlPctVal.toFixed(1)}%`;
+        pnlEl.textContent = `${pnlPctVal >= 0 ? '+' : ''}${pnlPctVal.toFixed(2)}%`;
         pnlEl.className = pnlPctVal >= 0 ? 'pos-text' : 'neg-text';
       } else {
         portStatsEl.style.display = 'none';
       }
 
-      // Smart signal action badge
-      const topScoring = queryAll('SELECT ticker FROM scoring_latest ORDER BY ranking_score DESC LIMIT 10').map(x => x.ticker);
+      // Suggested action status badge
+      const topScoring = queryAll('SELECT ticker FROM scoring_latest WHERE alpha_core_eligible = 1 ORDER BY ranking_score DESC LIMIT 12').map(x => x.ticker);
       const openPositions = queryAll('SELECT ticker FROM open_positions').map(x => x.ticker);
       const indexInTop = topScoring.indexOf(ticker);
       const isOwned = openPositions.includes(ticker);
@@ -1788,79 +2601,204 @@
         badgeContainer.innerHTML = '<span class="badge badge-action" style="background:rgba(255,255,255,0.08); color:var(--text-muted)">İZLE</span>';
       }
 
-      // Factor Breakdown list
-      const factorsGrid = document.getElementById('det-factors-grid');
-      factorsGrid.innerHTML = '';
+      // Alert Warning banner for SELL suggestions
+      const sellWarningEl = document.getElementById('det-sell-warning');
+      const sellWarningTextEl = document.getElementById('det-sell-warning-text');
+      if (isOwned && (indexInTop === -1 || indexInTop >= 12)) {
+        sellWarningEl.style.display = 'block';
+        sellWarningTextEl.textContent = 'Bu hisse, güncel model kriterlerine göre ilk 12 şirketin dışında kaldığı için portföyden çıkarılma (SAT) sinyali vermektedir.';
+      } else {
+        sellWarningEl.style.display = 'none';
+      }
+
+      // Investment Thesis
+      const thesisListEl = document.getElementById('det-thesis-list');
+      thesisListEl.innerHTML = '';
       
-      const fields = [
-        { label: 'Buffett Skor', val: sc.buffett },
-        { label: 'Graham Değeri', val: sc.graham },
-        { label: 'Piotroski Skor', val: sc.piotroski_raw ? `${sc.piotroski_raw}/9` : '—' },
-        { label: 'Sihirli Formül', val: sc.magic_formula },
-        { label: 'Lynch PEG', val: sc.lynch_peg },
-        { label: 'Mesafe MoS', val: sc.dcf_mos },
-        { label: 'Momentum Skor', val: sc.momentum },
-        { label: 'Teknik Skor', val: sc.technical },
-        { label: 'Temettü Skor', val: sc.dividend },
-        { label: 'Beta Katsayısı', val: sc.beta }
+      if ((sc.buffett || 0) > 75) {
+        const div = document.createElement('div');
+        div.style.marginBottom = '8px';
+        div.innerHTML = `<strong style="color:var(--primary)">Kalite Odaklı Büyüme (Buffett)</strong>
+                         <div style="color:var(--text-muted); font-size:11px; margin-top:2px;">Şirket, yüksek özsermaye kârlılığı ile yatırdığı her 1 TL'yi verimli bir şekilde büyütüyor. Rekabet avantajı (Moat) çok güçlü.</div>`;
+        thesisListEl.appendChild(div);
+      }
+      if ((sc.graham || 0) > 75) {
+        const div = document.createElement('div');
+        div.style.marginBottom = '8px';
+        div.innerHTML = `<strong style="color:var(--primary)">Benjamin Graham İskontosu</strong>
+                         <div style="color:var(--text-muted); font-size:11px; margin-top:2px;">Hisse fiyatı, şirketin sahip olduğu varlıkların ve değerinin çok altında. Güvenlik marjı (MOS) yüksek.</div>`;
+        thesisListEl.appendChild(div);
+      }
+      if ((sc.momentum || 0) > 75) {
+        const div = document.createElement('div');
+        div.style.marginBottom = '8px';
+        div.innerHTML = `<strong style="color:var(--primary)">Trend Takibi (Momentum)</strong>
+                         <div style="color:var(--text-muted); font-size:11px; margin-top:2px;">Piyasa bu şirketi fark etmiş durumda. Yükseliş ivmesi teknik olarak çok güçlü ve ana endeksin üzerinde getiri sağlıyor.</div>`;
+        thesisListEl.appendChild(div);
+      }
+
+      if (isOwned && pos && pos.reason_top_factors_json) {
+        try {
+          const list = JSON.parse(pos.reason_top_factors_json);
+          list.forEach(item => {
+            const li = document.createElement('div');
+            li.style.marginTop = '4px';
+            li.style.fontSize = '11px';
+            li.style.color = 'var(--text-muted)';
+            li.textContent = `• ${item.label}: ${item.value.toFixed(1)}`;
+            thesisListEl.appendChild(li);
+          });
+        } catch(e) {}
+      }
+
+      if (thesisListEl.innerHTML === '') {
+        thesisListEl.innerHTML = '<div style="color:var(--text-muted); font-style:italic;">Bu şirket için belirgin bir model tez limiti aşılmadı.</div>';
+      }
+
+      // Deep Financial Insights
+      const insightsCardsEl = document.getElementById('det-insights-cards');
+      insightsCardsEl.innerHTML = '';
+      if (metrics) {
+        const roeVal = metrics.roe_adjusted !== null && metrics.roe_adjusted !== undefined ? (metrics.roe_adjusted * 100).toFixed(1) : '—';
+        const fcfVal = metrics.free_cash_flow !== null && metrics.free_cash_flow !== undefined ? (metrics.free_cash_flow / 1000000).toFixed(0) : '—';
+        const epsGrowthVal = metrics.real_eps_growth_pct !== null && metrics.real_eps_growth_pct !== undefined ? (metrics.real_eps_growth_pct * 100).toFixed(1) : '—';
+        
+        const roeBmText = sectorBenchmark && sectorBenchmark.roe_median !== null ? ` (Sektör Medyanı: ${(sectorBenchmark.roe_median * 100).toFixed(1)}%)` : '';
+
+        const roeCard = document.createElement('div');
+        roeCard.className = 'card';
+        roeCard.style.background = 'rgba(255,255,255,0.02)';
+        roeCard.innerHTML = `
+          <div class="row" style="margin-bottom:6px;">
+            <span style="font-weight:700; font-size:13px; color:var(--primary);">ROE (Özsermaye Kârlılığı)</span>
+            <strong style="font-size:15px;" class="tnum">${roeVal}%</strong>
+          </div>
+          <p style="font-size:11px; color:var(--text-muted); line-height:1.4;">
+            Şirket ortaklarının koyduğu sermayeyi yıllık %${roeVal} oranında kârla işletiyor. %20 üzeri genellikle 'başarılı' kabul edilir.${roeBmText}
+          </p>
+        `;
+        insightsCardsEl.appendChild(roeCard);
+
+        const fcfCard = document.createElement('div');
+        fcfCard.className = 'card';
+        fcfCard.style.background = 'rgba(255,255,255,0.02)';
+        fcfCard.innerHTML = `
+          <div class="row" style="margin-bottom:6px;">
+            <span style="font-weight:700; font-size:13px; color:var(--primary);">Serbest Nakit Akışı (FCF)</span>
+            <strong style="font-size:15px;" class="tnum">${fcfVal} M TL</strong>
+          </div>
+          <p style="font-size:11px; color:var(--text-muted); line-height:1.4;">
+            Tüm yatırımlar yapıldıktan sonra şirketin elinde kalan net nakit. Bu rakam ne kadar yüksekse temettü ve yeni yatırım potansiyeli o kadar artar.
+          </p>
+        `;
+        insightsCardsEl.appendChild(fcfCard);
+
+        const epsCard = document.createElement('div');
+        epsCard.className = 'card';
+        epsCard.style.background = 'rgba(255,255,255,0.02)';
+        epsCard.innerHTML = `
+          <div class="row" style="margin-bottom:6px;">
+            <span style="font-weight:700; font-size:13px; color:var(--primary);">Reel EPS Büyümesi</span>
+            <strong style="font-size:15px;" class="tnum">${epsGrowthVal}%</strong>
+          </div>
+          <p style="font-size:11px; color:var(--text-muted); line-height:1.4;">
+            Şirketin hisse başı kârı, enflasyondan arındırıldıktan sonra %${epsGrowthVal} büyümüş. Gerçek büyümeyi temsil eder.
+          </p>
+        `;
+        insightsCardsEl.appendChild(epsCard);
+      } else {
+        insightsCardsEl.innerHTML = '<div style="color:var(--text-muted); font-style:italic;">Finansal özet bulunmuyor.</div>';
+      }
+
+      // Sectoral Benchmarks details
+      const bmCard = document.getElementById('det-benchmark-card');
+      if (sectorBenchmark) {
+        bmCard.style.display = 'block';
+        document.getElementById('det-bm-roe').textContent = fmtPct(sectorBenchmark.roe_median);
+        document.getElementById('det-bm-roa').textContent = fmtPct(sectorBenchmark.roa_median);
+        document.getElementById('det-bm-count').textContent = sectorBenchmark.company_count !== null && sectorBenchmark.company_count !== undefined ? sectorBenchmark.company_count : '—';
+      } else {
+        bmCard.style.display = 'none';
+      }
+
+      // Model detail scores (fixed mapping bug to scores list)
+      const scoresListEl = document.getElementById('det-scores-list');
+      scoresListEl.innerHTML = '';
+      const scoreRows = [
+        { label: 'Buffett Kalite', val: sc.buffett },
+        { label: 'Graham Değer', val: sc.graham },
+        { label: 'Piotroski Mali', val: sc.piotroski_raw },
+        { label: 'Momentum Gücü', val: sc.momentum },
+        { label: 'DCF İskonto', val: sc.dcf_mos || sc.dcf_margin_of_safety_pct }
       ];
 
-      fields.forEach(f => {
+      scoreRows.forEach(item => {
         let displayVal = '—';
-        if (f.val !== null && f.val !== undefined) {
-          if (typeof f.val === 'number') {
-            displayVal = f.label.includes('Değeri') ? fmtTry(f.val) : f.val.toFixed(1);
+        if (item.val !== null && item.val !== undefined) {
+          if (item.label === 'Piotroski Mali') {
+            displayVal = `${item.val}/9`;
+          } else if (item.label === 'DCF İskonto') {
+            displayVal = `${item.val >= 0 ? '+' : ''}${item.val.toFixed(1)}%`;
           } else {
-            displayVal = String(f.val);
+            displayVal = item.val.toFixed(1);
           }
         }
-        const card = document.createElement('div');
-        card.className = 'factor-card';
-        card.innerHTML = `
-          <span class="factor-lbl">${f.label}</span>
-          <span class="factor-val">${displayVal}</span>
+        
+        const row = document.createElement('div');
+        row.className = 'row';
+        row.style.padding = '4px 0';
+        row.innerHTML = `
+          <span style="color:var(--text-muted)">${item.label}:</span>
+          <strong style="color:var(--text);">${displayVal}</strong>
         `;
-        factorsGrid.appendChild(card);
+        scoresListEl.appendChild(row);
       });
 
-      // Quality Flags
-      const flagsCard = document.getElementById('det-flags-card');
-      const flagsList = document.getElementById('det-flags-list');
-      flagsList.innerHTML = '';
-      if (sc.quality_flags_json) {
-        try {
-          const flags = JSON.parse(sc.quality_flags_json);
-          if (flags && flags.length > 0) {
-            flagsCard.style.display = 'block';
-            flags.forEach(f => {
-              const chip = document.createElement('span');
-              chip.className = 'badge badge-sell';
-              chip.style.fontSize = '9px';
-              chip.style.padding = '3px 8px';
-              chip.style.borderRadius = '20px';
-              chip.textContent = f;
-              flagsList.appendChild(chip);
-            });
-          } else {
-            flagsCard.style.display = 'none';
-          }
-        } catch (e) {
-          flagsCard.style.display = 'none';
+      // Advanced parameters values population
+      if (metrics) {
+        document.getElementById('det-adv-reported-net').textContent = metrics.reported_net_income !== null && metrics.reported_net_income !== undefined ? fmtMoney(metrics.reported_net_income) : '—';
+        document.getElementById('det-adv-adjusted-net').textContent = metrics.adjusted_net_income !== null && metrics.adjusted_net_income !== undefined ? fmtMoney(metrics.adjusted_net_income) : '—';
+        document.getElementById('det-adv-monetary').textContent = metrics.monetary_gain_loss !== null && metrics.monetary_gain_loss !== undefined ? fmtMoney(metrics.monetary_gain_loss) : '—';
+        document.getElementById('det-adv-eps-growth').textContent = metrics.real_eps_growth_pct !== null && metrics.real_eps_growth_pct !== undefined ? fmtPct(metrics.real_eps_growth_pct) : '—';
+        document.getElementById('det-adv-roa').textContent = metrics.roa_adjusted !== null && metrics.roa_adjusted !== undefined ? fmtPct(metrics.roa_adjusted) : '—';
+        
+        document.getElementById('det-adv-owner-earnings').textContent = metrics.owner_earnings !== null && metrics.owner_earnings !== undefined ? fmtMoney(metrics.owner_earnings) : '—';
+        document.getElementById('det-adv-fcf').textContent = metrics.free_cash_flow !== null && metrics.free_cash_flow !== undefined ? fmtMoney(metrics.free_cash_flow) : '—';
+      }
+
+      document.getElementById('det-adv-dcf-val').textContent = sc.dcf_intrinsic_value ? fmtTry(sc.dcf_intrinsic_value) : '—';
+      document.getElementById('det-adv-dcf-growth').textContent = sc.dcf_growth_rate_pct ? fmtPct(sc.dcf_growth_rate_pct / 100) : '—';
+      document.getElementById('det-adv-dcf-wacc').textContent = sc.dcf_discount_rate_pct ? fmtPct(sc.dcf_discount_rate_pct / 100) : '—';
+      document.getElementById('det-adv-dcf-terminal').textContent = sc.dcf_terminal_growth_pct ? fmtPct(sc.dcf_terminal_growth_pct / 100) : '—';
+      
+      const advMos = sc.dcf_mos || sc.dcf_margin_of_safety_pct || 0;
+      document.getElementById('det-adv-dcf-mos').textContent = fmtPct(advMos / 100);
+
+      if (metrics && metrics.related_party_revenue_pct !== null && metrics.related_party_revenue_pct !== undefined) {
+        const rpPct = metrics.related_party_revenue_pct;
+        const rpContainer = document.getElementById('det-related-party-container');
+        const rpWarning = document.getElementById('det-related-party-warning');
+        
+        document.getElementById('det-adv-related-pct').textContent = fmtPct(rpPct);
+        
+        if (rpPct > 0.15) {
+          rpContainer.style.backgroundColor = 'rgba(239, 68, 68, 0.08)';
+          rpContainer.style.border = '1px solid rgba(239, 68, 68, 0.25)';
+          rpWarning.style.display = 'block';
+          rpWarning.style.color = 'var(--danger)';
+          rpWarning.textContent = 'UYARI: İlişkili taraf işlemlerinden elde edilen gelir payı %15 limitinin üzerindedir. Bu durum finansal şeffaflık riski oluşturabilir.';
+        } else {
+          rpContainer.style.backgroundColor = 'rgba(255, 255, 255, 0.02)';
+          rpContainer.style.border = '1px solid var(--outline)';
+          rpWarning.style.display = 'none';
         }
-      } else {
-        flagsCard.style.display = 'none';
       }
 
-      // AI Insight Notes
-      const insightCard = document.getElementById('det-insight-card');
-      if (sc.ai_insight) {
-        insightCard.style.display = 'block';
-        document.getElementById('det-insight-text').textContent = sc.ai_insight;
-      } else {
-        insightCard.style.display = 'none';
-      }
+      document.getElementById('det-adv-piotroski').textContent = sc.piotroski_raw ? `${sc.piotroski_raw}/9` : '—';
+      document.getElementById('det-adv-peg').textContent = sc.lynch_peg ? sc.lynch_peg.toFixed(2) : '—';
+      document.getElementById('det-adv-magic').textContent = sc.magic_formula ? sc.magic_formula.toFixed(1) : '—';
 
-      // Financials Snapshot
+      // Financials Snapshot Grid
       const financesGrid = document.getElementById('det-finances-grid');
       financesGrid.innerHTML = '';
       if (metrics) {
@@ -1890,7 +2828,6 @@
         financesGrid.innerHTML = '<p style="color:var(--text-muted); font-size:11px; font-style:italic; padding:12px;">Bu şirket için finansal veri bulunmuyor.</p>';
       }
 
-      // Draw Detail Charts
       drawCharts(sc.company_id);
     }
 
@@ -1906,7 +2843,7 @@
       const priceValEl = document.getElementById('det-current-price');
       if (livePrice) {
         priceValEl.textContent = fmtTry(livePrice);
-        priceValEl.className = 'pos-text'; // Pulsing live price color
+        priceValEl.className = 'pos-text'; 
       } else if (dbPrice) {
         priceValEl.textContent = fmtTry(dbPrice);
         priceValEl.className = 'neutral-text';
@@ -1917,7 +2854,6 @@
 
     // --- Chart Rendering Function via ApexCharts ---
     function drawCharts(companyId) {
-      // 1. Price History Chart (730d)
       const prices = queryAll('SELECT date, close FROM price_history_730d WHERE company_id = :cid ORDER BY date ASC', { ':cid': companyId });
       
       const priceDates = prices.map(p => p.date);
@@ -1935,7 +2871,7 @@
           background: 'transparent',
           foreColor: '#94a3b8'
         },
-        colors: ['#3b82f6'],
+        colors: ['#FFB48A'],
         fill: {
           type: 'gradient',
           gradient: {
@@ -1955,7 +2891,7 @@
             formatter: (val) => {
               if (!val) return '';
               const parts = val.split('-');
-              return parts.length === 3 ? `${parts[2]}/${parts[1]}` : val; // e.g. 29/05
+              return parts.length === 3 ? `${parts[2]}/${parts[1]}` : val; 
             }
           },
           axisBorder: { show: false },
@@ -1983,7 +2919,6 @@
       priceChartInstance = new ApexCharts(document.querySelector("#price-chart"), priceOptions);
       priceChartInstance.render();
 
-      // 2. Factor History Chart (Quarterly)
       const factors = queryAll('SELECT quarter_end, composite_alpha FROM factor_history_quarterly WHERE company_id = :cid ORDER BY quarter_end ASC', { ':cid': companyId });
       
       const factorQuarters = factors.map(f => f.quarter_end);
@@ -2001,7 +2936,7 @@
           background: 'transparent',
           foreColor: '#94a3b8'
         },
-        colors: ['#10b981'],
+        colors: ['#7DD3FC'],
         plotOptions: {
           bar: {
             borderRadius: 4,
@@ -2033,22 +2968,198 @@
       factorChartInstance.render();
     }
 
-    // Modal backtest click event handler
-    document.getElementById('btn-backtest-info').addEventListener('click', () => {
-      // Create and display a quick backtest info modal
-      const overview = queryOne('SELECT * FROM home_summary WHERE id = 1');
-      const winRate = overview?.win_rate ? (overview.win_rate * 100).toFixed(0) + '%' : '—';
-      const avgReturn = overview?.total_return_avg ? (overview.total_return_avg * 100).toFixed(1) + '%' : '—';
-      const activeReturn = overview?.active_return_avg ? (overview.active_return_avg * 100).toFixed(1) + '%' : '—';
-      
-      alert(
-        `📊 BIST Picker 10 Yıllık Backtest Sonuçları\n\n` +
-        `• Strateji Toplam Başarı Oranı: ${winRate}\n` +
-        `• Rebalance Başına Ortalama Getiri: ${avgReturn}\n` +
-        `• Endeks Üzeri Aktif Getiri (Alfa): ${activeReturn}\n\n` +
-        `Model, 2017-2026 yılları arasında endeksi kümülatif bazda büyük oranda yenmiştir.`
-      );
+    // Toggle advanced details in stock detail page
+    document.getElementById('btn-toggle-advanced').addEventListener('click', () => {
+      const container = document.getElementById('det-advanced-container');
+      const btn = document.getElementById('btn-toggle-advanced');
+      if (container.style.display === 'none') {
+        container.style.display = 'block';
+        btn.textContent = 'Gelişmiş Verileri Gizle';
+      } else {
+        container.style.display = 'none';
+        btn.textContent = 'Gelişmiş Verileri Göster';
+      }
     });
+
+    // --- Backtesting overlay logic implementation ---
+    const backtestOverlayEl = document.getElementById('backtest-overlay');
+    const closeBacktestBtn = document.getElementById('btn-close-backtest');
+
+    closeBacktestBtn.addEventListener('click', () => {
+      backtestOverlayEl.classList.remove('open');
+    });
+
+    document.getElementById('btn-backtest-info').addEventListener('click', () => {
+      openBacktest();
+    });
+
+    function openBacktest() {
+      backtestOverlayEl.classList.add('open');
+      
+      const perfPoints = queryAll('SELECT * FROM model_performance ORDER BY date ASC');
+      const last = perfPoints[perfPoints.length - 1];
+      
+      const totalReturn = last ? last.strategy_return - 100.0 : 0.0;
+      const benchReturn = last ? last.benchmark_return - 100.0 : 0.0;
+      const alpha = last ? last.strategy_return - last.benchmark_return : 0.0;
+      
+      document.getElementById('bt-total-return').textContent = `%${totalReturn.toFixed(1)}`;
+      document.getElementById('bt-total-return').className = totalReturn >= 0 ? 'pos-text' : 'neg-text';
+      
+      document.getElementById('bt-bench-return').textContent = `%${benchReturn.toFixed(1)}`;
+      document.getElementById('bt-bench-return').className = benchReturn >= 0 ? 'pos-text' : 'neg-text';
+      
+      const alphaBadge = document.getElementById('bt-alpha-badge');
+      alphaBadge.textContent = `Alpha (Endeks Üstü Getiri): ${alpha >= 0 ? '+' : ''}${alpha.toFixed(1)}%`;
+      alphaBadge.style.backgroundColor = alpha >= 0 ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)';
+      alphaBadge.style.color = alpha >= 0 ? 'var(--success)' : 'var(--danger)';
+
+      drawBacktestChart(perfPoints);
+      populateBacktestHistory(perfPoints);
+      populateBacktestTransactions();
+    }
+
+    function drawBacktestChart(perfPoints) {
+      const dates = perfPoints.map(p => p.date);
+      const stratSeries = perfPoints.map(p => parseFloat((p.strategy_return - 100.0).toFixed(1)));
+      const benchSeries = perfPoints.map(p => parseFloat((p.benchmark_return - 100.0).toFixed(1)));
+      
+      const options = {
+        series: [
+          { name: 'Model Portföy', data: stratSeries },
+          { name: 'BIST100 Endeksi', data: benchSeries }
+        ],
+        chart: {
+          type: 'area',
+          height: 220,
+          toolbar: { show: false },
+          background: 'transparent',
+          foreColor: '#94a3b8'
+        },
+        colors: ['#FFB48A', '#7DD3FC'], 
+        fill: {
+          type: 'gradient',
+          gradient: {
+            shadeIntensity: 1,
+            opacityFrom: 0.25,
+            opacityTo: 0.0,
+            stops: [0, 95, 100]
+          }
+        },
+        dataLabels: { enabled: false },
+        stroke: { curve: 'smooth', width: 2 },
+        xaxis: {
+          categories: dates,
+          labels: {
+            show: true,
+            rotate: 0,
+            formatter: (val) => {
+              if (!val) return '';
+              const parts = val.split('-');
+              return parts.length === 3 ? `${parts[0]}` : val; 
+            }
+          },
+          axisBorder: { show: false },
+          axisTicks: { show: false },
+          tickAmount: 5
+        },
+        yaxis: {
+          labels: {
+            formatter: (val) => `${val >= 0 ? '+' : ''}${val.toFixed(0)}%`
+          }
+        },
+        grid: {
+          borderColor: 'rgba(255,255,255,0.05)',
+          strokeDashArray: 4,
+          xaxis: { lines: { show: false } },
+          yaxis: { lines: { show: true } }
+        },
+        tooltip: {
+          theme: 'dark',
+          x: { formatter: (val) => formatDateToTurkish(dates[val - 1]) }
+        }
+      };
+
+      if (window.backtestChartInstance) {
+        window.backtestChartInstance.destroy();
+      }
+      window.backtestChartInstance = new ApexCharts(document.querySelector("#bt-chart"), options);
+      window.backtestChartInstance.render();
+    }
+
+    function populateBacktestHistory(perfPoints) {
+      const historyListEl = document.getElementById('bt-history-list');
+      historyListEl.innerHTML = '';
+      
+      const reversedPoints = perfPoints.slice().reverse();
+      reversedPoints.forEach(point => {
+        const stratRet = point.strategy_return - 100.0;
+        const benchRet = point.benchmark_return - 100.0;
+        const alpha = point.alpha;
+        const alphaClass = alpha >= 0 ? 'pos-text' : 'neg-text';
+        
+        const row = document.createElement('div');
+        row.className = 'card';
+        row.style.background = 'rgba(255,255,255,0.01)';
+        row.innerHTML = `
+          <div class="row" style="font-size:12px; align-items:center;">
+            <div>
+              <div style="font-weight:700;">${formatDateToTurkish(point.date)}</div>
+              <div class="${alphaClass}" style="font-size:10px; font-weight:bold; margin-top:2px;">
+                Alpha: ${alpha >= 0 ? '+' : ''}${alpha.toFixed(2)}%
+              </div>
+            </div>
+            <div style="display:flex; gap:16px;">
+              <div style="text-align:right;">
+                <div style="font-size:9px; color:var(--text-muted);">Model</div>
+                <strong style="color:var(--success);">${stratRet >= 0 ? '+' : ''}${stratRet.toFixed(1)}%</strong>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:9px; color:var(--text-muted);">BIST100</div>
+                <strong style="color:var(--text);">${benchRet >= 0 ? '+' : ''}${benchRet.toFixed(1)}%</strong>
+              </div>
+            </div>
+          </div>
+        `;
+        historyListEl.appendChild(row);
+      });
+    }
+
+    function populateBacktestTransactions() {
+      const transListEl = document.getElementById('bt-transactions-list');
+      transListEl.innerHTML = '';
+      const closedPos = queryAll('SELECT * FROM portfolio_history ORDER BY exit_date DESC');
+      
+      if (closedPos.length === 0) {
+        transListEl.innerHTML = '<p style="color:var(--text-muted); font-size:11px; font-style:italic; padding:12px;">Henüz tamamlanmış işlem bulunmuyor.</p>';
+        return;
+      }
+
+      closedPos.forEach(pos => {
+        const pnl = pos.pnl_pct || 0.0;
+        const pnlClass = pnl >= 0 ? 'pos-text' : 'neg-text';
+        const exitR = pos.exit_reason || 'Model değişimi';
+        
+        const row = document.createElement('div');
+        row.className = 'card';
+        row.style.background = 'rgba(255,255,255,0.01)';
+        row.innerHTML = `
+          <div class="row" style="font-size:12px; align-items:center;">
+            <div>
+              <strong style="color:var(--primary);">${pos.ticker}</strong>
+              <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">
+                ${formatDateToTurkish(pos.selection_date)} - ${formatDateToTurkish(pos.exit_date)}
+              </div>
+            </div>
+            <div style="text-align:right;">
+              <strong class="${pnlClass}">${pnl >= 0 ? '+' : ''}${pnl.toFixed(1)}%</strong>
+              <div style="font-size:9px; color:var(--text-muted); margin-top:2px;">${exitR}</div>
+            </div>
+          </div>
+        `;
+        transListEl.appendChild(row);
+      });
+    }
 
     // Launch Application
     window.addEventListener('load', () => {

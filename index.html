@@ -1,10 +1,2059 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>MobileInv Feed</title>
-  </head>
-  <body>
-    <p>MobileInv feed branch is ready. Manifest will be published here by GitHub Actions.</p>
-  </body>
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>BIST Picker — Mobil Portföy Takip</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  
+  <!-- PWA Meta Tags for iOS & Android -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="BistPicker">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#090d16">
+
+  <!-- Icons for PWA -->
+  <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/Somethinglikeu-hub/MobileInv-mobile-v2/main/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Material Symbols Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+
+  <!-- Premium Dark Theme CSS -->
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: rgba(17, 24, 39, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-border-glow: rgba(59, 130, 246, 0.25);
+      --primary: #3b82f6;
+      --primary-rgb: 59, 130, 246;
+      --primary-grad: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      --accent-purple: linear-gradient(135deg, #e91e63, #5e3dbf);
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-gold: #f59e0b;
+      --nav-bg: rgba(13, 18, 30, 0.85);
+      
+      --font-display: 'Outfit', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 14px;
+      line-height: 1.5;
+      overflow-x: hidden;
+      /* Prevent scrolling body bounce on iOS */
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      display: flex;
+      flex-direction: column;
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    /* Container holding all active content */
+    #app-container {
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 16px 16px 90px 16px;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: var(--font-display);
+      font-weight: 700;
+    }
+
+    /* Top bar / Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px;
+      border-bottom: 1px solid var(--card-border);
+      background: rgba(9, 13, 22, 0.9);
+      backdrop-filter: blur(10px);
+      z-index: 10;
+    }
+
+    header h1 {
+      font-size: 20px;
+      background: linear-gradient(135deg, #3b82f6, #00f2fe);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 800;
+    }
+
+    header .meta-badge {
+      font-size: 10px;
+      padding: 4px 8px;
+      border-radius: 20px;
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    /* Bottom Navigation Tab Bar */
+    nav.bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 65px;
+      background: var(--nav-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding-bottom: env(safe-area-inset-bottom);
+      z-index: 100;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 500;
+      transition: color 0.2s ease;
+      flex: 1;
+      height: 100%;
+    }
+
+    .nav-item.active {
+      color: var(--primary);
+    }
+
+    .nav-item .material-symbols-rounded {
+      font-size: 24px;
+      margin-bottom: 4px;
+      transition: transform 0.2s ease;
+    }
+
+    .nav-item:active .material-symbols-rounded {
+      transform: scale(0.9);
+    }
+
+    /* UI Cards with Glassmorphism */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 16px;
+      margin-bottom: 16px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: border 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:active {
+      border-color: var(--card-border-glow);
+    }
+
+    .card-title {
+      font-size: 15px;
+      margin-bottom: 12px;
+      color: var(--text);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Generic Utility Layout elements */
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .spaced-y > * + * {
+      margin-top: 12px;
+    }
+
+    /* Badges & Chips */
+    .badge {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 9px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .badge-live {
+      background: #e91e63;
+      color: white;
+      animation: pulse 1.5s infinite;
+    }
+
+    .badge-action {
+      font-size: 10px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+    .badge-buy { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+    .badge-sell { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
+    .badge-hold { background: rgba(59, 130, 246, 0.15); color: var(--primary); }
+
+    /* Keyframes */
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+
+    /* Loader / Splash Screen */
+    #splash-screen {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 32px;
+      text-align: center;
+    }
+
+    .loader {
+      width: 48px;
+      height: 48px;
+      border: 3px solid rgba(59, 130, 246, 0.15);
+      border-radius: 50%;
+      display: inline-block;
+      border-top-3d: 3px solid var(--primary);
+      border-top: 3px solid var(--primary);
+      animation: rotation 1s linear infinite;
+      margin-bottom: 24px;
+    }
+
+    @keyframes rotation {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* List view items */
+    .list-item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      border-bottom: 1px solid var(--card-border);
+      transition: background 0.2s ease;
+    }
+
+    .list-item-row:last-child {
+      border-bottom: none;
+    }
+
+    .list-item-row:active {
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .ticker-block {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ticker-name {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--primary);
+    }
+
+    .company-fullname {
+      font-size: 10px;
+      color: var(--text-muted);
+      max-width: 180px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .score-val {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 16px;
+    }
+
+    /* Forms & Inputs */
+    .search-box {
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 12px 16px 12px 42px;
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 14px;
+      outline: none;
+      transition: border 0.3s ease;
+    }
+
+    .search-input:focus {
+      border-color: var(--primary);
+    }
+
+    .search-box .material-symbols-rounded {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 20px;
+    }
+
+    .filters-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    select.filter-select {
+      width: 100%;
+      padding: 10px 12px;
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      color: var(--text);
+      font-size: 12px;
+      outline: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 14px;
+    }
+
+    /* Chip Filter List */
+    .chip-filters {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 16px;
+      scrollbar-width: none;
+    }
+    .chip-filters::-webkit-scrollbar { display: none; }
+
+    .chip-btn {
+      padding: 6px 14px;
+      border-radius: 20px;
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .chip-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+
+    /* Gauge / Slider */
+    .gauge-container {
+      margin-top: 12px;
+    }
+    .gauge-track {
+      height: 8px;
+      border-radius: 4px;
+      background: linear-gradient(to right, var(--danger) 0%, var(--warning) 50%, var(--success) 100%);
+      position: relative;
+    }
+    .gauge-pin {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: white;
+      border: 3px solid var(--primary);
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 8px rgba(0,0,0,0.5);
+      transition: left 0.5s ease;
+    }
+
+    /* Collapsible items for history */
+    .collapsible-header {
+      padding: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+    .collapsible-body {
+      padding: 12px;
+      border-top: 1px solid var(--card-border);
+      display: none;
+    }
+    .collapsible-body.open {
+      display: block;
+    }
+
+    /* Detail overlay bottom sheet */
+    #detail-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: var(--bg);
+      z-index: 500;
+      display: flex;
+      flex-direction: column;
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    #detail-overlay.open {
+      transform: translateY(0);
+    }
+
+    #detail-scrollable {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      padding-bottom: 90px;
+    }
+
+    .detail-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .close-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--card-border);
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      cursor: pointer;
+    }
+
+    /* Factor scoring layout */
+    .factor-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .factor-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .factor-lbl {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .factor-val {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    /* Financials grid */
+    .fin-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+    .fin-item {
+      padding: 8px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    /* Live price gain/loss animations */
+    .pos-text { color: var(--success) !important; }
+    .neg-text { color: var(--danger) !important; }
+    .neutral-text { color: var(--text-muted); }
+
+    /* Custom scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header -->
+  <header>
+    <h1>BIST Picker</h1>
+    <div class="meta-badge" id="app-exported-date">Yükleniyor...</div>
+  </header>
+
+  <!-- Main Scrolling Area -->
+  <div id="app-container">
+    
+    <!-- PAGE 1: PICKS (HOME) -->
+    <div id="page-picks" class="tab-page">
+      <!-- Active Week Summary -->
+      <div class="card" style="background: var(--accent-purple); border: none;">
+        <h3 id="picks-week-range" style="font-size: 18px; color: white;">Portföy Yönetimi</h3>
+        <p style="font-size: 11px; color: rgba(255, 255, 255, 0.85); margin-top: 4px;">
+          ALPHA Core modeli haftalık hisse seçim sinyalleri.
+        </p>
+      </div>
+
+      <!-- Zeki Sinyaller (Smart Signals) -->
+      <div class="card" id="card-signals" style="display: none;">
+        <div class="card-title">
+          <span>Zeki Sinyaller</span>
+          <span class="badge" style="background: rgba(59, 130, 246, 0.15); color: var(--primary);">MODEL</span>
+        </div>
+        <div id="signals-list" class="spaced-y"></div>
+      </div>
+
+      <!-- Aktif Portföy -->
+      <div class="card">
+        <div class="card-title">
+          <span>Aktif Portföy</span>
+          <span class="badge" id="port-count-badge" style="background: rgba(255, 255, 255, 0.1); color: var(--text-muted);">0 Hisse</span>
+        </div>
+        <div id="portfolio-list" class="spaced-y">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 2: LISTE (SCORING) -->
+    <div id="page-list" class="tab-page" style="display: none;">
+      <!-- Search Input -->
+      <div class="search-box">
+        <span class="material-symbols-rounded">search</span>
+        <input type="text" id="search-input" class="search-input" placeholder="Hisse kodu veya adı ara...">
+      </div>
+
+      <!-- Scoring View Mode Chips -->
+      <div class="chip-filters">
+        <button class="chip-btn active" data-mode="ALPHA_CORE">ALPHA Core</button>
+        <button class="chip-btn" data-mode="ALPHA_X">ALPHA-X</button>
+        <button class="chip-btn" data-mode="MODEL">Hisse Modeli</button>
+        <button class="chip-btn" data-mode="RESEARCH">İzleme Listesi</button>
+        <button class="chip-btn" data-mode="ALL">Tüm Hisseler</button>
+      </div>
+
+      <!-- Filter Grid -->
+      <div class="filters-grid">
+        <select id="sector-filter" class="filter-select">
+          <option value="">Tüm Sektörler</option>
+        </select>
+        <select id="risk-filter" class="filter-select">
+          <option value="">Tüm Riskler</option>
+          <option value="LOW">Düşük Risk</option>
+          <option value="MEDIUM">Orta Risk</option>
+          <option value="HIGH">Yüksek Risk</option>
+        </select>
+      </div>
+
+      <!-- Scrollable Scoring Rows -->
+      <div class="card" style="padding: 0; overflow: hidden;">
+        <div id="scoring-list">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 3: MAKRO (MARKET) -->
+    <div id="page-macro" class="tab-page" style="display: none;">
+      <!-- Reel Faiz Getirisi Card -->
+      <div class="card" id="card-real-yield">
+        <div class="card-title">
+          <span>Reel Faiz Getirisi</span>
+          <span class="badge" style="background: rgba(16,185,129,0.1); color: var(--success);">MAKRO</span>
+        </div>
+        <div class="row" style="margin-top: 8px;">
+          <div>
+            <div id="macro-real-yield-val" style="font-family: var(--font-display); font-weight: 800; font-size: 32px; color: var(--success);">--</div>
+            <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Politika Faizi - Yıllık Enflasyon</div>
+          </div>
+          <span class="badge" id="macro-real-yield-badge" style="padding: 4px 8px; border-radius: 8px; font-weight: bold; background: rgba(16, 185, 129, 0.15); color: var(--success);">POZİTİF REEL</span>
+        </div>
+        <div class="gauge-container">
+          <div class="gauge-track">
+            <div id="macro-real-yield-pin" class="gauge-pin" style="left: 50%;"></div>
+          </div>
+          <div class="row" style="margin-top: 6px; font-size: 10px; color: var(--text-muted);">
+            <span>-15%</span>
+            <span>0% Denge</span>
+            <span>+15%</span>
+          </div>
+        </div>
+        <div style="margin-top: 16px; padding: 12px; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--card-border); border-radius: 12px; font-size: 11px; color: var(--text-muted); line-height: 1.6;" id="macro-yield-desc">
+          Lütfen bekleyin...
+        </div>
+      </div>
+
+      <!-- Nakit ve Risk Yönetimi Card -->
+      <div class="card" id="card-cash-strategy">
+        <div class="card-title">
+          <span>Nakit ve Risk Yönetimi</span>
+          <span class="material-symbols-rounded" style="color: var(--primary);">wallet</span>
+        </div>
+        <div class="row" style="margin-top: 8px;">
+          <div>
+            <div style="font-size: 11px; color: var(--text-muted);">Mevcut Strateji Durumu</div>
+            <div id="macro-cash-state" style="font-family: var(--font-display); font-weight: 800; font-size: 15px; color: var(--primary); margin-top: 4px;">NORMAL (Hisse Ağırlıklı)</div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 11px; color: var(--text-muted);">Hedef Sinyal</div>
+            <div id="macro-cash-target" style="font-weight: 700; font-size: 13px; margin-top: 4px;">NORMAL</div>
+          </div>
+        </div>
+        <div style="margin-top: 16px;">
+          <div class="row" style="font-size: 11px; font-weight: bold; margin-bottom: 6px;">
+            <span>Portföy Dağılımı</span>
+            <span id="macro-cash-split">0% Nakit / 100% Hisse</span>
+          </div>
+          <div style="width: 100%; height: 8px; background: rgba(255, 255, 255, 0.08); border-radius: 4px; overflow: hidden;">
+            <div id="macro-cash-progress" style="height: 100%; background: var(--primary); width: 0%;"></div>
+          </div>
+        </div>
+        <div id="macro-cash-notes" style="margin-top: 16px; padding: 12px; background: rgba(255,255,255,0.02); border-radius: 12px; font-size: 11px; color: var(--text-muted); display: none;"></div>
+      </div>
+
+      <!-- Göstergeler Grid -->
+      <div class="card">
+        <div class="card-title">Ekonomik Göstergeler</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--card-border); padding: 12px; border-radius: 12px;">
+            <div style="font-size: 10px; color: var(--text-muted);">PIYASA REJIMI</div>
+            <div id="macro-regime" style="font-family: var(--font-display); font-weight: 800; font-size: 18px; margin-top: 4px;">--</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--card-border); padding: 12px; border-radius: 12px;">
+            <div style="font-size: 10px; color: var(--text-muted);">TCMB POLITIKA FAIZI</div>
+            <div id="macro-rate" style="font-family: var(--font-display); font-weight: 800; font-size: 18px; color: var(--primary); margin-top: 4px;">--</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--card-border); padding: 12px; border-radius: 12px;">
+            <div style="font-size: 10px; color: var(--text-muted);">YILLIK ENFLASYON (YOY)</div>
+            <div id="macro-cpi" style="font-family: var(--font-display); font-weight: 800; font-size: 18px; color: var(--warning); margin-top: 4px;">--</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--card-border); padding: 12px; border-radius: 12px;">
+            <div style="font-size: 10px; color: var(--text-muted);">DOLAR KURU</div>
+            <div id="macro-usdtry" style="font-family: var(--font-display); font-weight: 800; font-size: 18px; color: var(--success); margin-top: 4px;">--</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 4: GECMIS (HISTORY) -->
+    <div id="page-history" class="tab-page" style="display: none;">
+      <!-- Model Backtest Card (Pink Gradient) -->
+      <div class="card" style="background: var(--accent-purple); border: none; cursor: pointer;" id="btn-backtest-info">
+        <div class="row">
+          <div style="max-width: 85%;">
+            <h3 style="font-size: 16px; color: white;">Model Backtesting (10 Yıl)</h3>
+            <p style="font-size: 11px; color: rgba(255, 255, 255, 0.85); margin-top: 4px;">
+              Point-in-Time simülasyonu ile endeks karşılaştırmalı model performansı.
+            </p>
+          </div>
+          <span class="material-symbols-rounded" style="color: white;">chevron_right</span>
+        </div>
+      </div>
+
+      <!-- Kümülâtif Portföy Getirisi -->
+      <div class="card" style="background: rgba(59, 130, 246, 0.05);">
+        <div class="row">
+          <div>
+            <h3 style="font-size: 15px;">Kümülatif Takip Getirisi</h3>
+            <div id="history-start-date" style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">Başlangıç: --</div>
+          </div>
+          <span class="badge badge-live">CANLI TAKİP</span>
+        </div>
+        <div class="row" style="margin-top: 16px;">
+          <div>
+            <div style="font-size: 10px; color: var(--text-muted);">TOPLAM PORTFÖY</div>
+            <div id="history-total-port" style="font-family: var(--font-display); font-weight: 800; font-size: 24px; color: var(--success);">--</div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 10px; color: var(--text-muted);">BIST100 ENDEKSİ</div>
+            <div id="history-total-bist" style="font-family: var(--font-display); font-weight: 800; font-size: 24px; color: var(--text-muted);">--</div>
+          </div>
+        </div>
+        <div style="margin-top: 14px; padding: 6px 10px; background: rgba(16, 185, 129, 0.1); border-radius: 6px; display: inline-block; font-size: 11px; font-weight: bold; color: var(--success);" id="history-total-alpha">
+          Endeks Farkı: --
+        </div>
+      </div>
+
+      <!-- Haftalık Performans Geçmişi -->
+      <h3 style="font-size: 15px; margin-bottom: 12px; margin-left: 4px;">Haftalık Performanslar</h3>
+      <div id="weekly-history-list" class="spaced-y"></div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Sheet/Detail View Overlay -->
+  <div id="detail-overlay">
+    <div class="detail-top-bar">
+      <div>
+        <h2 id="det-ticker" style="font-size: 22px; color: var(--primary);">THYAO</h2>
+        <p id="det-fullname" style="font-size: 11px; color: var(--text-muted);">TURK HAVA YOLLARI A.O.</p>
+      </div>
+      <div class="close-btn" id="btn-close-detail">
+        <span class="material-symbols-rounded">close</span>
+      </div>
+    </div>
+    
+    <div id="detail-scrollable">
+      
+      <!-- Performance Quick Stats -->
+      <div class="card">
+        <div class="row">
+          <div>
+            <div style="font-size: 10px; color: var(--text-muted);">CANLI FİYAT</div>
+            <div id="det-current-price" style="font-family: var(--font-display); font-weight: 800; font-size: 28px;">--</div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 10px; color: var(--text-muted);">SİNYAL DURUMU</div>
+            <div id="det-signal-action" style="margin-top: 4px;"><span class="badge badge-action badge-hold">TUT</span></div>
+          </div>
+        </div>
+        <div id="det-port-stats" style="margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--card-border); display: none;">
+          <div class="row">
+            <div>
+              <div style="font-size: 10px; color: var(--text-muted);">Giriş Fiyatı</div>
+              <div id="det-entry-price" style="font-weight: bold;">--</div>
+            </div>
+            <div>
+              <div style="font-size: 10px; color: var(--text-muted);">Güncel Getiri</div>
+              <div id="det-pnl-pct" style="font-weight: 800; font-size: 15px;">--</div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 10px; color: var(--text-muted);">Elde Tutma Gün</div>
+              <div id="det-days-held" style="font-weight: bold;">--</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DCF Valuation -->
+      <div class="card">
+        <div class="card-title">DCF İskonto Değerlemesi</div>
+        <div class="row">
+          <div>
+            <div style="font-size: 11px; color: var(--text-muted);">DCF İçsel Değeri</div>
+            <div id="det-dcf-val" style="font-family: var(--font-display); font-weight: 800; font-size: 20px; color: var(--primary);">--</div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 11px; color: var(--text-muted);">Güvenlik Marjı (MoS)</div>
+            <div id="det-dcf-mos" style="font-family: var(--font-display); font-weight: 800; font-size: 20px; color: var(--success);">--</div>
+          </div>
+        </div>
+        <div class="fin-grid" style="margin-top: 12px; font-size: 11px;">
+          <div class="fin-item"><span style="color:var(--text-muted);">Büyüme Hızı:</span> <strong id="det-dcf-growth">--</strong></div>
+          <div class="fin-item"><span style="color:var(--text-muted);">İndirgeme Katsayısı:</span> <strong id="det-dcf-discount">--</strong></div>
+          <div class="fin-item"><span style="color:var(--text-muted);">Terminal Büyüme:</span> <strong id="det-dcf-terminal">--</strong></div>
+          <div class="fin-item"><span style="color:var(--text-muted);">Hedef / Stop Limit:</span> <strong id="det-det-limits">--</strong></div>
+        </div>
+      </div>
+
+      <!-- Charts Tab -->
+      <div class="card" style="padding: 12px;">
+        <div class="card-title">Fiyat Grafiği (Son 2 Yıl)</div>
+        <div id="price-chart"></div>
+      </div>
+
+      <!-- Model Skor Geçmişi Grafiği -->
+      <div class="card" style="padding: 12px;">
+        <div class="card-title">Model Skor Geçmişi (Çeyrekler)</div>
+        <div id="factor-chart"></div>
+      </div>
+
+      <!-- Score Breakdown -->
+      <div class="card">
+        <div class="card-title">Model Faktör Puanları</div>
+        <div class="factor-grid" id="det-factors-grid"></div>
+      </div>
+
+      <!-- Quality Flags -->
+      <div class="card" id="det-flags-card" style="display: none;">
+        <div class="card-title">Model Kalite Bayrakları</div>
+        <div id="det-flags-list" style="display: flex; flex-wrap: wrap; gap: 8px;"></div>
+      </div>
+
+      <!-- AI Insights -->
+      <div class="card" id="det-insight-card" style="display: none;">
+        <div class="card-title">Yapay Zeka Analiz Notu</div>
+        <div id="det-insight-text" style="font-size: 12px; color: var(--text-muted); line-height: 1.6; padding: 12px; background: rgba(255, 255, 255, 0.02); border-radius: 12px;"></div>
+      </div>
+
+      <!-- Financial Snapshot -->
+      <div class="card">
+        <div class="card-title">Finansal Tablo Özetleri (Enflasyondan Arındırılmış)</div>
+        <div class="fin-grid" id="det-finances-grid" style="font-size: 11px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Splash / Loading Screen -->
+  <div id="splash-screen">
+    <div>
+      <div class="loader"></div>
+      <h2 style="font-size: 24px; font-weight: 800; background: linear-gradient(135deg, #3b82f6, #00f2fe); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">BIST Picker</h2>
+      <p id="splash-status" style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">Uygulama hazırlanıyor...</p>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation Bar -->
+  <nav class="bottom-nav">
+    <a href="#" class="nav-item active" data-tab="picks">
+      <span class="material-symbols-rounded">home</span>
+      <span>Picks</span>
+    </a>
+    <a href="#" class="nav-item" data-tab="list">
+      <span class="material-symbols-rounded">bar_chart</span>
+      <span>Liste</span>
+    </a>
+    <a href="#" class="nav-item" data-tab="macro">
+      <span class="material-symbols-rounded">account_balance</span>
+      <span>Makro</span>
+    </a>
+    <a href="#" class="nav-item" data-tab="history">
+      <span class="material-symbols-rounded">history</span>
+      <span>Geçmiş</span>
+    </a>
+  </nav>
+
+  <!-- External Library CDNs -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+  <!-- Frontend logic -->
+  <script>
+    const SQL_WASM_URL = 'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.wasm';
+    
+    // Global App States
+    let db = null;
+    let SQL = null;
+    let currentTab = 'picks';
+    let loadedMetadata = null;
+    let activeDetailTicker = null;
+    window.livePrices = {};
+
+    // DOM Elements
+    const splashEl = document.getElementById('splash-screen');
+    const splashStatusEl = document.getElementById('splash-status');
+    const appExportedDateEl = document.getElementById('app-exported-date');
+    const tabPages = document.querySelectorAll('.tab-page');
+    const navItems = document.querySelectorAll('.nav-item');
+
+    // Chart Handles
+    let priceChartInstance = null;
+    let factorChartInstance = null;
+
+    // --- IndexedDB Caching Utility ---
+    const DB_NAME = 'BistPickerCache';
+    const DB_VERSION = 1;
+    const STORE_NAME = 'snapshots';
+
+    function openDB() {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open(DB_NAME, DB_VERSION);
+        request.onupgradeneeded = (e) => {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains(STORE_NAME)) {
+            db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+          }
+        };
+        request.onsuccess = (e) => resolve(e.target.result);
+        request.onerror = (e) => reject(request.error);
+      });
+    }
+
+    async function getCachedSnapshot() {
+      try {
+        const dbInstance = await openDB();
+        return new Promise((resolve, reject) => {
+          const transaction = dbInstance.transaction(STORE_NAME, 'readonly');
+          const store = transaction.objectStore(STORE_NAME);
+          const request = store.get(1);
+          request.onsuccess = () => resolve(request.result || null);
+          request.onerror = () => reject(request.error);
+        });
+      } catch (err) {
+        console.error('IndexedDB open error:', err);
+        return null;
+      }
+    }
+
+    async function setCachedSnapshot(data) {
+      try {
+        const dbInstance = await openDB();
+        return new Promise((resolve, reject) => {
+          const transaction = dbInstance.transaction(STORE_NAME, 'readwrite');
+          const store = transaction.objectStore(STORE_NAME);
+          const request = store.put({ id: 1, ...data });
+          request.onsuccess = () => resolve();
+          request.onerror = () => reject(request.error);
+        });
+      } catch (err) {
+        console.error('IndexedDB write error:', err);
+      }
+    }
+
+    // --- Formatters ---
+    function fmtPct(n, digits = 1) {
+      if (n === null || n === undefined || Number.isNaN(n)) return '—';
+      return (n * 100).toFixed(digits) + '%';
+    }
+    function fmtPctRaw(n, digits = 1) {
+      if (n === null || n === undefined || Number.isNaN(n)) return '—';
+      return n.toFixed(digits) + '%';
+    }
+    function fmtNum(n, digits = 2) {
+      if (n === null || n === undefined || Number.isNaN(n)) return '—';
+      return Number(n).toLocaleString('tr-TR', { minimumFractionDigits: digits, maximumFractionDigits: digits });
+    }
+    function fmtInt(n) {
+      if (n === null || n === undefined || Number.isNaN(n)) return '—';
+      return Number(n).toLocaleString('tr-TR');
+    }
+    function fmtTry(n) {
+      if (n === null || n === undefined || Number.isNaN(n)) return '—';
+      return '₺' + Number(n).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+    function fmtMoney(n) {
+      if (n === null || n === undefined || Number.isNaN(n)) return '—';
+      const abs = Math.abs(n);
+      if (abs >= 1e9) return (n / 1e9).toFixed(2) + ' Milyar';
+      if (abs >= 1e6) return (n / 1e6).toFixed(2) + ' Milyon';
+      if (abs >= 1e3) return (n / 1e3).toFixed(2) + ' Bin';
+      return n.toFixed(2);
+    }
+    function formatDateToTurkish(dateStr) {
+      if (!dateStr) return '—';
+      try {
+        const parts = dateStr.split('-');
+        if (parts.length !== 3) return dateStr;
+        const date = new Date(parts[0], parts[1] - 1, parts[2]);
+        return date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+      } catch (e) {
+        return dateStr;
+      }
+    }
+
+    // --- SQLite Helpers ---
+    function rowsAsObjects(stmt) {
+      const out = [];
+      while (stmt.step()) out.push(stmt.getAsObject());
+      stmt.free();
+      return out;
+    }
+    function queryAll(sql, params) {
+      if (!db) return [];
+      const stmt = db.prepare(sql);
+      if (params) stmt.bind(params);
+      return rowsAsObjects(stmt);
+    }
+    function queryOne(sql, params) {
+      const rows = queryAll(sql, params);
+      return rows[0] || null;
+    }
+
+    // --- App Navigation Logic ---
+    navItems.forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        const tab = item.getAttribute('data-tab');
+        switchTab(tab);
+      });
+    });
+
+    function switchTab(tab) {
+      currentTab = tab;
+      navItems.forEach(i => {
+        if (i.getAttribute('data-tab') === tab) i.classList.add('active');
+        else i.classList.remove('active');
+      });
+      tabPages.forEach(p => {
+        if (p.id === 'page-' + tab) p.style.display = 'block';
+        else p.style.display = 'none';
+      });
+      renderPage(tab);
+    }
+
+    // --- Application Initialization & Load ---
+    async function initApp() {
+      try {
+        splashStatusEl.textContent = 'Veri paketi sorgulanıyor...';
+        
+        // Fetch manifest to compare versions
+        let manifest = null;
+        try {
+          const res = await fetch('./manifest.json?t=' + Date.now(), { cache: 'no-store' });
+          if (res.ok) {
+            manifest = await res.json();
+          }
+        } catch (e) {
+          console.warn('Could not fetch manifest.json, falling back to cache if available.', e);
+        }
+
+        // Check IndexedDB cache
+        const cached = await getCachedSnapshot();
+
+        let rawBytes = null;
+        let manifestToSave = manifest;
+
+        if (cached && manifest && cached.sha256 === manifest.snapshot.sha256) {
+          splashStatusEl.textContent = 'Önbellekteki veritabanı açılıyor...';
+          rawBytes = cached.db_blob;
+        } else if (cached && !manifest) {
+          // Offline mode or fetch failed, use cache
+          splashStatusEl.textContent = 'Çevrimdışı modda önbellekten açılıyor...';
+          rawBytes = cached.db_blob;
+          manifestToSave = {
+            exported_at: cached.exported_at,
+            snapshot_version: cached.snapshot_version,
+            snapshot: { sha256: cached.sha256 }
+          };
+        } else {
+          // Download fresh snapshot
+          if (!manifest) {
+            throw new Error('Manifest alınamadı ve önbellekte kayıtlı veri yok!');
+          }
+          const downloadUrl = './' + (manifest.snapshot.filename || 'mobile_snapshot.db.gz');
+          splashStatusEl.textContent = 'Yeni veri tabanı indiriliyor (yaklaşık 10MB)...';
+          
+          const response = await fetch(downloadUrl, { cache: 'no-store' });
+          if (!response.ok) throw new Error('Veri tabanı indirme hatası: HTTP ' + response.status);
+          
+          const arrayBuffer = await response.arrayBuffer();
+          splashStatusEl.textContent = 'Sıkıştırılmış veri açılıyor...';
+          
+          const gzBytes = new Uint8Array(arrayBuffer);
+          rawBytes = pako.ungzip(gzBytes);
+          
+          splashStatusEl.textContent = 'Tarayıcı önbelleğine kaydediliyor...';
+          await setCachedSnapshot({
+            db_blob: rawBytes,
+            sha256: manifest.snapshot.sha256,
+            exported_at: manifest.exported_at,
+            snapshot_version: manifest.snapshot_version
+          });
+        }
+
+        splashStatusEl.textContent = 'SQL motoru başlatılıyor...';
+        SQL = await initSqlJs({ locateFile: () => SQL_WASM_URL });
+        
+        db = new SQL.Database(rawBytes);
+        
+        // Hide Splash
+        splashEl.style.display = 'none';
+
+        // Load Global Metadata
+        loadedMetadata = queryOne('SELECT * FROM snapshot_metadata WHERE id = 1');
+        if (loadedMetadata) {
+          appExportedDateEl.textContent = 'Veri: ' + (loadedMetadata.snapshot_date || '—');
+        }
+
+        // Populate filter selectors
+        populateFilters();
+
+        // Render starting tab
+        switchTab('picks');
+
+        // Asynchronously fetch Yahoo Live prices
+        fetchLivePrices();
+
+      } catch (err) {
+        console.error('Initialization failed:', err);
+        splashStatusEl.innerHTML = `<span style="color:var(--danger)">Hata: ${err.message || err}</span><br/><br/>Lütfen internet bağlantınızı kontrol edip sayfayı yenileyin.`;
+      }
+    }
+
+    // --- Populate filter selects ---
+    function populateFilters() {
+      const sectors = queryAll('SELECT DISTINCT sector_custom FROM companies WHERE sector_custom IS NOT NULL AND sector_custom != "" ORDER BY sector_custom ASC');
+      const sectorFilter = document.getElementById('sector-filter');
+      sectorFilter.innerHTML = '<option value="">Tüm Sektörler</option>';
+      sectors.forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s.sector_custom;
+        opt.textContent = s.sector_custom;
+        sectorFilter.appendChild(opt);
+      });
+    }
+
+    // --- Yahoo Finance Live Price Fetcher (via CORS proxy) ---
+    async function fetchLivePrices() {
+      try {
+        // Collect active positions + top 12 scoring tickers to monitor
+        const portfolioTickers = queryAll('SELECT ticker FROM open_positions').map(p => p.ticker);
+        const topTickers = queryAll('SELECT ticker FROM scoring_latest ORDER BY ranking_score DESC LIMIT 12').map(p => p.ticker);
+        
+        const tickers = [...new Set([...portfolioTickers, ...topTickers, 'XU100'])];
+        if (tickers.length === 0) return;
+
+        const yahooSymbols = tickers.map(t => t === 'XU100' ? 'XU100.IS' : t + '.IS').join(',');
+        const yahooUrl = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${yahooSymbols}`;
+        
+        // CORS Proxy wrapper
+        const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(yahooUrl)}`;
+        
+        const response = await fetch(proxyUrl);
+        if (!response.ok) throw new Error('Live price response failure');
+        
+        const data = await response.json();
+        const results = data.quoteResponse?.result || [];
+
+        results.forEach(item => {
+          let ticker = item.symbol;
+          if (ticker.endsWith('.IS')) {
+            ticker = ticker.slice(0, -3);
+          }
+          const price = item.regularMarketPrice;
+          if (price) {
+            window.livePrices[ticker] = price;
+          }
+        });
+
+        console.log('Successfully updated live prices:', window.livePrices);
+
+        // Re-render current page to apply live prices
+        renderPage(currentTab);
+        
+        // Update detail page live stats if open
+        if (activeDetailTicker) {
+          updateDetailLiveStats();
+        }
+
+      } catch (err) {
+        console.warn('Failed to fetch live prices:', err);
+      }
+    }
+
+    // --- Page Rendering Dispatcher ---
+    function renderPage(tab) {
+      if (!db) return;
+      if (tab === 'picks') renderPicksPage();
+      else if (tab === 'list') renderListPage();
+      else if (tab === 'macro') renderMacroPage();
+      else if (tab === 'history') renderHistoryPage();
+    }
+
+    // --- 1. PICKS PAGE RENDER ---
+    function renderPicksPage() {
+      // Set week range
+      const home = queryOne('SELECT * FROM home_summary WHERE id = 1');
+      const picksWeekRange = document.getElementById('picks-week-range');
+      if (home && home.macro_date) {
+        // Calculate monday/sunday range labels like Kotlin code does
+        const dateStr = home.macro_date;
+        const parts = dateStr.split('-');
+        const date = new Date(parts[0], parts[1]-1, parts[2]);
+        const day = date.getDay();
+        const diffToMonday = day >= 1 ? 1 - day : -6;
+        
+        const monday = new Date(date);
+        monday.setDate(date.getDate() + diffToMonday);
+        const sunday = new Date(monday);
+        sunday.setDate(monday.getDate() + 6);
+        
+        const fmt = { day: 'numeric', month: 'short' };
+        picksWeekRange.textContent = `${monday.toLocaleDateString('tr-TR', fmt)} - ${sunday.toLocaleDateString('tr-TR', fmt)}`;
+      } else {
+        picksWeekRange.textContent = 'Haftalık Portföy';
+      }
+
+      // Render Active Portfolio
+      const positions = queryAll('SELECT op.*, c.name as fullname FROM open_positions op LEFT JOIN companies c ON c.ticker = op.ticker ORDER BY op.sort_order ASC');
+      const portfolioListEl = document.getElementById('portfolio-list');
+      document.getElementById('port-count-badge').textContent = `${positions.length} Hisse`;
+      
+      portfolioListEl.innerHTML = '';
+      if (positions.length === 0) {
+        portfolioListEl.innerHTML = '<p style="color:var(--text-muted); font-size:13px; text-align:center; padding:12px;">Portföyde hisse bulunmuyor.</p>';
+      } else {
+        positions.forEach(pos => {
+          const livePrice = window.livePrices[pos.ticker];
+          let currentPrice = pos.current_price;
+          let pnlVal = pos.pnl_pct * 100; // Database holds absolute decimal, e.g. 0.05
+          let isLiveBadge = false;
+
+          if (livePrice) {
+            currentPrice = livePrice;
+            pnlVal = (currentPrice / pos.entry_price - 1.0) * 100;
+            isLiveBadge = true;
+          } else {
+            pnlVal = pnlVal || 0;
+          }
+
+          const sign = pnlVal >= 0 ? '+' : '';
+          const pnlClass = pnlVal >= 0 ? 'pos-text' : 'neg-text';
+
+          const itemEl = document.createElement('div');
+          itemEl.className = 'list-item-row';
+          itemEl.style.padding = '10px 0';
+          itemEl.innerHTML = `
+            <div>
+              <div class="ticker-block">
+                <span class="ticker-name">${pos.ticker}</span>
+                ${isLiveBadge ? '<span class="badge badge-live">CANLI</span>' : ''}
+              </div>
+              <div class="company-fullname" style="margin-top: 2px;">${pos.fullname || '—'}</div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-weight: 600; font-size: 13px;">${fmtTry(currentPrice)}</div>
+              <div class="${pnlClass}" style="font-size: 11px; font-weight: 800; margin-top: 2px;">${sign}${pnlVal.toFixed(1)}%</div>
+            </div>
+          `;
+          itemEl.addEventListener('click', () => openDetail(pos.ticker));
+          portfolioListEl.appendChild(itemEl);
+        });
+      }
+
+      // Render Suggested Signals
+      const signalsListEl = document.getElementById('signals-list');
+      const topScoring = queryAll('SELECT * FROM scoring_latest ORDER BY ranking_score DESC LIMIT 10');
+      
+      // Calculate Suggestions using same Kotlin logic:
+      const openTickers = new Set(positions.map(p => p.ticker));
+      const top12Tickers = new Set(topScoring.slice(0, 12).map(t => t.ticker));
+
+      const buys = [];
+      const holds = [];
+      const sells = [];
+
+      topScoring.slice(0, 5).forEach(row => {
+        if (!openTickers.has(row.ticker)) {
+          buys.push({ ticker: row.ticker, action: 'BUY', reason: 'Haftalık Model: Yeni giriş' });
+        }
+      });
+
+      positions.forEach(pos => {
+        if (!top12Tickers.has(pos.ticker)) {
+          sells.push({ ticker: pos.ticker, action: 'SELL', reason: 'Model kriterlerinden tamamen düştü.' });
+        } else {
+          holds.push({ ticker: pos.ticker, action: 'HOLD', reason: 'Şirket hala güçlü, potansiyel devam ediyor.' });
+        }
+      });
+
+      // Buffer constraints
+      const currentTargetCount = holds.length + buys.length;
+      if (currentTargetCount > 5) {
+        const overflow = currentTargetCount - 5;
+        // Sort holds by ranking score
+        const holdsWithScores = holds.map(h => {
+          const score = topScoring.find(t => t.ticker === h.ticker)?.ranking_score || 0;
+          return { item: h, score };
+        }).sort((a,b) => a.score - b.score);
+
+        const strongestNewcomer = buys[0]?.ticker || "yeni fırsatlar";
+
+        for (let i = 0; i < overflow; i++) {
+          const weakest = holdsWithScores[i].item;
+          const idx = holds.findIndex(x => x.ticker === weakest.ticker);
+          if (idx !== -1) holds.splice(idx, 1);
+          sells.push({
+            ticker: weakest.ticker,
+            action: 'SELL',
+            reason: `Hisse güçlü ancak ${strongestNewcomer}'a yer açmak için feda edildi.`
+          });
+        }
+      }
+
+      const suggestions = [...buys, ...holds, ...sells];
+      signalsListEl.innerHTML = '';
+      if (suggestions.length === 0) {
+        document.getElementById('card-signals').style.display = 'none';
+      } else {
+        document.getElementById('card-signals').style.display = 'block';
+        suggestions.forEach(sug => {
+          let badgeClass = 'badge-hold';
+          let actionLabel = 'TUT';
+          if (sug.action === 'BUY') { badgeClass = 'badge-buy'; actionLabel = 'AL'; }
+          else if (sug.action === 'SELL') { badgeClass = 'badge-sell'; actionLabel = 'SAT'; }
+
+          const sugEl = document.createElement('div');
+          sugEl.className = 'list-item-row';
+          sugEl.style.padding = '8px 0';
+          sugEl.innerHTML = `
+            <div>
+              <div style="font-weight: 700; font-size: 13px; color: var(--text);">${sug.ticker}</div>
+              <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">${sug.reason}</div>
+            </div>
+            <div>
+              <span class="badge badge-action ${badgeClass}">${actionLabel}</span>
+            </div>
+          `;
+          sugEl.addEventListener('click', () => openDetail(sug.ticker));
+          signalsListEl.appendChild(sugEl);
+        });
+      }
+    }
+
+    // --- 2. LIST PAGE RENDER ---
+    let activeListMode = 'ALPHA_CORE';
+    const listModeBtns = document.querySelectorAll('.chip-btn');
+    const searchInput = document.getElementById('search-input');
+    const sectorFilter = document.getElementById('sector-filter');
+    const riskFilter = document.getElementById('risk-filter');
+
+    listModeBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        listModeBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeListMode = btn.getAttribute('data-mode');
+        renderListPage();
+      });
+    });
+
+    [searchInput, sectorFilter, riskFilter].forEach(el => {
+      el.addEventListener('input', () => {
+        renderListPage();
+      });
+    });
+
+    function renderListPage() {
+      const query = searchInput.value.trim().toUpperCase();
+      const sector = sectorFilter.value;
+      const risk = riskFilter.value;
+
+      // Construct SQL parameters
+      let sql = 'SELECT * FROM scoring_latest WHERE is_active = 1';
+      const params = {};
+
+      if (activeListMode === 'ALPHA_CORE') {
+        sql += ' AND alpha_core_eligible = 1';
+      } else if (activeListMode === 'ALPHA_X') {
+        sql += ' AND alpha_x_eligible = 1';
+      } else if (activeListMode === 'MODEL') {
+        sql += ' AND model_score IS NOT NULL';
+      } else if (activeListMode === 'RESEARCH') {
+        sql += ' AND (alpha_research_bucket IN ("Quality Shadow", "Free-Float Shadow", "Non-Core Research"))';
+      }
+
+      if (sector) {
+        sql += ' AND sector = :sector';
+        params[':sector'] = sector;
+      }
+      if (risk) {
+        sql += ' AND risk = :risk';
+        params[':risk'] = risk;
+      }
+      if (query) {
+        sql += ' AND (ticker LIKE :query OR name LIKE :query)';
+        params[':query'] = `%${query}%`;
+      }
+
+      sql += ' ORDER BY ranking_score DESC';
+
+      const rows = queryAll(sql, params);
+      const listEl = document.getElementById('scoring-list');
+      listEl.innerHTML = '';
+
+      if (rows.length === 0) {
+        listEl.innerHTML = '<p style="color:var(--text-muted); font-size:13px; text-align:center; padding:24px;">Aranan kriterlerde hisse bulunamadı.</p>';
+        return;
+      }
+
+      rows.forEach((row, idx) => {
+        const itemEl = document.createElement('div');
+        itemEl.className = 'list-item-row';
+        
+        const scoreDisplay = row.ranking_score ? row.ranking_score.toFixed(1) : '—';
+        const rank = idx + 1;
+
+        itemEl.innerHTML = `
+          <div style="display:flex; align-items:center; gap:12px;">
+            <span style="font-size:11px; font-weight:bold; color:var(--text-muted); width:20px; text-align:right;">${rank}</span>
+            <div>
+              <div class="ticker-block">
+                <span class="ticker-name">${row.ticker}</span>
+              </div>
+              <div class="company-fullname" style="margin-top:2px;">${row.name || '—'}</div>
+            </div>
+          </div>
+          <div style="text-align: right;">
+            <div class="score-val" style="color: ${row.alpha_core_eligible ? 'var(--success)' : 'var(--text)'}">${scoreDisplay}</div>
+            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Model Skoru</div>
+          </div>
+        `;
+        itemEl.addEventListener('click', () => openDetail(row.ticker));
+        listEl.appendChild(itemEl);
+      });
+    }
+
+    // --- 3. MACRO PAGE RENDER ---
+    function renderMacroPage() {
+      const home = queryOne('SELECT * FROM home_summary WHERE id = 1');
+      if (!home) return;
+
+      const policyRate = home.policy_rate_pct || 0;
+      const inflation = home.cpi_yoy_pct || 0;
+      const realYield = policyRate - inflation;
+      const isPositive = realYield > 0;
+
+      // Real Yield Card elements
+      const yieldValEl = document.getElementById('macro-real-yield-val');
+      const yieldBadgeEl = document.getElementById('macro-real-yield-badge');
+      const yieldPinEl = document.getElementById('macro-real-yield-pin');
+      const yieldDescEl = document.getElementById('macro-yield-desc');
+
+      const yieldPercentText = (realYield * 100).toFixed(2);
+      yieldValEl.textContent = `${realYield >= 0 ? '+' : ''}${yieldPercentText}%`;
+      
+      if (isPositive) {
+        yieldValEl.className = 'pos-text';
+        yieldBadgeEl.textContent = 'POZİTİF REEL';
+        yieldBadgeEl.style.background = 'rgba(16, 185, 129, 0.15)';
+        yieldBadgeEl.style.color = 'var(--success)';
+        yieldDescEl.textContent = 'Pozitif Reel Faiz: Nakit ve risksiz mevduat getirileri enflasyon karşısında değerini korur. Borsa İstanbul\'da seçici olunmalı, çarpanları ucuz ve yüksek büyüme kapasiteli ALPHA Core şirketleri tercih edilmelidir.';
+      } else {
+        yieldValEl.className = 'neg-text';
+        yieldBadgeEl.textContent = 'NEGATİF REEL';
+        yieldBadgeEl.style.background = 'rgba(239, 68, 68, 0.15)';
+        yieldBadgeEl.style.color = 'var(--danger)';
+        yieldDescEl.textContent = 'Negatif Reel Faiz: Nakit ve mevduat tutmak reel bazda kayıp yaratır. Hisse senetleri ve reel varlıklar enflasyona karşı doğal koruma kalkanıdır. BIST100 endeksi genel olarak desteklenir.';
+      }
+
+      // Slider pin placement (-15% to +15% maps to 0% to 100%)
+      const clampedYield = Math.max(-0.15, Math.min(0.15, realYield));
+      const percentagePosition = ((clampedYield + 0.15) / 0.30) * 100;
+      yieldPinEl.style.left = `${percentagePosition}%`;
+      yieldPinEl.style.borderColor = isPositive ? 'var(--success)' : 'var(--danger)';
+
+      // Cash strategy elements
+      const cashState = home.cash_state || 'NORMAL';
+      let stateColor = 'var(--success)';
+      let stateLabel = 'NORMAL (Hisse Ağırlıklı)';
+      
+      if (cashState === 'CAUTION') { stateColor = 'var(--warning)'; stateLabel = 'İHTİYAT (Seçici Nakit)'; }
+      else if (cashState === 'DEFENSIVE') { stateColor = 'var(--warning)'; stateLabel = 'SAVUNMA (Yüksek Nakit)'; }
+      else if (cashState === 'RISK_OFF') { stateColor = 'var(--danger)'; stateLabel = 'RİSK DIŞI (Tam Nakit)'; }
+
+      const cashStateEl = document.getElementById('macro-cash-state');
+      cashStateEl.textContent = stateLabel;
+      cashStateEl.style.color = stateColor;
+      document.getElementById('macro-cash-target').textContent = home.cash_target_state || 'NORMAL';
+
+      const cashPct = home.cash_pct || 0;
+      document.getElementById('macro-cash-split').textContent = `${(cashPct * 100).toFixed(0)}% Nakit / ${((1 - cashPct) * 100).toFixed(0)}% Hisse`;
+      
+      const progressEl = document.getElementById('macro-cash-progress');
+      progressEl.style.width = `${cashPct * 100}%`;
+      progressEl.style.backgroundColor = stateColor;
+
+      const notesEl = document.getElementById('macro-cash-notes');
+      if (home.cash_notes) {
+        notesEl.textContent = home.cash_notes;
+        notesEl.style.display = 'block';
+      } else {
+        notesEl.style.display = 'none';
+      }
+
+      // Macro Stats Grid
+      document.getElementById('macro-regime').textContent = home.regime || '—';
+      document.getElementById('macro-regime').style.color = home.regime === 'RISK_ON' ? 'var(--success)' : 'var(--danger)';
+      document.getElementById('macro-rate').textContent = `${(policyRate * 100).toFixed(1)}%`;
+      document.getElementById('macro-cpi').textContent = `${(inflation * 100).toFixed(1)}%`;
+      document.getElementById('macro-usdtry').textContent = `${fmtNum(home.usdtry_rate, 4)} TL`;
+    }
+
+    // --- 4. HISTORY PAGE RENDER ---
+    function renderHistoryPage() {
+      // 1. Live portfolio performance summary
+      const weeklyPerf = queryAll('SELECT * FROM model_performance ORDER BY date ASC');
+      // If we don't have model_performance history, we fall back to seeds
+      // Seed week starting 2026-05-18
+      const seedWeek = {
+        weekStartDate: "2026-05-18",
+        portfolioReturn: 0.0372,
+        bist100Return: -0.0158
+      };
+
+      // In browser localstorage we can hold weekly records, let's read or write if not present
+      let storageRecords = localStorage.getItem('bist_weekly_records');
+      let records = [];
+      if (storageRecords) {
+        records = JSON.parse(storageRecords);
+      } else {
+        // Create from seed
+        records = [
+          {
+            weekStartDate: "2026-05-18",
+            positions: [
+              { ticker: "PCILT", entryPrice: 32.48, exitPrice: 33.10, returnPct: 0.0191 },
+              { ticker: "KIMMR", entryPrice: 17.29, exitPrice: 17.19, returnPct: -0.0058 },
+              { ticker: "ASELS", entryPrice: 428.00, exitPrice: 410.00, returnPct: -0.0421 },
+              { ticker: "LILAK", entryPrice: 36.08, exitPrice: 34.30, returnPct: -0.0493 },
+              { ticker: "TCKRC", entryPrice: 111.80, exitPrice: 141.30, returnPct: 0.2639 }
+            ],
+            portfolioReturn: 0.0372,
+            bist100StartPrice: 14029.54,
+            bist100EndPrice: 13808.20,
+            bist100Return: -0.0158,
+            isCompleted: true
+          }
+        ];
+        
+        // Dynamically compute the current active week
+        // Get current Monday date
+        const now = new Date();
+        const day = now.getDay();
+        const diff = now.getDate() - day + (day === 0 ? -6 : 1);
+        const monday = new Date(now.setDate(diff));
+        const mondayStr = monday.toISOString().split('T')[0];
+
+        // Ensure current active week is seeded
+        if (mondayStr !== "2026-05-18") {
+          // Query active positions
+          const dbPos = queryAll('SELECT * FROM open_positions');
+          const positionsRecords = dbPos.map(pos => {
+            const live = window.livePrices[pos.ticker] || pos.current_price;
+            return {
+              ticker: pos.ticker,
+              entryPrice: pos.entry_price || pos.current_price,
+              exitPrice: live,
+              returnPct: (live / (pos.entry_price || pos.current_price)) - 1.0
+            };
+          });
+
+          const homeSummary = queryOne('SELECT * FROM home_summary LIMIT 1');
+          const bist100Start = 13808.20;
+          const liveBist100 = window.livePrices['XU100'] || bist100Start;
+
+          // BIST Friday Close check (Friday 18:15 Istanbul time is GMT+3)
+          // We estimate based on client system time
+          const localDay = new Date().getDay();
+          const localHour = new Date().getHours();
+          const localMin = new Date().getMinutes();
+          const isPastFridayClose = (localDay === 5 && (localHour > 18 || (localHour === 18 && localMin >= 15))) || localDay === 6 || localDay === 0;
+
+          records.push({
+            weekStartDate: mondayStr,
+            positions: positionsRecords,
+            portfolioReturn: positionsRecords.length > 0 ? positionsRecords.map(p => p.returnPct).reduce((a,b)=>a+b, 0) / positionsRecords.length : 0.0,
+            bist100StartPrice: bist100Start,
+            bist100EndPrice: liveBist100,
+            bist100Return: (liveBist100 / bist100Start) - 1.0,
+            isCompleted: isPastFridayClose
+          });
+        }
+        localStorage.setItem('bist_weekly_records', JSON.stringify(records));
+      }
+
+      // Calculate cumulative returns
+      let cumulativePortfolio = 1.0;
+      let cumulativeBist100 = 1.0;
+      records.forEach(r => {
+        cumulativePortfolio *= (1.0 + r.portfolioReturn);
+        cumulativeBist100 *= (1.0 + r.bist100Return);
+      });
+
+      const totalPortfolioReturn = (cumulativePortfolio - 1.0) * 100;
+      const totalBist100Return = (cumulativeBist100 - 1.0) * 100;
+      const totalAlpha = totalPortfolioReturn - totalBist100Return;
+
+      document.getElementById('history-start-date').textContent = `Başlangıç: ${formatDateToTurkish(records[0].weekStartDate)}`;
+      
+      const portEl = document.getElementById('history-total-port');
+      portEl.textContent = `${totalPortfolioReturn >= 0 ? '+' : ''}${totalPortfolioReturn.toFixed(2)}%`;
+      portEl.className = totalPortfolioReturn >= 0 ? 'pos-text' : 'neg-text';
+
+      document.getElementById('history-total-bist').textContent = `${totalBist100Return >= 0 ? '+' : ''}${totalBist100Return.toFixed(2)}%`;
+      
+      const alphaEl = document.getElementById('history-total-alpha');
+      alphaEl.textContent = `Endeks Farkı: ${totalAlpha >= 0 ? '+' : ''}${totalAlpha.toFixed(2)}%`;
+      alphaEl.style.backgroundColor = totalAlpha >= 0 ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)';
+      alphaEl.style.color = totalAlpha >= 0 ? 'var(--success)' : 'var(--danger)';
+
+      // 2. Render weekly performance history rows
+      const historyListEl = document.getElementById('weekly-history-list');
+      historyListEl.innerHTML = '';
+
+      records.slice().reverse().forEach(record => {
+        const diff = (record.portfolioReturn - record.bist100Return) * 100;
+        const diffClass = diff >= 0 ? 'pos-text' : 'neg-text';
+
+        const rowCard = document.createElement('div');
+        rowCard.className = 'card';
+        rowCard.style.padding = '0';
+        rowCard.style.overflow = 'hidden';
+
+        const hasPositions = record.positions && record.positions.length > 0;
+
+        rowCard.innerHTML = `
+          <div class="collapsible-header">
+            <div>
+              <div style="font-weight: 700; font-size: 14px;">${formatDateToTurkish(record.weekStartDate)} Haftası</div>
+              <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;">
+                Haftalık Fark: <span class="${diffClass}" style="font-weight:bold;">${diff >= 0 ? '+' : ''}${diff.toFixed(2)}%</span>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              ${!record.isCompleted ? '<span class="badge" style="background:#e91e63; color:white; font-size:8px;">AKTİF</span>' : ''}
+              <span class="material-symbols-rounded collapsible-arrow" style="color:var(--text-muted);">expand_more</span>
+            </div>
+          </div>
+          <div class="collapsible-body">
+            <div class="row" style="font-size:11px; margin-bottom:12px;">
+              <div>
+                <span style="color:var(--text-muted)">Haftalık Portföy:</span>
+                <strong class="${record.portfolioReturn >= 0 ? 'pos-text' : 'neg-text'}">${(record.portfolioReturn * 100).toFixed(2)}%</strong>
+              </div>
+              <div style="text-align:right;">
+                <span style="color:var(--text-muted)">BIST100 Getirisi:</span>
+                <strong>${(record.bist100Return * 100).toFixed(2)}%</strong>
+              </div>
+            </div>
+            <div style="border-top:1px solid var(--card-border); padding-top:8px;">
+              <div style="font-size:10px; font-weight:bold; color:var(--text-muted); margin-bottom:6px;">SEÇİLEN HİSSELER VE GETİRİLERİ</div>
+              <div class="spaced-y" id="pos-details-${record.weekStartDate}"></div>
+            </div>
+          </div>
+        `;
+
+        // Populate positions breakdown
+        const positionsContainer = rowCard.querySelector(`#pos-details-${record.weekStartDate}`);
+        if (hasPositions) {
+          record.positions.forEach(stock => {
+            const stockReturn = stock.returnPct * 100;
+            const stockRow = document.createElement('div');
+            stockRow.className = 'row';
+            stockRow.style.fontSize = '12px';
+            stockRow.innerHTML = `
+              <span style="font-weight:600; color:var(--primary);">${stock.ticker}</span>
+              <div>
+                <span style="color:var(--text-muted); font-size:10px; margin-right:8px;">${stock.entryPrice.toFixed(2)} → ${stock.exitPrice.toFixed(2)} TL</span>
+                <strong class="${stockReturn >= 0 ? 'pos-text' : 'neg-text'}">${stockReturn >= 0 ? '+' : ''}${stockReturn.toFixed(1)}%</strong>
+              </div>
+            `;
+            positionsContainer.appendChild(stockRow);
+          });
+        } else {
+          positionsContainer.innerHTML = '<div style="font-size:11px; color:var(--text-muted); font-style:italic;">Hisse verisi yok</div>';
+        }
+
+        // Toggle collapsible body
+        const header = rowCard.querySelector('.collapsible-header');
+        const body = rowCard.querySelector('.collapsible-body');
+        const arrow = rowCard.querySelector('.collapsible-arrow');
+        
+        // Active week open by default
+        if (!record.isCompleted) {
+          body.classList.add('open');
+          arrow.textContent = 'expand_less';
+        }
+
+        header.addEventListener('click', () => {
+          const isOpen = body.classList.toggle('open');
+          arrow.textContent = isOpen ? 'expand_less' : 'expand_more';
+        });
+
+        historyListEl.appendChild(rowCard);
+      });
+    }
+
+    // --- 5. STOCK DETAIL CARD OPEN & UPDATE ---
+    const detailOverlayEl = document.getElementById('detail-overlay');
+    const closeDetailBtn = document.getElementById('btn-close-detail');
+
+    closeDetailBtn.addEventListener('click', () => {
+      detailOverlayEl.classList.remove('open');
+      activeDetailTicker = null;
+    });
+
+    function openDetail(ticker) {
+      activeDetailTicker = ticker;
+      detailOverlayEl.classList.add('open');
+      
+      const sc = queryOne('SELECT * FROM scoring_latest WHERE ticker = :ticker', { ':ticker': ticker });
+      const comp = queryOne('SELECT * FROM companies WHERE ticker = :ticker', { ':ticker': ticker });
+      const pos = queryOne('SELECT * FROM open_positions WHERE ticker = :ticker', { ':ticker': ticker });
+      const metrics = queryOne('SELECT * FROM adjusted_metrics_latest WHERE company_id = (SELECT id FROM companies WHERE ticker = :ticker)', { ':ticker': ticker });
+      const sectorBenchmark = sc && sc.sector ? queryOne('SELECT * FROM sector_benchmarks WHERE sector = :sector', { ':sector': sc.sector }) : null;
+
+      if (!sc) return;
+
+      // Header details
+      document.getElementById('det-ticker').textContent = ticker;
+      document.getElementById('det-fullname').textContent = sc.name || comp?.name || '—';
+
+      // Live price overlay
+      updateDetailLiveStats();
+
+      // DCF Valuation details
+      document.getElementById('det-dcf-val').textContent = sc.dcf_intrinsic_value ? fmtTry(sc.dcf_intrinsic_value) : '—';
+      const mos = sc.dcf_mos || sc.dcf_margin_of_safety_pct || 0;
+      const mosEl = document.getElementById('det-dcf-mos');
+      mosEl.textContent = fmtPct(mos);
+      mosEl.className = mos >= 0 ? 'pos-text' : 'neg-text';
+
+      document.getElementById('det-dcf-growth').textContent = sc.dcf_growth_rate_pct ? fmtPct(sc.dcf_growth_rate_pct / 100) : '—';
+      document.getElementById('det-dcf-discount').textContent = sc.dcf_discount_rate_pct ? fmtPct(sc.dcf_discount_rate_pct / 100) : '—';
+      document.getElementById('det-dcf-terminal').textContent = sc.dcf_terminal_growth_pct ? fmtPct(sc.dcf_terminal_growth_pct / 100) : '—';
+      
+      const targetP = sc.target_price ? fmtTry(sc.target_price) : '—';
+      const stopP = sc.stop_loss_price ? fmtTry(sc.stop_loss_price) : '—';
+      document.getElementById('det-det-limits').textContent = `${targetP} / ${stopP}`;
+
+      // Live position info block
+      const portStatsEl = document.getElementById('det-port-stats');
+      if (pos) {
+        portStatsEl.style.display = 'block';
+        document.getElementById('det-entry-price').textContent = fmtTry(pos.entry_price);
+        document.getElementById('det-days-held').textContent = `${pos.days_held} Gün`;
+        
+        const livePrice = window.livePrices[ticker];
+        let currentP = pos.current_price;
+        let pnlPctVal = pos.pnl_pct * 100;
+        if (livePrice) {
+          currentP = livePrice;
+          pnlPctVal = (currentP / pos.entry_price - 1.0) * 100;
+        }
+        
+        const pnlEl = document.getElementById('det-pnl-pct');
+        pnlEl.textContent = `${pnlPctVal >= 0 ? '+' : ''}${pnlPctVal.toFixed(1)}%`;
+        pnlEl.className = pnlPctVal >= 0 ? 'pos-text' : 'neg-text';
+      } else {
+        portStatsEl.style.display = 'none';
+      }
+
+      // Smart signal action badge
+      const topScoring = queryAll('SELECT ticker FROM scoring_latest ORDER BY ranking_score DESC LIMIT 10').map(x => x.ticker);
+      const openPositions = queryAll('SELECT ticker FROM open_positions').map(x => x.ticker);
+      const indexInTop = topScoring.indexOf(ticker);
+      const isOwned = openPositions.includes(ticker);
+      
+      const badgeContainer = document.getElementById('det-signal-action');
+      badgeContainer.innerHTML = '';
+      if (!isOwned && indexInTop !== -1 && indexInTop < 5) {
+        badgeContainer.innerHTML = '<span class="badge badge-action badge-buy">AL</span>';
+      } else if (isOwned) {
+        if (indexInTop === -1 || indexInTop >= 12) {
+          badgeContainer.innerHTML = '<span class="badge badge-action badge-sell">SAT</span>';
+        } else {
+          badgeContainer.innerHTML = '<span class="badge badge-action badge-hold">TUT</span>';
+        }
+      } else {
+        badgeContainer.innerHTML = '<span class="badge badge-action" style="background:rgba(255,255,255,0.08); color:var(--text-muted)">İZLE</span>';
+      }
+
+      // Factor Breakdown list
+      const factorsGrid = document.getElementById('det-factors-grid');
+      factorsGrid.innerHTML = '';
+      
+      const fields = [
+        { label: 'Buffett Skor', val: sc.buffett },
+        { label: 'Graham Değeri', val: sc.graham },
+        { label: 'Piotroski Skor', val: sc.piotroski_raw ? `${sc.piotroski_raw}/9` : '—' },
+        { label: 'Sihirli Formül', val: sc.magic_formula },
+        { label: 'Lynch PEG', val: sc.lynch_peg },
+        { label: 'Mesafe MoS', val: sc.dcf_mos },
+        { label: 'Momentum Skor', val: sc.momentum },
+        { label: 'Teknik Skor', val: sc.technical },
+        { label: 'Temettü Skor', val: sc.dividend },
+        { label: 'Beta Katsayısı', val: sc.beta }
+      ];
+
+      fields.forEach(f => {
+        let displayVal = '—';
+        if (f.val !== null && f.val !== undefined) {
+          if (typeof f.val === 'number') {
+            displayVal = f.label.includes('Değeri') ? fmtTry(f.val) : f.val.toFixed(1);
+          } else {
+            displayVal = String(f.val);
+          }
+        }
+        const card = document.createElement('div');
+        card.className = 'factor-card';
+        card.innerHTML = `
+          <span class="factor-lbl">${f.label}</span>
+          <span class="factor-val">${displayVal}</span>
+        `;
+        factorsGrid.appendChild(card);
+      });
+
+      // Quality Flags
+      const flagsCard = document.getElementById('det-flags-card');
+      const flagsList = document.getElementById('det-flags-list');
+      flagsList.innerHTML = '';
+      if (sc.quality_flags_json) {
+        try {
+          const flags = JSON.parse(sc.quality_flags_json);
+          if (flags && flags.length > 0) {
+            flagsCard.style.display = 'block';
+            flags.forEach(f => {
+              const chip = document.createElement('span');
+              chip.className = 'badge badge-sell';
+              chip.style.fontSize = '9px';
+              chip.style.padding = '3px 8px';
+              chip.style.borderRadius = '20px';
+              chip.textContent = f;
+              flagsList.appendChild(chip);
+            });
+          } else {
+            flagsCard.style.display = 'none';
+          }
+        } catch (e) {
+          flagsCard.style.display = 'none';
+        }
+      } else {
+        flagsCard.style.display = 'none';
+      }
+
+      // AI Insight Notes
+      const insightCard = document.getElementById('det-insight-card');
+      if (sc.ai_insight) {
+        insightCard.style.display = 'block';
+        document.getElementById('det-insight-text').textContent = sc.ai_insight;
+      } else {
+        insightCard.style.display = 'none';
+      }
+
+      // Financials Snapshot
+      const financesGrid = document.getElementById('det-finances-grid');
+      financesGrid.innerHTML = '';
+      if (metrics) {
+        const finItems = [
+          { label: 'Raporlama Dönemi', val: metrics.period_end || '—' },
+          { label: 'Özsermaye Kârlılığı (ROE)', val: fmtPct(metrics.roe_adjusted) },
+          { label: 'Aktif Kârlılığı (ROA)', val: fmtPct(metrics.roa_adjusted) },
+          { label: 'Hisse Başı Kâr (EPS)', val: fmtNum(metrics.eps_adjusted) },
+          { label: 'Reel EPS Büyümesi', val: fmtPct(metrics.real_eps_growth_pct) },
+          { label: 'Ortaklık Gelir Payı %', val: fmtPct(metrics.related_party_revenue_pct) },
+          { label: 'Serbest Nakit Akışı', val: fmtMoney(metrics.free_cash_flow) },
+          { label: 'Sahip Kazancı', val: fmtMoney(metrics.owner_earnings) },
+          { label: 'Raporlanan Kar', val: fmtMoney(metrics.reported_net_income) },
+          { label: 'Parasal Kazanç/Kayıp', val: fmtMoney(metrics.monetary_gain_loss) }
+        ];
+
+        finItems.forEach(item => {
+          const div = document.createElement('div');
+          div.className = 'fin-item';
+          div.innerHTML = `
+            <span style="color:var(--text-muted)">${item.label}:</span>
+            <strong style="float:right; color:var(--text);">${item.val}</strong>
+          `;
+          financesGrid.appendChild(div);
+        });
+      } else {
+        financesGrid.innerHTML = '<p style="color:var(--text-muted); font-size:11px; font-style:italic; padding:12px;">Bu şirket için finansal veri bulunmuyor.</p>';
+      }
+
+      // Draw Detail Charts
+      drawCharts(sc.company_id);
+    }
+
+    function updateDetailLiveStats() {
+      const ticker = activeDetailTicker;
+      if (!ticker) return;
+      const livePrice = window.livePrices[ticker];
+      
+      const sc = queryOne('SELECT * FROM scoring_latest WHERE ticker = :ticker', { ':ticker': ticker });
+      const priceHistory = sc ? queryAll('SELECT close FROM price_history_730d WHERE company_id = :cid ORDER BY date DESC LIMIT 1', { ':cid': sc.company_id }) : [];
+      const dbPrice = priceHistory[0]?.close || 0;
+
+      const priceValEl = document.getElementById('det-current-price');
+      if (livePrice) {
+        priceValEl.textContent = fmtTry(livePrice);
+        priceValEl.className = 'pos-text'; // Pulsing live price color
+      } else if (dbPrice) {
+        priceValEl.textContent = fmtTry(dbPrice);
+        priceValEl.className = 'neutral-text';
+      } else {
+        priceValEl.textContent = '—';
+      }
+    }
+
+    // --- Chart Rendering Function via ApexCharts ---
+    function drawCharts(companyId) {
+      // 1. Price History Chart (730d)
+      const prices = queryAll('SELECT date, close FROM price_history_730d WHERE company_id = :cid ORDER BY date ASC', { ':cid': companyId });
+      
+      const priceDates = prices.map(p => p.date);
+      const priceValues = prices.map(p => p.close);
+
+      const priceOptions = {
+        series: [{
+          name: 'Kapanış Fiyatı',
+          data: priceValues
+        }],
+        chart: {
+          type: 'area',
+          height: 180,
+          toolbar: { show: false },
+          background: 'transparent',
+          foreColor: '#94a3b8'
+        },
+        colors: ['#3b82f6'],
+        fill: {
+          type: 'gradient',
+          gradient: {
+            shadeIntensity: 1,
+            opacityFrom: 0.4,
+            opacityTo: 0.05,
+            stops: [0, 90, 100]
+          }
+        },
+        dataLabels: { enabled: false },
+        stroke: { curve: 'smooth', width: 2 },
+        xaxis: {
+          categories: priceDates,
+          labels: {
+            show: true,
+            rotate: 0,
+            formatter: (val) => {
+              if (!val) return '';
+              const parts = val.split('-');
+              return parts.length === 3 ? `${parts[2]}/${parts[1]}` : val; // e.g. 29/05
+            }
+          },
+          axisBorder: { show: false },
+          axisTicks: { show: false },
+          tickAmount: 4
+        },
+        yaxis: {
+          labels: {
+            formatter: (val) => val.toFixed(1) + ' ₺'
+          }
+        },
+        grid: {
+          borderColor: 'rgba(255,255,255,0.05)',
+          strokeDashArray: 4,
+          xaxis: { lines: { show: true } },
+          yaxis: { lines: { show: true } }
+        },
+        tooltip: {
+          theme: 'dark',
+          x: { formatter: (val) => formatDateToTurkish(priceDates[val - 1]) }
+        }
+      };
+
+      if (priceChartInstance) priceChartInstance.destroy();
+      priceChartInstance = new ApexCharts(document.querySelector("#price-chart"), priceOptions);
+      priceChartInstance.render();
+
+      // 2. Factor History Chart (Quarterly)
+      const factors = queryAll('SELECT quarter_end, composite_alpha FROM factor_history_quarterly WHERE company_id = :cid ORDER BY quarter_end ASC', { ':cid': companyId });
+      
+      const factorQuarters = factors.map(f => f.quarter_end);
+      const factorValues = factors.map(f => f.composite_alpha ? parseFloat(f.composite_alpha.toFixed(1)) : 0);
+
+      const factorOptions = {
+        series: [{
+          name: 'Kompozit Alfa',
+          data: factorValues
+        }],
+        chart: {
+          type: 'bar',
+          height: 180,
+          toolbar: { show: false },
+          background: 'transparent',
+          foreColor: '#94a3b8'
+        },
+        colors: ['#10b981'],
+        plotOptions: {
+          bar: {
+            borderRadius: 4,
+            columnWidth: '45%'
+          }
+        },
+        dataLabels: { enabled: false },
+        xaxis: {
+          categories: factorQuarters,
+          axisBorder: { show: false },
+          axisTicks: { show: false }
+        },
+        yaxis: {
+          labels: {
+            formatter: (val) => val.toFixed(1)
+          }
+        },
+        grid: {
+          borderColor: 'rgba(255,255,255,0.05)',
+          strokeDashArray: 4,
+          xaxis: { lines: { show: false } },
+          yaxis: { lines: { show: true } }
+        },
+        tooltip: { theme: 'dark' }
+      };
+
+      if (factorChartInstance) factorChartInstance.destroy();
+      factorChartInstance = new ApexCharts(document.querySelector("#factor-chart"), factorOptions);
+      factorChartInstance.render();
+    }
+
+    // Modal backtest click event handler
+    document.getElementById('btn-backtest-info').addEventListener('click', () => {
+      // Create and display a quick backtest info modal
+      const overview = queryOne('SELECT * FROM home_summary WHERE id = 1');
+      const winRate = overview?.win_rate ? (overview.win_rate * 100).toFixed(0) + '%' : '—';
+      const avgReturn = overview?.total_return_avg ? (overview.total_return_avg * 100).toFixed(1) + '%' : '—';
+      const activeReturn = overview?.active_return_avg ? (overview.active_return_avg * 100).toFixed(1) + '%' : '—';
+      
+      alert(
+        `📊 BIST Picker 10 Yıllık Backtest Sonuçları\n\n` +
+        `• Strateji Toplam Başarı Oranı: ${winRate}\n` +
+        `• Rebalance Başına Ortalama Getiri: ${avgReturn}\n` +
+        `• Endeks Üzeri Aktif Getiri (Alfa): ${activeReturn}\n\n` +
+        `Model, 2017-2026 yılları arasında endeksi kümülatif bazda büyük oranda yenmiştir.`
+      );
+    });
+
+    // Launch Application
+    window.addEventListener('load', () => {
+      initApp();
+    });
+  </script>
+</body>
 </html>

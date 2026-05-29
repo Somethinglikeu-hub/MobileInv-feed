@@ -1225,7 +1225,7 @@
         positions.forEach(pos => {
           const livePrice = window.livePrices[pos.ticker];
           let currentPrice = pos.current_price;
-          let pnlVal = pos.pnl_pct * 100; // Database holds absolute decimal, e.g. 0.05
+          let pnlVal = pos.pnl_pct; // Database holds percentage value, e.g. 11.39
           let isLiveBadge = false;
 
           if (livePrice) {
@@ -1755,7 +1755,7 @@
         
         const livePrice = window.livePrices[ticker];
         let currentP = pos.current_price;
-        let pnlPctVal = pos.pnl_pct * 100;
+        let pnlPctVal = pos.pnl_pct;
         if (livePrice) {
           currentP = livePrice;
           pnlPctVal = (currentP / pos.entry_price - 1.0) * 100;

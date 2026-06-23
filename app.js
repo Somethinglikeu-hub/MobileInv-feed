@@ -25,6 +25,13 @@ function finiteNumber(value, fallback = 0) {
   return Number.isFinite(parsed) ? parsed : fallback;
 }
 
+function mixedScalePercent(value) {
+  if (value === null || value === undefined || value === '') return null;
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed)) return null;
+  return Math.abs(parsed) <= 1 ? parsed * 100 : parsed;
+}
+
 // ==========================================================================
 // 1. PWA Service Worker & Cache Busting Setup
 // ==========================================================================
@@ -960,7 +967,10 @@ function openStockDetail(ticker) {
   // Sectoral metadata
   const sector = score.sector || company?.sector_custom || 'Tümü';
   document.getElementById('detail-sector').textContent = sector;
-  document.getElementById('detail-float').textContent = company?.free_float_pct ? `${(company.free_float_pct * 100).toFixed(1)}%` : '—';
+  const freeFloatPct = mixedScalePercent(company?.free_float_pct);
+  document.getElementById('detail-float').textContent = freeFloatPct !== null
+    ? `${freeFloatPct.toFixed(1)}%`
+    : '—';
   document.getElementById('detail-class').textContent = score.is_bist100 ? 'BIST 100' : 'BIST DIŞI';
 
   // Live Price and Model Score
@@ -1387,7 +1397,7 @@ async function initApp() {
     progressFill.style.width = '90%';
     
     const SQL = await initSqlJs({
-      locateFile: filename => `./vendor/${filename}?v=6`
+      locateFile: filename => `./vendor/${filename}?v=7`
     });
 
     try {

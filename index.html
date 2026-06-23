@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <title>BIST Picker — Mobil Portföy Takip</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  
+
   <!-- Force no-cache on iOS Safari / PWA -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  
+
   <!-- PWA Meta Tags for iOS & Android -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -19,32 +19,32 @@
 
   <!-- Icons for PWA -->
   <link rel="apple-touch-icon" href="./icons/icon-192.png">
-  <link rel="manifest" href="./manifest.webmanifest?v=5">
-  
+  <link rel="manifest" href="./manifest.webmanifest?v=6">
+
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  
+
   <!-- Material Symbols Icons -->
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
-  
+
   <!-- Stylesheet -->
-  <link rel="stylesheet" href="./index.css?v=5">
-  
-  <!-- CDN Dependencies -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-  
+  <link rel="stylesheet" href="./index.css?v=6">
+
+  <!-- Local runtime dependencies: first launch must not depend on a CDN. -->
+  <script src="./vendor/pako.min.js?v=6"></script>
+  <script src="./vendor/sql-wasm.js?v=6"></script>
+  <script src="./vendor/apexcharts.min.js?v=6"></script>
+
   <!-- Main Application Logic (deferred) -->
-  <script src="./app.js?v=5" defer></script>
+  <script src="./app.js?v=6" defer></script>
 </head>
 <body>
 
   <!-- Simulated Mobile Viewport Mockup on Desktop Browsers -->
   <div class="mobile-frame">
-    
+
     <!-- 1. SPLASH SCREEN (Loading engine progress) -->
     <div id="splash-screen" class="splash-container">
       <div class="splash-brand">
@@ -52,28 +52,28 @@
         <h1 class="logo-title">BIST Picker</h1>
         <p class="logo-subtitle">Değer Odaklı Akıllı Portföy</p>
       </div>
-      
+
       <div class="loading-wrapper">
         <div class="progress-bar-track">
           <div id="splash-progress" class="progress-bar-fill" style="width: 0%;"></div>
         </div>
         <p id="splash-status" class="loading-status">Uygulama kütüphaneleri yükleniyor...</p>
       </div>
-      
-      <button id="splash-retry-btn" class="retry-btn" style="display: none;">🔄 Yeniden Dene</button>
+
+      <button type="button" id="splash-retry-btn" class="retry-btn" style="display: none;">🔄 Yeniden Dene</button>
     </div>
 
     <!-- 2. MAIN APPLICATION CONTENT -->
     <div id="app-content" class="app-container" style="display: none;">
-      
+
       <!-- App Header -->
-      <header class="app-header">
+      <header class="app-header" aria-label="Uygulama başlığı">
         <div class="header-main">
           <div class="brand-text">
             <span class="brand-title">BIST Picker</span>
             <span id="app-update-date" class="brand-subtitle">Güncelleniyor...</span>
           </div>
-          <button id="refresh-db-btn" class="header-icon-btn">
+          <button type="button" id="refresh-db-btn" class="header-icon-btn" aria-label="Verileri yenile">
             <span class="material-symbols-rounded">refresh</span>
           </button>
         </div>
@@ -81,7 +81,7 @@
 
       <!-- Main Page Content Containers (Tab-driven Router) -->
       <main class="page-content">
-        
+
         <!-- PAGE 1: PICKS (HOME) -->
         <section id="page-picks" class="tab-page active">
           <!-- Active Portfolio Header -->
@@ -89,7 +89,7 @@
             <h2>Aktif Portföy</h2>
             <span id="picks-count-badge" class="badge badge-accent">0 Hisse</span>
           </div>
-          
+
           <div id="portfolio-list" class="list-container">
             <!-- Dynamically populated portfolio rows -->
           </div>
@@ -115,12 +115,12 @@
               <span class="material-symbols-rounded search-icon">search</span>
               <input type="text" id="browse-search" placeholder="Hisse kodu veya adıyla ara..." autocomplete="off">
             </div>
-            
+
             <div class="filter-pills-row">
-              <button id="pill-all" class="filter-pill active" data-mode="ALL">Hepsi</button>
-              <button id="pill-core" class="filter-pill" data-mode="ALPHA_CORE">ALPHA Core</button>
-              <button id="pill-x" class="filter-pill" data-mode="ALPHA_X">ALPHA X</button>
-              <button id="pill-research" class="filter-pill" data-mode="RESEARCH">Araştırma</button>
+              <button type="button" id="pill-all" class="filter-pill active" data-mode="ALL">Hepsi</button>
+              <button type="button" id="pill-core" class="filter-pill" data-mode="ALPHA_CORE">ALPHA Core</button>
+              <button type="button" id="pill-x" class="filter-pill" data-mode="ALPHA_X">ALPHA X</button>
+              <button type="button" id="pill-research" class="filter-pill" data-mode="RESEARCH">Araştırma</button>
             </div>
           </div>
 
@@ -149,6 +149,7 @@
           </div>
 
           <!-- Scoring Rows List -->
+          <div id="browse-result-info" class="label" aria-live="polite"></div>
           <div id="browse-list" class="list-container">
             <!-- Dynamically populated stock lists -->
           </div>
@@ -158,7 +159,7 @@
         <section id="page-market" class="tab-page">
           <div class="macro-card">
             <h2>Makro Göstergeler</h2>
-            
+
             <div class="macro-metric-row">
               <div class="macro-metric">
                 <span class="label">TCMB Politika Faizi</span>
@@ -177,7 +178,7 @@
                 <span id="macro-real-yield-badge" class="badge">NEGATİF REEL</span>
               </div>
               <div id="macro-real-yield-val" class="yield-value neg-text">+0.00%</div>
-              
+
               <div class="yield-slider-track">
                 <div class="yield-slider-labels">
                   <span>-%15</span>
@@ -205,7 +206,7 @@
                 <span id="macro-cash-target" class="cash-target-title">NORMAL</span>
               </div>
             </div>
-            
+
             <div class="progress-bar-track" style="margin: 12px 0;">
               <div id="macro-cash-progress" class="progress-bar-fill" style="width: 0%;"></div>
             </div>
@@ -301,7 +302,7 @@
               <strong>%15</strong>
             </div>
             <div class="about-weight-row">
-              <span>Momentum & Teknik Trend Takibi</span>
+              <span>Momentum &amp; Teknik Trend Takibi</span>
               <strong>%15</strong>
             </div>
           </div>
@@ -315,33 +316,33 @@
               <li><strong>Nakit Koruma:</strong> Enflasyon ve politika faiz makası değiştikçe model otomatik olarak nakit koruma kademelerini (CAUTION, DEFENSIVE, RISK_OFF) etkinleştirir.</li>
             </ul>
           </div>
-          
+
           <div class="about-card disclaimer">
             <p><strong>Yasal Uyarı:</strong> Burada yer alan model çıktıları, portföy dağılımları ve analizler yatırım danışmanlığı kapsamında değildir. Geçmiş performans gelecek sonuçların garantisi olamaz.</p>
           </div>
         </section>
-        
+
       </main>
 
       <!-- Bottom Tab Navigation Bar -->
       <nav class="bottom-nav">
-        <button class="nav-item active" data-tab="picks">
+        <button type="button" class="nav-item active" data-tab="picks">
           <span class="material-symbols-rounded">home</span>
           <span class="nav-label">Picks</span>
         </button>
-        <button class="nav-item" data-tab="browse">
+        <button type="button" class="nav-item" data-tab="browse">
           <span class="material-symbols-rounded">search</span>
           <span class="nav-label">Browse</span>
         </button>
-        <button class="nav-item" data-tab="market">
+        <button type="button" class="nav-item" data-tab="market">
           <span class="material-symbols-rounded">public</span>
           <span class="nav-label">Market</span>
         </button>
-        <button class="nav-item" data-tab="history">
+        <button type="button" class="nav-item" data-tab="history">
           <span class="material-symbols-rounded">history</span>
           <span class="nav-label">History</span>
         </button>
-        <button class="nav-item" data-tab="about">
+        <button type="button" class="nav-item" data-tab="about">
           <span class="material-symbols-rounded">info</span>
           <span class="nav-label">Hakkında</span>
         </button>
@@ -350,11 +351,11 @@
     </div>
 
     <!-- 3. SLIDING SHEETS / OVERLAYS -->
-    
+
     <!-- Detail Sheet overlay -->
     <div id="detail-sheet" class="overlay-sheet">
-      <header class="sheet-header">
-        <button id="close-detail-btn" class="sheet-close-btn">
+      <header class="sheet-header" aria-label="Hisse detay başlığı">
+        <button type="button" id="close-detail-btn" class="sheet-close-btn" aria-label="Hisse detayını kapat">
           <span class="material-symbols-rounded">close</span>
         </button>
         <div class="sheet-title-container">
@@ -362,9 +363,9 @@
           <span id="detail-in-portfolio-badge" class="badge badge-portfolio" style="display: none;">PORTFÖYDE</span>
         </div>
       </header>
-      
+
       <div id="detail-scroll-content" class="sheet-scroll-body">
-        
+
         <!-- Smart Signal Warning Banner -->
         <div id="detail-signal-banner" class="signal-banner" style="display: none;">
           <span class="material-symbols-rounded">warning</span>
@@ -427,7 +428,7 @@
 
         <!-- Investment Thesis / Core Strengths -->
         <div class="detail-card">
-          <h4>Yatırım Tezi & Güçlü Faktörler</h4>
+          <h4>Yatırım Tezi &amp; Güçlü Faktörler</h4>
           <ul id="detail-thesis-list" class="thesis-list">
             <!-- Evaluated strengths -->
           </ul>
@@ -489,13 +490,13 @@
 
         <!-- Advanced Details Accordion Toggle -->
         <div class="collapsible-section">
-          <button id="detail-advanced-toggle" class="collapsible-header-btn">
+          <button type="button" id="detail-advanced-toggle" class="collapsible-header-btn">
             <span>Gelişmiş Analiz Verileri (Enflasyon Muhasebesi)</span>
             <span class="material-symbols-rounded icon-arrow">expand_more</span>
           </button>
-          
+
           <div id="detail-advanced-body" class="collapsible-body-content" style="display: none;">
-            
+
             <!-- Audit warnings if related party > 15% -->
             <div id="audit-warning-card" class="audit-warning-box" style="display: none;">
               <span class="material-symbols-rounded">report</span>
@@ -555,8 +556,8 @@
 
     <!-- Backtesting Sheet overlay -->
     <div id="backtest-sheet" class="overlay-sheet">
-      <header class="sheet-header">
-        <button id="close-backtest-btn" class="sheet-close-btn">
+      <header class="sheet-header" aria-label="Backtest başlığı">
+        <button type="button" id="close-backtest-btn" class="sheet-close-btn" aria-label="Backtest ekranını kapat">
           <span class="material-symbols-rounded">close</span>
         </button>
         <div>

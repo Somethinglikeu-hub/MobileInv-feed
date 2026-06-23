@@ -1,18 +1,16 @@
-const CACHE_NAME = 'bist-picker-shell-v5';
+const CACHE_NAME = 'bist-picker-shell-v6';
 const APP_SHELL = [
   './',
   './index.html',
-  './index.css?v=5',
-  './app.js?v=5',
-  './manifest.webmanifest?v=5',
+  './index.css?v=6',
+  './app.js?v=6',
+  './manifest.webmanifest?v=6',
   './icons/icon-192.png',
-  './icons/icon-512.png'
-];
-const OPTIONAL_RUNTIME_ASSETS = [
-  'https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js',
-  'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js',
-  'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.wasm',
-  'https://cdn.jsdelivr.net/npm/apexcharts'
+  './icons/icon-512.png',
+  './vendor/pako.min.js?v=6',
+  './vendor/sql-wasm.js?v=6',
+  './vendor/sql-wasm.wasm?v=6',
+  './vendor/apexcharts.min.js?v=6'
 ];
 
 self.addEventListener('install', (e) => {
@@ -22,18 +20,6 @@ self.addEventListener('install', (e) => {
       console.log('[Service Worker] Caching app shell assets');
       await cache.addAll(
         APP_SHELL.map(asset => new Request(asset, { cache: 'reload' }))
-      );
-
-      // CDN files are useful offline but must never make the PWA installation
-      // fail when one provider is temporarily unavailable.
-      await Promise.allSettled(
-        OPTIONAL_RUNTIME_ASSETS.map(async asset => {
-          const request = new Request(asset, { cache: 'reload' });
-          const response = await fetch(request);
-          if (response.ok || response.type === 'opaque') {
-            await cache.put(request, response);
-          }
-        })
       );
     }).then(() => self.skipWaiting())
   );
@@ -93,7 +79,7 @@ self.addEventListener('fetch', (e) => {
   }
 
   // Network first makes installed PWAs receive new code immediately. Successful
-  // responses are retained for offline startup, including CDN dependencies.
+  // responses are retained for offline startup, including optional web fonts.
   e.respondWith(
     fetch(e.request)
       .then((response) => {

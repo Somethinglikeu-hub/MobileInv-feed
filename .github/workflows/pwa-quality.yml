@@ -1,0 +1,32 @@
+name: PWA Quality
+
+on:
+  push:
+    branches:
+      - gh-pages
+  pull_request:
+    branches:
+      - gh-pages
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Validate JavaScript and published assets
+        run: |
+          node --check app.js
+          node --check sw.js
+          node tests/pwa-static-check.mjs

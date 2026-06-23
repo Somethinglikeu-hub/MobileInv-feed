@@ -11,6 +11,20 @@ let priceChartInstance = null;
 let factorChartInstance = null;
 let backtestChartInstance = null;
 
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
+function finiteNumber(value, fallback = 0) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : fallback;
+}
+
 // ==========================================================================
 // 1. PWA Service Worker & Cache Busting Setup
 // ==========================================================================
@@ -123,6 +137,54 @@ async function setCachedSnapshot(data) {
   }
 }
 
+async function deleteCachedSnapshot() {
+  try {
+    const db = await openIDB();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE_NAME, 'readwrite');
+      const req = tx.objectStore(STORE_NAME).delete(1);
+      req.onsuccess = () => resolve(true);
+      req.onerror = () => reject(req.error);
+    });
+  } catch (err) {
+    console.warn('[DB] IndexedDB cleanup failed:', err);
+    return false;
+  }
+}
+
+function validateSnapshotManifest(value) {
+  if (!value || typeof value !== 'object' || !value.snapshot || typeof value.snapshot !== 'object') {
+    throw new Error('Manifest yapısı geçersiz.');
+  }
+
+  const filename = String(value.snapshot.filename || '');
+  const sha256 = String(value.snapshot.sha256 || '').toLowerCase();
+  const sizeBytes = Number(value.snapshot.size_bytes);
+
+  if (!/^[a-zA-Z0-9._-]+$/.test(filename)) {
+    throw new Error('Manifest snapshot dosya adı geçersiz.');
+  }
+  if (!/^[a-f0-9]{64}$/.test(sha256)) {
+    throw new Error('Manifest snapshot SHA-256 değeri geçersiz.');
+  }
+  if (!Number.isSafeInteger(sizeBytes) || sizeBytes <= 0) {
+    throw new Error('Manifest snapshot boyutu geçersiz.');
+  }
+
+  return value;
+}
+
+async function sha256Hex(arrayBuffer) {
+  if (!globalThis.crypto?.subtle) {
+    console.warn('[DB] Web Crypto unavailable; snapshot hash validation skipped.');
+    return null;
+  }
+  const digest = await crypto.subtle.digest('SHA-256', arrayBuffer);
+  return Array.from(new Uint8Array(digest))
+    .map(byte => byte.toString(16).padStart(2, '0'))
+    .join('');
+}
+
 // ==========================================================================
 // 3. Database Downloader (With Real-time Progress Tracking)
 // ==========================================================================
@@ -145,6 +207,13 @@ async function fetchWithProgress(url, onProgress, options = {}) {
       return buf;
     }
 
+    if (!response.body?.getReader) {
+      console.warn('[Fetch] Streaming response unsupported, using buffered download');
+      const buf = await response.arrayBuffer();
+      onProgress(100);
+      return buf;
+    }
+
     const reader = response.body.getReader();
     let loaded = 0;
     const chunks = [];
@@ -155,7 +224,7 @@ async function fetchWithProgress(url, onProgress, options = {}) {
       chunks.push(value);
       loaded += value.length;
       
-      const percent = Math.round((loaded / total) * 100);
+      const percent = Math.max(0, Math.min(100, Math.round((loaded / total) * 100)));
       onProgress(percent);
     }
 
@@ -170,6 +239,24 @@ async function fetchWithProgress(url, onProgress, options = {}) {
   } finally {
     clearTimeout(timeoutId);
   }
+}
+
+async function downloadSnapshot(manifest, onProgress) {
+  const downloadUrl = `./${manifest.snapshot.filename}?t=${Date.now()}`;
+  const arrayBuffer = await fetchWithProgress(downloadUrl, onProgress);
+
+  if (arrayBuffer.byteLength !== manifest.snapshot.size_bytes) {
+    throw new Error(
+      `Snapshot boyutu uyuşmuyor (${arrayBuffer.byteLength}/${manifest.snapshot.size_bytes}).`
+    );
+  }
+
+  const actualHash = await sha256Hex(arrayBuffer);
+  if (actualHash && actualHash !== manifest.snapshot.sha256) {
+    throw new Error('Snapshot bütünlük kontrolü başarısız (SHA-256 uyuşmuyor).');
+  }
+
+  return pako.ungzip(new Uint8Array(arrayBuffer));
 }
 
 // ==========================================================================
@@ -239,6 +326,15 @@ function getPriceOnOrBefore(ticker, dateStr) {
     ORDER BY date DESC LIMIT 1
   `, { ':ticker': ticker, ':date': dateStr });
   return row ? row.close : null;
+}
+
+function getLatestSnapshotPrice(ticker) {
+  const row = queryOne(`
+    SELECT close FROM price_history_730d
+    WHERE company_id = (SELECT id FROM companies WHERE ticker = :ticker LIMIT 1)
+    ORDER BY date DESC LIMIT 1
+  `, { ':ticker': ticker });
+  return row ? finiteNumber(row.close, null) : null;
 }
 
 const LIVE_TRACKING_START_DATE = '2026-05-21';
@@ -390,20 +486,23 @@ function renderPicksPage() {
     portListEl.innerHTML = `<p style="color:var(--text-muted); font-size:12px; text-align:center; padding:24px;">Portföyde hisse bulunmuyor.</p>`;
   } else {
     positions.forEach(pos => {
-      const live = window.livePrices[pos.ticker] || pos.current_price;
-      const entry = pos.entry_price || 1.0;
+      const live = finiteNumber(window.livePrices[pos.ticker] ?? pos.current_price, 0);
+      const rawEntry = finiteNumber(pos.entry_price);
+      const entry = rawEntry > 0 ? rawEntry : (live > 0 ? live : 1.0);
       const pnl = ((live / entry) - 1) * 100;
       const pnlClass = pnl >= 0 ? 'pos-text' : 'neg-text';
+      const safeTicker = escapeHtml(pos.ticker);
+      const safeName = escapeHtml(pos.fullname || pos.name || '—');
 
       const row = document.createElement('div');
       row.className = 'list-item-row';
       row.innerHTML = `
         <div>
           <div class="ticker-block">
-            <span class="ticker-name">${pos.ticker}</span>
+            <span class="ticker-name">${safeTicker}</span>
             <span class="badge badge-live">CANLI</span>
           </div>
-          <div class="company-fullname">${pos.fullname || pos.name || '—'}</div>
+          <div class="company-fullname">${safeName}</div>
         </div>
         <div style="text-align: right;">
           <div class="tabular-nums" style="font-weight:700; font-size:14px;">${live.toFixed(2)} TL</div>
@@ -491,8 +590,8 @@ function renderPicksPage() {
       row.style.padding = '8px 0';
       row.innerHTML = `
         <div>
-          <div style="font-weight:700; font-size:12px;">${sig.ticker}</div>
-          <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">${sig.reason}</div>
+          <div style="font-weight:700; font-size:12px;">${escapeHtml(sig.ticker)}</div>
+          <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">${escapeHtml(sig.reason)}</div>
         </div>
         <div style="font-weight:900; font-size:12px; color:${colorMap[sig.action]}">${labelMap[sig.action]}</div>
       `;
@@ -566,6 +665,12 @@ function renderBrowsePage() {
     params[':risk'] = riskVal;
   }
 
+  const countQuery = query.replace(
+    'SELECT * FROM scoring_latest',
+    'SELECT COUNT(*) AS total FROM scoring_latest'
+  );
+  const totalRows = finiteNumber(queryOne(countQuery, params)?.total);
+
   if (sortVal === 'SCORE_DESC') {
     query += ` ORDER BY ranking_score DESC`;
   } else if (sortVal === 'TICKER_ASC') {
@@ -574,9 +679,14 @@ function renderBrowsePage() {
     query += ` ORDER BY CASE risk WHEN 'LOW' THEN 0 WHEN 'MEDIUM' THEN 1 WHEN 'HIGH' THEN 2 ELSE 3 END ASC`;
   }
 
+  query += ' LIMIT 200';
   const rows = queryAll(query, params);
   const listEl = document.getElementById('browse-list');
+  const resultInfo = document.getElementById('browse-result-info');
   listEl.innerHTML = '';
+  resultInfo.textContent = totalRows > rows.length
+    ? `${totalRows} sonuçtan ilk ${rows.length} kayıt gösteriliyor. Arama veya filtre kullanarak daraltın.`
+    : `${totalRows} sonuç`;
 
   if (rows.length === 0) {
     listEl.innerHTML = `<p style="color:var(--text-muted); font-size:12px; text-align:center; padding:32px;">Hisse bulunamadı.</p>`;
@@ -584,8 +694,8 @@ function renderBrowsePage() {
   }
 
   rows.forEach(row => {
-    const alphaVal = row.alpha || 0.0;
-    const riskText = row.risk || 'UNKNOWN';
+    const alphaVal = finiteNumber(row.alpha);
+    const riskText = escapeHtml(row.risk || 'UNKNOWN');
     const alphaClass = alphaVal >= 0 ? 'pos-text' : 'neg-text';
 
     const item = document.createElement('div');
@@ -593,9 +703,9 @@ function renderBrowsePage() {
     item.innerHTML = `
       <div>
         <div class="ticker-block">
-          <span class="ticker-name">${row.ticker}</span>
+          <span class="ticker-name">${escapeHtml(row.ticker)}</span>
         </div>
-        <div class="company-fullname">${row.name || '—'}</div>
+        <div class="company-fullname">${escapeHtml(row.name || '—')}</div>
       </div>
       <div style="text-align: right;">
         <div class="${alphaClass} tabular-nums" style="font-weight: 800; font-size: 14px;">
@@ -736,15 +846,18 @@ function renderHistoryPage() {
   listEl.innerHTML = '';
 
   records.slice().reverse().forEach(rec => {
-    const diff = (rec.portfolioReturn - rec.bist100Return) * 100;
+    const portfolioReturn = finiteNumber(rec.portfolioReturn);
+    const bistReturn = finiteNumber(rec.bist100Return);
+    const diff = (portfolioReturn - bistReturn) * 100;
     const diffClass = diff >= 0 ? 'pos-text' : 'neg-text';
+    const safeWeekLabel = escapeHtml(formatDateToTurkish(rec.weekStartDate));
 
     const card = document.createElement('div');
     card.className = 'collapsible-card';
     card.innerHTML = `
       <div class="collapsible-header">
         <div class="collapsible-header-left">
-          <span class="collapsible-header-title">${formatDateToTurkish(rec.weekStartDate)} Haftası</span>
+          <span class="collapsible-header-title">${safeWeekLabel} Haftası</span>
           <span class="collapsible-header-subtitle ${diffClass}">Haftalık Fark: ${diff >= 0 ? '+' : ''}${diff.toFixed(2)}%</span>
         </div>
         <div class="collapsible-header-right">
@@ -756,16 +869,16 @@ function renderHistoryPage() {
         <div class="collapsible-body-metrics">
           <div>
             <span style="color:var(--text-muted);">Portföy Getirisi:</span>
-            <strong class="${rec.portfolioReturn >= 0 ? 'pos-text' : 'neg-text'}">${(rec.portfolioReturn * 100).toFixed(2)}%</strong>
+            <strong class="${portfolioReturn >= 0 ? 'pos-text' : 'neg-text'}">${(portfolioReturn * 100).toFixed(2)}%</strong>
           </div>
           <div>
             <span style="color:var(--text-muted);">BIST100 Getirisi:</span>
-            <strong class="${rec.bist100Return >= 0 ? 'pos-text' : 'neg-text'}">${(rec.bist100Return * 100).toFixed(2)}%</strong>
+            <strong class="${bistReturn >= 0 ? 'pos-text' : 'neg-text'}">${(bistReturn * 100).toFixed(2)}%</strong>
           </div>
         </div>
         <div style="border-top:1px dashed var(--outline); padding-top:10px;">
           <div style="font-size:9px; font-weight:800; color:var(--text-muted); margin-bottom:8px; text-transform:uppercase;">SEÇİLEN HİSSELER VE GETİRİLERİ</div>
-          <div id="history-details-${rec.weekStartDate}" class="spaced-y"></div>
+          <div class="spaced-y"></div>
         </div>
       </div>
     `;
@@ -778,18 +891,20 @@ function renderHistoryPage() {
     listEl.appendChild(card);
 
     // Populate positions
-    const detailsContainer = document.getElementById(`history-details-${rec.weekStartDate}`);
+    const detailsContainer = card.querySelector('.spaced-y');
     if (rec.positions && rec.positions.length > 0) {
       rec.positions.forEach(pos => {
-        const stockPct = pos.returnPct * 100;
+        const stockPct = finiteNumber(pos.returnPct) * 100;
+        const entryPrice = finiteNumber(pos.entryPrice);
+        const exitPrice = finiteNumber(pos.exitPrice);
         const pClass = stockPct >= 0 ? 'pos-text' : 'neg-text';
 
         const row = document.createElement('div');
         row.className = 'stock-performance-item';
         row.innerHTML = `
-          <span style="font-size:11px; font-weight:700; color:var(--text);">${pos.ticker}</span>
+          <span style="font-size:11px; font-weight:700; color:var(--text);">${escapeHtml(pos.ticker)}</span>
           <div class="tabular-nums" style="font-size:10px; color:var(--text-muted);">
-            ${pos.entryPrice.toFixed(2)} → ${pos.exitPrice.toFixed(2)} TL
+            ${entryPrice.toFixed(2)} → ${exitPrice.toFixed(2)} TL
             <span class="${pClass}" style="font-weight:800; margin-left:8px;">${stockPct >= 0 ? '+' : ''}${stockPct.toFixed(2)}%</span>
           </div>
         `;
@@ -800,14 +915,30 @@ function renderHistoryPage() {
 }
 
 function formatDateToTurkish(dateStr) {
-  try {
-    const parts = dateStr.split('-');
-    const date = new Date(parts[0], parts[1] - 1, parts[2]);
-    const months = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
-    return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
-  } catch (e) {
-    return dateStr;
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(dateStr || ''));
+  if (!match) return String(dateStr || '—');
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  const day = Number(match[3]);
+  const date = new Date(year, month - 1, day);
+  if (
+    date.getFullYear() !== year ||
+    date.getMonth() !== month - 1 ||
+    date.getDate() !== day
+  ) {
+    return String(dateStr || '—');
   }
+  const months = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
+  return `${day} ${months[month - 1]} ${year}`;
+}
+
+function daysBetweenIsoDates(startDate, endDate) {
+  const startMatch = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(startDate || ''));
+  const endMatch = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(endDate || ''));
+  if (!startMatch || !endMatch) return 0;
+  const start = Date.UTC(Number(startMatch[1]), Number(startMatch[2]) - 1, Number(startMatch[3]));
+  const end = Date.UTC(Number(endMatch[1]), Number(endMatch[2]) - 1, Number(endMatch[3]));
+  return Math.max(0, Math.round((end - start) / 86400000));
 }
 
 // ==========================================================================
@@ -833,8 +964,13 @@ function openStockDetail(ticker) {
   document.getElementById('detail-class').textContent = score.is_bist100 ? 'BIST 100' : 'BIST DIŞI';
 
   // Live Price and Model Score
-  const livePrice = window.livePrices[ticker] || score.current_price || 1.0;
-  document.getElementById('detail-price-val').textContent = `${livePrice.toFixed(2)} TL`;
+  const livePrice = finiteNumber(
+    window.livePrices[ticker] ?? score.current_price ?? getLatestSnapshotPrice(ticker),
+    0
+  );
+  document.getElementById('detail-price-val').textContent = livePrice > 0
+    ? `${livePrice.toFixed(2)} TL`
+    : '—';
   document.getElementById('detail-model-score').textContent = score.ranking_score ? score.ranking_score.toFixed(1) : '—';
   document.getElementById('detail-live-indicator').style.display = window.livePrices[ticker] ? 'inline-flex' : 'none';
 
@@ -1096,28 +1232,25 @@ function openBacktestingSheet() {
     closedListEl.innerHTML = `<p style="color:var(--text-muted); font-size:11px; font-style:italic;">Tamamlanmış işlem kaydı bulunmuyor.</p>`;
   } else {
     closedPositions.forEach(pos => {
-      const pnl = pos.pnl_pct || 0.0;
+      const pnl = finiteNumber(pos.pnl_pct);
       const pnlClass = pnl >= 0 ? 'pos-text' : 'neg-text';
       const holdingDays = pos.holding_days != null
-        ? pos.holding_days
-        : Math.max(
-            0,
-            Math.round((new Date(pos.exit_date) - new Date(pos.selection_date)) / 86400000)
-          );
+        ? Math.max(0, Math.round(finiteNumber(pos.holding_days)))
+        : daysBetweenIsoDates(pos.selection_date, pos.exit_date);
 
       const card = document.createElement('div');
       card.className = 'card';
       card.innerHTML = `
         <div style="display:flex; justify-content:space-between; font-size:11px; align-items:center;">
           <div>
-            <strong style="color:var(--primary); font-size:12px;">${pos.ticker}</strong>
+            <strong style="color:var(--primary); font-size:12px;">${escapeHtml(pos.ticker)}</strong>
             <div style="font-size:9px; color:var(--text-muted); margin-top:2px;">
-              ${formatDateToTurkish(pos.selection_date)} - ${formatDateToTurkish(pos.exit_date)} (${holdingDays} Gün)
+              ${escapeHtml(formatDateToTurkish(pos.selection_date))} - ${escapeHtml(formatDateToTurkish(pos.exit_date))} (${holdingDays} Gün)
             </div>
           </div>
           <div style="text-align:right;">
             <strong class="${pnlClass} tabular-nums" style="font-size:12px;">${pnl >= 0 ? '+' : ''}${pnl.toFixed(1)}%</strong>
-            <div style="font-size:8px; color:var(--text-muted); margin-top:2px;">${pos.exit_reason || 'Model Değişimi'}</div>
+            <div style="font-size:8px; color:var(--text-muted); margin-top:2px;">${escapeHtml(pos.exit_reason || 'Model Değişimi')}</div>
           </div>
         </div>
       `;
@@ -1186,8 +1319,10 @@ async function initApp() {
     try {
       const res = await fetch('./manifest.json?t=' + Date.now(), { cache: 'no-store' });
       if (res.ok) {
-        manifest = await res.json();
+        manifest = validateSnapshotManifest(await res.json());
         console.log('[DB] Live manifest found:', manifest.snapshot_version);
+      } else {
+        console.warn('[DB] Live manifest request failed with HTTP', res.status);
       }
     } catch(e) {
       console.warn('[DB] Could not query live manifest:', e.message);
@@ -1198,41 +1333,12 @@ async function initApp() {
     const cached = await getCachedSnapshot();
 
     let rawBytes = null;
-    let newManifestToCache = manifest;
-
-    if (cached && manifest && cached.sha256 === manifest.snapshot.sha256) {
-      statusEl.textContent = '📦 Önbellekteki veriler yükleniyor...';
-      progressFill.style.width = '50%';
-      rawBytes = cached.db_blob;
-    } else if (cached && !manifest) {
-      statusEl.textContent = '📴 Çevrimdışı Mod: Önbellekteki veriler yükleniyor...';
-      progressFill.style.width = '50%';
-      rawBytes = cached.db_blob;
-      newManifestToCache = {
-        exported_at: cached.exported_at,
-        snapshot_version: cached.snapshot_version,
-        snapshot: { sha256: cached.sha256 }
-      };
-    } else {
-      if (!manifest) {
-        throw new Error('Canlı manifest alınamadı ve önbellekte kayıtlı veri bulunmuyor!');
-      }
-      
-      const downloadFilename = manifest.snapshot.filename || 'mobile_snapshot.db.gz';
-      const downloadUrl = `./${downloadFilename}?t=${Date.now()}`;
-      statusEl.textContent = '⬇️ Güncel veritabanı indiriliyor (~10MB)...';
-      
-      const arrayBuffer = await fetchWithProgress(downloadUrl, (percent) => {
-        progressFill.style.width = `${20 + percent * 0.4}%`;
-        statusEl.textContent = `⬇️ İndiriliyor: %${percent}...`;
-      });
-      
-      statusEl.textContent = '📦 Veritabanı arşivi açılıyor...';
-      progressFill.style.width = '70%';
-      
-      const gzBytes = new Uint8Array(arrayBuffer);
-      rawBytes = pako.ungzip(gzBytes);
-      
+    let snapshotSource = "";
+    const showDownloadProgress = (percent) => {
+      progressFill.style.width = `${20 + percent * 0.4}%`;
+      statusEl.textContent = `⬇️ İndiriliyor: %${percent}...`;
+    };
+    const persistDownloadedSnapshot = async () => {
       statusEl.textContent = '💾 Veriler önbelleğe yazılıyor...';
       progressFill.style.width = '80%';
       try {
@@ -1245,16 +1351,59 @@ async function initApp() {
       } catch(cacheErr) {
         console.warn('[DB] Failed writing database snapshot to browser IndexedDB:', cacheErr);
       }
+    };
+
+    if (cached && manifest && cached.sha256 === manifest.snapshot.sha256) {
+      statusEl.textContent = '📦 Önbellekteki veriler yükleniyor...';
+      progressFill.style.width = '50%';
+      rawBytes = cached.db_blob;
+      snapshotSource = 'cache-current';
+    } else if (!manifest && cached?.db_blob) {
+      statusEl.textContent = '📴 Çevrimdışı Mod: Önbellekteki veriler yükleniyor...';
+      progressFill.style.width = '50%';
+      rawBytes = cached.db_blob;
+      snapshotSource = 'cache-offline';
+    } else {
+      if (!manifest) {
+        throw new Error('Canlı manifest alınamadı ve önbellekte kayıtlı veri bulunmuyor!');
+      }
+
+      statusEl.textContent = '⬇️ Güncel veritabanı indiriliyor (~10MB)...';
+      try {
+        rawBytes = await downloadSnapshot(manifest, showDownloadProgress);
+        snapshotSource = 'download';
+        await persistDownloadedSnapshot();
+      } catch (downloadError) {
+        if (!cached?.db_blob) throw downloadError;
+        console.warn('[DB] Latest snapshot download failed; using last valid cache:', downloadError);
+        statusEl.textContent = '📴 Güncel veri alınamadı; son kayıtlı veriler açılıyor...';
+        progressFill.style.width = '60%';
+        rawBytes = cached.db_blob;
+        snapshotSource = 'cache-stale';
+      }
     }
 
     statusEl.textContent = '⚙️ SQL veritabanı motoru başlatılıyor...';
     progressFill.style.width = '90%';
     
     const SQL = await initSqlJs({
-      locateFile: filename => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${filename}`
+      locateFile: filename => `./vendor/${filename}?v=6`
     });
-    
-    dbInstance = new SQL.Database(rawBytes);
+
+    try {
+      dbInstance = new SQL.Database(rawBytes);
+    } catch (databaseError) {
+      const canRecoverFromNetwork = manifest && snapshotSource.startsWith('cache');
+      if (!canRecoverFromNetwork) throw databaseError;
+
+      console.warn('[DB] Cached snapshot is invalid; downloading a clean copy.', databaseError);
+      await deleteCachedSnapshot();
+      statusEl.textContent = '🔄 Önbellek bozuk; temiz snapshot indiriliyor...';
+      rawBytes = await downloadSnapshot(manifest, showDownloadProgress);
+      snapshotSource = 'download-recovery';
+      await persistDownloadedSnapshot();
+      dbInstance = new SQL.Database(rawBytes);
+    }
     progressFill.style.width = '100%';
     
     clearTimeout(slowLoadTimer);
@@ -1283,7 +1432,8 @@ async function initApp() {
   } catch(err) {
     clearTimeout(slowLoadTimer);
     console.error('[Launch] App start failed:', err);
-    statusEl.innerHTML = `<span style="color:var(--danger)">❌ Hata: ${err.message}</span>`;
+    statusEl.textContent = `❌ Hata: ${err?.message || 'Uygulama başlatılamadı.'}`;
+    statusEl.style.color = 'var(--danger)';
     retryBtn.style.display = 'block';
   }
 }

@@ -352,6 +352,16 @@ body {
   color: #FFFFFF;
 }
 
+.badge-delayed {
+  background: #F59E0B;
+  color: #111827;
+}
+
+.badge-snapshot {
+  background: var(--outline);
+  color: var(--text-muted);
+}
+
 .badge-portfolio {
   background: var(--tertiary);
   color: #0E0E10;

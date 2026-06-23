@@ -4,7 +4,17 @@
  */
 
 window.livePrices = {};
+window.livePriceDetails = {};
+window.snapshotPrices = {};
 let dbInstance = null;
+let activeDetailTicker = null;
+let livePriceRefreshTimer = null;
+
+const LIVE_PRICE_FEED_URL = 'https://raw.githubusercontent.com/Somethinglikeu-hub/MobileInv-feed/live-data/live_prices.json';
+const LIVE_PRICE_REFRESH_MS = 60_000;
+const LIVE_PRICE_REQUEST_TIMEOUT_MS = 7_000;
+const RECENT_QUOTE_MAX_AGE_MS = 45 * 60_000;
+const USABLE_QUOTE_MAX_AGE_MS = 7 * 24 * 60 * 60_000;
 
 // --- Global Chart Instances ---
 let priceChartInstance = null;
@@ -30,6 +40,48 @@ function mixedScalePercent(value) {
   const parsed = Number(value);
   if (!Number.isFinite(parsed)) return null;
   return Math.abs(parsed) <= 1 ? parsed * 100 : parsed;
+}
+
+function quoteAgeMs(quoteTime) {
+  const timestamp = Date.parse(String(quoteTime || ''));
+  return Number.isFinite(timestamp) ? Math.max(0, Date.now() - timestamp) : Infinity;
+}
+
+function formatQuoteTime(quoteTime) {
+  const timestamp = Date.parse(String(quoteTime || ''));
+  if (!Number.isFinite(timestamp)) return '';
+  return new Intl.DateTimeFormat('tr-TR', {
+    timeZone: 'Europe/Istanbul',
+    day: '2-digit',
+    month: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit'
+  }).format(new Date(timestamp));
+}
+
+function getQuoteStatus(ticker) {
+  const detail = window.livePriceDetails[ticker];
+  if (!detail) {
+    return {
+      label: 'SNAPSHOT',
+      className: 'badge badge-snapshot',
+      title: 'Son yayınlanan snapshot kapanış fiyatı'
+    };
+  }
+
+  const age = quoteAgeMs(detail.quote_time);
+  if (age <= RECENT_QUOTE_MAX_AGE_MS) {
+    return {
+      label: '15 DK GEC.',
+      className: 'badge badge-live',
+      title: `Yahoo Finance yaklaşık 15 dakika gecikmeli fiyat • ${formatQuoteTime(detail.quote_time)}`
+    };
+  }
+  return {
+    label: 'SON İŞLEM',
+    className: 'badge badge-delayed',
+    title: `Son piyasa işlemi • ${formatQuoteTime(detail.quote_time)}`
+  };
 }
 
 // ==========================================================================
@@ -297,9 +349,11 @@ function queryOne(sql, params = {}) {
   return rows.length > 0 ? rows[0] : null;
 }
 
-// Load simulated live rates from price history
-function loadSimulatedLivePrices(tickers) {
+// Load snapshot prices immediately so offline startup always has a fallback.
+function loadSnapshotPrices(tickers) {
   window.livePrices = {};
+  window.livePriceDetails = {};
+  window.snapshotPrices = {};
   tickers.forEach(t => {
     const row = queryOne(`
       SELECT close FROM price_history_730d
@@ -307,6 +361,7 @@ function loadSimulatedLivePrices(tickers) {
       ORDER BY date DESC LIMIT 1
     `, { ':ticker': t });
     if (row) {
+      window.snapshotPrices[t] = row.close;
       window.livePrices[t] = row.close;
     }
   });
@@ -317,8 +372,93 @@ function loadSimulatedLivePrices(tickers) {
     ORDER BY date DESC LIMIT 1
   `);
   if (xu100Row) {
+    window.snapshotPrices['XU100'] = xu100Row.close;
     window.livePrices['XU100'] = xu100Row.close;
   }
+}
+
+function validateLivePriceFeed(value) {
+  if (
+    !value ||
+    typeof value !== 'object' ||
+    value.schema_version !== 1 ||
+    !value.prices ||
+    typeof value.prices !== 'object'
+  ) {
+    throw new Error('Canlı fiyat feed yapısı geçersiz.');
+  }
+  const generatedAge = quoteAgeMs(value.generated_at);
+  if (generatedAge > USABLE_QUOTE_MAX_AGE_MS) {
+    throw new Error('Canlı fiyat feed verisi çok eski.');
+  }
+  return value;
+}
+
+function rerenderLivePriceConsumers() {
+  const activeTab = document.querySelector('.nav-item.active')?.dataset.tab;
+  if (activeTab === 'picks' || activeTab === 'history') {
+    renderPage(activeTab);
+  }
+  if (
+    activeDetailTicker &&
+    document.getElementById('detail-sheet').classList.contains('open')
+  ) {
+    openStockDetail(activeDetailTicker);
+  }
+}
+
+async function refreshLivePrices() {
+  const controller = new AbortController();
+  const timeout = setTimeout(
+    () => controller.abort(),
+    LIVE_PRICE_REQUEST_TIMEOUT_MS
+  );
+  try {
+    const response = await fetch(`${LIVE_PRICE_FEED_URL}?t=${Date.now()}`, {
+      cache: 'no-store',
+      signal: controller.signal
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+    const feed = validateLivePriceFeed(await response.json());
+    const nextPrices = { ...window.snapshotPrices };
+    const nextDetails = {};
+    let updated = 0;
+    for (const [ticker, quote] of Object.entries(feed.prices)) {
+      if (!quote || typeof quote !== 'object') continue;
+      const price = finiteNumber(quote.price, 0);
+      if (price <= 0 || quoteAgeMs(quote.quote_time) > USABLE_QUOTE_MAX_AGE_MS) {
+        continue;
+      }
+      nextPrices[ticker] = price;
+      nextDetails[ticker] = {
+        price,
+        quote_time: quote.quote_time,
+        source: feed.source || 'Yahoo Finance'
+      };
+      updated += 1;
+    }
+    if (updated > 0) {
+      window.livePrices = nextPrices;
+      window.livePriceDetails = nextDetails;
+      console.info(`[Price] Updated ${updated} near-live quotes.`);
+      rerenderLivePriceConsumers();
+      return true;
+    }
+    throw new Error('Feed içinde kullanılabilir fiyat bulunamadı.');
+  } catch (error) {
+    console.warn('[Price] Near-live feed unavailable; snapshot prices retained:', error);
+    return false;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+function startLivePriceRefresh() {
+  if (livePriceRefreshTimer) clearInterval(livePriceRefreshTimer);
+  refreshLivePrices();
+  livePriceRefreshTimer = setInterval(refreshLivePrices, LIVE_PRICE_REFRESH_MS);
 }
 
 // ==========================================================================
@@ -500,6 +640,7 @@ function renderPicksPage() {
       const pnlClass = pnl >= 0 ? 'pos-text' : 'neg-text';
       const safeTicker = escapeHtml(pos.ticker);
       const safeName = escapeHtml(pos.fullname || pos.name || '—');
+      const quoteStatus = getQuoteStatus(pos.ticker);
 
       const row = document.createElement('div');
       row.className = 'list-item-row';
@@ -507,7 +648,7 @@ function renderPicksPage() {
         <div>
           <div class="ticker-block">
             <span class="ticker-name">${safeTicker}</span>
-            <span class="badge badge-live">CANLI</span>
+            <span class="${quoteStatus.className}" title="${escapeHtml(quoteStatus.title)}">${quoteStatus.label}</span>
           </div>
           <div class="company-fullname">${safeName}</div>
         </div>
@@ -844,9 +985,17 @@ function renderHistoryPage() {
   alphaEl.style.backgroundColor = alpha >= 0 ? 'rgba(34, 197, 94, 0.08)' : 'rgba(239, 68, 68, 0.08)';
   alphaEl.style.color = alpha >= 0 ? 'var(--success)' : 'var(--danger)';
 
-  // Public PWA uses the latest published snapshot, not an intraday quote feed.
   const hasActive = records.some(r => !r.isCompleted);
-  document.getElementById('live-tracking-badge').style.display = hasActive ? 'inline-flex' : 'none';
+  const trackingBadge = document.getElementById('live-tracking-badge');
+  if (hasActive) {
+    const quoteStatus = getQuoteStatus('XU100');
+    trackingBadge.textContent = quoteStatus.label;
+    trackingBadge.className = quoteStatus.className;
+    trackingBadge.title = quoteStatus.title;
+    trackingBadge.style.display = 'inline-flex';
+  } else {
+    trackingBadge.style.display = 'none';
+  }
 
   // Render list of weekly rows
   const listEl = document.getElementById('weekly-history-list');
@@ -953,6 +1102,7 @@ function daysBetweenIsoDates(startDate, endDate) {
 // ==========================================================================
 
 function openStockDetail(ticker) {
+  activeDetailTicker = ticker;
   const score = queryOne('SELECT * FROM scoring_latest WHERE ticker = :ticker LIMIT 1', { ':ticker': ticker });
   if (!score) return;
 
@@ -982,7 +1132,12 @@ function openStockDetail(ticker) {
     ? `${livePrice.toFixed(2)} TL`
     : '—';
   document.getElementById('detail-model-score').textContent = score.ranking_score ? score.ranking_score.toFixed(1) : '—';
-  document.getElementById('detail-live-indicator').style.display = window.livePrices[ticker] ? 'inline-flex' : 'none';
+  const detailQuoteStatus = getQuoteStatus(ticker);
+  const detailIndicator = document.getElementById('detail-live-indicator');
+  detailIndicator.textContent = detailQuoteStatus.label;
+  detailIndicator.className = detailQuoteStatus.className;
+  detailIndicator.title = detailQuoteStatus.title;
+  detailIndicator.style.display = livePrice > 0 ? 'inline-flex' : 'none';
 
   // Smart rebalance warnings
   const banner = document.getElementById('detail-signal-banner');
@@ -1397,7 +1552,7 @@ async function initApp() {
     progressFill.style.width = '90%';
     
     const SQL = await initSqlJs({
-      locateFile: filename => `./vendor/${filename}?v=7`
+      locateFile: filename => `./vendor/${filename}?v=8`
     });
 
     try {
@@ -1419,9 +1574,10 @@ async function initApp() {
     clearTimeout(slowLoadTimer);
     console.log('[DB] SQL.Database initialization completed successfully!');
 
-    // Initialize live price mocks based on database rows
+    // Initialize offline-safe snapshot prices, then update from the public
+    // near-live feed without blocking application startup.
     const tickers = queryAll('SELECT ticker FROM open_positions').map(p => p.ticker);
-    loadSimulatedLivePrices(tickers);
+    loadSnapshotPrices(tickers);
 
     // Populate advanced dropdowns
     populateSectorDropdown();
@@ -1432,6 +1588,7 @@ async function initApp() {
 
     // Render Home tab initially
     renderPage('picks');
+    startLivePriceRefresh();
 
     // Dismiss splash screen with minor timeout to ensure UI elements settled
     setTimeout(() => {
@@ -1453,6 +1610,7 @@ window.addEventListener('load', () => {
   // Wire up close buttons
   document.getElementById('close-detail-btn').addEventListener('click', () => {
     document.getElementById('detail-sheet').classList.remove('open');
+    activeDetailTicker = null;
   });
   
   document.getElementById('close-backtest-btn').addEventListener('click', () => {

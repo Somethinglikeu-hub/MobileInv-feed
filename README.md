@@ -5,6 +5,7 @@ MobileInv'in ana kullanıcı uygulamasıdır. Android APK artık birincil istemc
 - Uygulama: https://somethinglikeu-hub.github.io/MobileInv-feed/
 - Yayın branch'i: `gh-pages`
 - Veri kaynağı: `manifest.json` ve `mobile_snapshot.db.gz`
+- Canlıya yakın fiyat kaynağı: `live-data` branch'indeki `live_prices.json`
 - Çalışma biçimi: Tarayıcıdan açılır, Android/iOS ana ekranına kurulabilir ve son indirilen snapshot ile çevrimdışı çalışabilir.
 
 ## Geliştirme kuralları
@@ -12,9 +13,11 @@ MobileInv'in ana kullanıcı uygulamasıdır. Android APK artık birincil istemc
 1. Kullanıcı arayüzü değişiklikleri öncelikle bu PWA üzerinde yapılır.
 2. History ve performans değerleri yalnızca merkezi snapshot verilerinden hesaplanır; `localStorage` veya sabit seed performans verisi kullanılmaz.
 3. `manifest.json` ve `mobile_snapshot.db.gz`, Python backend'deki snapshot export koduyla üretilir.
-4. Kurulu uygulamanın yeni kodu alabilmesi için asset sürümü ve service-worker cache sürümü gerektiğinde artırılır.
-5. Android native uygulama ancak ayrıca istenirse güncellenir.
-6. Pako, SQL.js/WASM ve ApexCharts runtime dosyaları `vendor/` altında sabitlenir; ana uygulama açılışı CDN erişimine bağlı bırakılmaz.
+4. Canlıya yakın fiyatlar PWA içinde tarayıcıdan Yahoo'ya doğrudan giderek değil, backend workflow'unun yayınladığı `live_prices.json` üzerinden okunur.
+5. Fiyat feed'i gelmezse uygulama snapshot fiyatıyla çalışır ve UI bunu `SNAPSHOT` olarak etiketler.
+6. Kurulu uygulamanın yeni kodu alabilmesi için asset sürümü ve service-worker cache sürümü gerektiğinde artırılır.
+7. Android native uygulama ancak ayrıca istenirse güncellenir.
+8. Pako, SQL.js/WASM ve ApexCharts runtime dosyaları `vendor/` altında sabitlenir; ana uygulama açılışı CDN erişimine bağlı bırakılmaz.
 
 ## Kalite kontrolleri
 
@@ -28,5 +31,7 @@ Her push'ta `.github/workflows/pwa-quality.yml` aşağıdaki kontrolleri çalı�
 ## 23 Haziran 2026 düzeltmeleri
 
 History, backtest, snapshot üretimi, kurulu PWA güncellemesi, offline açılış, doğru ikonlar, yavaş mobil bağlantı başlangıcı, snapshot bütünlük kontrolü, bozuk cache kurtarma ve yerel runtime bağımlılıkları düzeltildi.
+
+Canlı fiyat tarafında `v8` ile PWA artık snapshot kapanış fiyatını `CANLI` diye göstermiyor. Backend'in 15 dakikalık workflow'u `live-data/live_prices.json` üretir; PWA bunu kullanır, başarısız olursa açık biçimde snapshot fallback'e döner.
 
 Ayrıntılı teknik kayıt ana backend reposundaki `docs/PWA_MAIN_APP_AND_HISTORY_FIX_2026-06-23.md` dosyasındadır.

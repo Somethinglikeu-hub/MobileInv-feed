@@ -16,9 +16,40 @@ let backtestChartInstance = null;
 // ==========================================================================
 
 if ('serviceWorker' in navigator) {
+  const hadServiceWorkerController = Boolean(navigator.serviceWorker.controller);
+  let isReloadingForServiceWorkerUpdate = false;
+
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (!hadServiceWorkerController || isReloadingForServiceWorkerUpdate) return;
+    isReloadingForServiceWorkerUpdate = true;
+    window.location.reload();
+  });
+
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js')
-      .then(reg => console.log('[PWA] Service Worker registered:', reg.scope))
+    navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' })
+      .then(async reg => {
+        console.log('[PWA] Service Worker registered:', reg.scope);
+        try {
+          await reg.update();
+        } catch (updateError) {
+          console.warn('[PWA] Update check skipped:', updateError);
+        }
+
+        if (reg.waiting) {
+          reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+        }
+
+        reg.addEventListener('updatefound', () => {
+          const installingWorker = reg.installing;
+          if (!installingWorker) return;
+
+          installingWorker.addEventListener('statechange', () => {
+            if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              installingWorker.postMessage({ type: 'SKIP_WAITING' });
+            }
+          });
+        });
+      })
       .catch(err => console.error('[PWA] Service Worker registration failed:', err));
   });
 }
@@ -35,7 +66,7 @@ function openIDB() {
   return new Promise((resolve, reject) => {
     const timeout = setTimeout(() => {
       reject(new Error('IndexedDB open timeout (iOS Safari workaround)'));
-    }, 2000);
+    }, 10000);
 
     try {
       const request = indexedDB.open(IDB_NAME, IDB_VERSION);
@@ -97,13 +128,12 @@ async function setCachedSnapshot(data) {
 // ==========================================================================
 
 async function fetchWithProgress(url, onProgress, options = {}) {
-  const { timeout = 60000 } = options;
+  const { timeout = 180000 } = options;
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeout);
 
   try {
     const response = await fetch(url, { ...options, signal: controller.signal });
-    clearTimeout(timeoutId);
     if (!response.ok) throw new Error(`HTTP ${response.status} ${response.statusText}`);
 
     const contentLength = response.headers.get('content-length');
@@ -137,9 +167,8 @@ async function fetchWithProgress(url, onProgress, options = {}) {
       offset += chunk.length;
     }
     return result.buffer;
-  } catch (err) {
+  } finally {
     clearTimeout(timeoutId);
-    throw err;
   }
 }
 
@@ -202,34 +231,6 @@ function loadSimulatedLivePrices(tickers) {
 // 5. Weekly Performance Calculations (WeeklyPerformanceManager.kt Parity)
 // ==========================================================================
 
-function getTurkeyTimeComponents() {
-  const dateTR = new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/Istanbul' }));
-  const trDay = dateTR.getDay(); // 0: Sun, 1: Mon, ..., 5: Fri, 6: Sat
-  const trHour = dateTR.getHours();
-  const trMin = dateTR.getMinutes();
-
-  let isPastFridayClose = false;
-  if (trDay === 5) { // Friday
-    isPastFridayClose = (trHour > 18) || (trHour === 18 && trMin >= 15);
-  } else if (trDay === 6 || trDay === 0) { // Saturday, Sunday
-    isPastFridayClose = true;
-  }
-  return { trDay, trHour, trMin, isPastFridayClose, dateTR };
-}
-
-function getTurkeyCurrentMonday() {
-  const { dateTR } = getTurkeyTimeComponents();
-  const day = dateTR.getDay();
-  const diff = (day >= 1) ? (1 - day) : -6;
-  const monday = new Date(dateTR);
-  monday.setDate(dateTR.getDate() + diff);
-
-  const y = monday.getFullYear();
-  const m = (monday.getMonth() + 1).toString().padStart(2, '0');
-  const d = monday.getDate().toString().padStart(2, '0');
-  return `${y}-${m}-${d}`;
-}
-
 function getPriceOnOrBefore(ticker, dateStr) {
   const row = queryOne(`
     SELECT close FROM price_history_730d 
@@ -240,172 +241,95 @@ function getPriceOnOrBefore(ticker, dateStr) {
   return row ? row.close : null;
 }
 
-function areConsecutiveWeeks(dateStr1, dateStr2) {
-  try {
-    const d1 = new Date(dateStr1);
-    const d2 = new Date(dateStr2);
-    const diffMs = d2.getTime() - d1.getTime();
-    const diffDays = diffMs / (1000 * 60 * 60 * 24);
-    return diffDays >= 6 && diffDays <= 8;
-  } catch (e) {
-    return false;
-  }
-}
+const LIVE_TRACKING_START_DATE = '2026-05-21';
 
-function seedInitialRecords() {
-  return [
-    {
-      weekStartDate: "2026-05-18",
-      positions: [
-        { ticker: "PCILT", entryPrice: 32.48, exitPrice: 33.10, returnPct: 0.0191 },
-        { ticker: "KIMMR", entryPrice: 17.29, exitPrice: 17.19, returnPct: -0.0058 },
-        { ticker: "ASELS", entryPrice: 428.00, exitPrice: 410.00, returnPct: -0.0421 },
-        { ticker: "LILAK", entryPrice: 36.08, exitPrice: 34.30, returnPct: -0.0493 },
-        { ticker: "TCKRC", entryPrice: 111.80, exitPrice: 141.30, returnPct: 0.2639 }
-      ],
-      portfolioReturn: 0.0372,
-      bist100StartPrice: 14029.54,
-      bist100EndPrice: 13808.20,
-      bist100Return: -0.0158,
-      isCompleted: true
-    }
-  ];
-}
+function buildWeeklyPerformanceRecords(dbPositions, livePrices) {
+  const completedRows = queryAll(`
+    SELECT * FROM portfolio_history
+    WHERE selection_date >= :startDate
+      AND selection_date IS NOT NULL
+      AND exit_date IS NOT NULL
+    ORDER BY selection_date ASC, exit_date ASC, sort_order ASC
+  `, { ':startDate': LIVE_TRACKING_START_DATE });
 
-function updateActiveWeek(dbPositions, livePrices) {
-  let storageRecords = localStorage.getItem('bist_weekly_records');
-  let records = [];
-  
-  if (storageRecords) {
-    try {
-      records = JSON.parse(storageRecords);
-    } catch (e) {
-      records = seedInitialRecords();
-    }
-  } else {
-    records = seedInitialRecords();
-  }
+  const periods = new Map();
+  completedRows.forEach(row => {
+    const key = `${row.selection_date}|${row.exit_date}`;
+    if (!periods.has(key)) periods.set(key, []);
+    periods.get(key).push(row);
+  });
 
-  const currentMonday = getTurkeyCurrentMonday();
-  const { isPastFridayClose } = getTurkeyTimeComponents();
-  let updated = false;
+  const records = [];
+  periods.forEach((rows, key) => {
+    const [startDate, endDate] = key.split('|');
+    const stockRecords = rows
+      .filter(row => row.entry_price > 0 && row.exit_price != null)
+      .map(row => ({
+        ticker: row.ticker,
+        entryPrice: row.entry_price,
+        exitPrice: row.exit_price,
+        returnPct: row.exit_price / row.entry_price - 1.0
+      }));
+    if (stockRecords.length === 0) return;
 
-  // 1. Mark older uncompleted weeks as completed
-  for (let i = 0; i < records.length; i++) {
-    if (records[i].weekStartDate !== currentMonday && !records[i].isCompleted) {
-      records[i].isCompleted = true;
-      updated = true;
-    }
-  }
+    const bistStart = getPriceOnOrBefore('XU100', startDate);
+    const bistEnd = getPriceOnOrBefore('XU100', endDate);
+    if (!(bistStart > 0) || bistEnd == null) return;
 
-  // 2. Find or create the current active week
-  let index = records.findIndex(r => r.weekStartDate === currentMonday);
-
-  if (index === -1) {
-    records.sort((a, b) => a.weekStartDate.localeCompare(b.weekStartDate));
-    const prevRecord = records[records.length - 1];
-    const isConsecutive = prevRecord && areConsecutiveWeeks(prevRecord.weekStartDate, currentMonday);
-    
-    const prevPositionsMap = {};
-    if (isConsecutive && prevRecord && prevRecord.positions) {
-      prevRecord.positions.forEach(pos => {
-        prevPositionsMap[pos.ticker] = pos.exitPrice;
-      });
-    }
-
-    const stockRecords = dbPositions.map(pos => {
-      const mondayPrice = getPriceOnOrBefore(pos.ticker, currentMonday);
-      const entry = prevPositionsMap[pos.ticker] || mondayPrice || pos.entry_price || pos.current_price || 1.0;
-      const live = livePrices[pos.ticker] || entry;
-      return {
-        ticker: pos.ticker,
-        entryPrice: entry,
-        exitPrice: live,
-        returnPct: entry > 0 ? (live / entry - 1.0) : 0.0
-      };
-    });
-
-    const prevBistEnd = (isConsecutive && prevRecord) ? prevRecord.bist100EndPrice : null;
-    const dbBistMonday = getPriceOnOrBefore('XU100', currentMonday) || 13808.20;
-    const startBist100 = prevBistEnd || dbBistMonday;
-    const liveBist100 = livePrices['XU100'] || startBist100;
-
-    const newRecord = {
-      weekStartDate: currentMonday,
+    records.push({
+      weekStartDate: startDate,
+      weekEndDate: endDate,
       positions: stockRecords,
-      portfolioReturn: stockRecords.length > 0 ? stockRecords.map(s => s.returnPct).reduce((a, b) => a + b, 0) / stockRecords.length : 0.0,
-      bist100StartPrice: startBist100,
-      bist100EndPrice: liveBist100,
-      bist100Return: startBist100 > 0 ? (liveBist100 / startBist100 - 1.0) : 0.0,
-      isCompleted: isPastFridayClose
-    };
-    
-    records.push(newRecord);
-    updated = true;
-  } else {
-    const rec = records[index];
-    if (!rec.isCompleted) {
-      const shouldPopulate = !rec.positions || rec.positions.length === 0 || rec.positions.every(p => p.entryPrice === 1.0 && p.exitPrice === 1.0);
-      
-      let basePositions = [];
-      if (shouldPopulate) {
-        const prevRecord = index > 0 ? records[index - 1] : null;
-        const isConsecutive = prevRecord && areConsecutiveWeeks(prevRecord.weekStartDate, currentMonday);
-        const prevPositionsMap = {};
-        if (isConsecutive && prevRecord && prevRecord.positions) {
-          prevRecord.positions.forEach(pos => {
-            prevPositionsMap[pos.ticker] = pos.exitPrice;
-          });
-        }
+      portfolioReturn: stockRecords.reduce((sum, stock) => sum + stock.returnPct, 0) / stockRecords.length,
+      bist100StartPrice: bistStart,
+      bist100EndPrice: bistEnd,
+      bist100Return: bistEnd / bistStart - 1.0,
+      isCompleted: true
+    });
+  });
 
-        basePositions = dbPositions.map(pos => {
-          const mondayPrice = getPriceOnOrBefore(pos.ticker, currentMonday);
-          const entry = prevPositionsMap[pos.ticker] || mondayPrice || pos.entry_price || pos.current_price || 1.0;
-          return {
-            ticker: pos.ticker,
-            entryPrice: entry,
-            exitPrice: entry,
-            returnPct: 0.0
-          };
-        });
-      } else {
-        basePositions = rec.positions;
-      }
+  const activeStart = dbPositions
+    .map(position => position.selection_date)
+    .filter(Boolean)
+    .sort()
+    .pop();
 
-      const updatedStocks = basePositions.map(stock => {
-        const live = livePrices[stock.ticker];
-        if (live !== undefined && live !== null) {
-          return {
-            ...stock,
-            exitPrice: live,
-            returnPct: stock.entryPrice > 0 ? (live / stock.entryPrice - 1.0) : 0.0
-          };
-        }
-        return stock;
+  if (activeStart && activeStart >= LIVE_TRACKING_START_DATE) {
+    const activeStocks = dbPositions
+      .filter(position => position.selection_date === activeStart)
+      .map(position => {
+        const entry = position.entry_price || position.current_price;
+        const latest = livePrices[position.ticker] || position.current_price || entry;
+        if (!(entry > 0) || latest == null) return null;
+        return {
+          ticker: position.ticker,
+          entryPrice: entry,
+          exitPrice: latest,
+          returnPct: latest / entry - 1.0
+        };
+      })
+      .filter(Boolean);
+
+    const bistStart = getPriceOnOrBefore('XU100', activeStart);
+    const latestPriceDate = queryOne('SELECT latest_price_date FROM snapshot_metadata WHERE id = 1')?.latest_price_date;
+    const endDate = latestPriceDate || activeStart;
+    const bistEnd = livePrices.XU100 || getPriceOnOrBefore('XU100', endDate);
+
+    if (activeStocks.length > 0 && bistStart > 0 && bistEnd != null) {
+      records.push({
+        weekStartDate: activeStart,
+        weekEndDate: endDate,
+        positions: activeStocks,
+        portfolioReturn: activeStocks.reduce((sum, stock) => sum + stock.returnPct, 0) / activeStocks.length,
+        bist100StartPrice: bistStart,
+        bist100EndPrice: bistEnd,
+        bist100Return: bistEnd / bistStart - 1.0,
+        isCompleted: false
       });
-
-      const startBist100 = rec.bist100StartPrice || 13808.20;
-      const liveBist100 = livePrices['XU100'] || rec.bist100EndPrice || startBist100;
-
-      records[index] = {
-        ...rec,
-        positions: updatedStocks,
-        portfolioReturn: updatedStocks.length > 0 ? updatedStocks.map(s => s.returnPct).reduce((a, b) => a + b, 0) / updatedStocks.length : 0.0,
-        bist100EndPrice: liveBist100,
-        bist100Return: startBist100 > 0 ? (liveBist100 / startBist100 - 1.0) : 0.0,
-        isCompleted: isPastFridayClose
-      };
-
-      if (shouldPopulate || isPastFridayClose) {
-        updated = true;
-      }
     }
   }
 
-  if (updated || isPastFridayClose) {
-    localStorage.setItem('bist_weekly_records', JSON.stringify(records));
-  }
-  return records;
+  return records.sort((a, b) => a.weekStartDate.localeCompare(b.weekStartDate));
 }
 
 // ==========================================================================
@@ -773,7 +697,7 @@ function renderMarketPage() {
 // --- PAGE 4: HISTORY ---
 function renderHistoryPage() {
   const dbPos = queryAll('SELECT * FROM open_positions');
-  const records = updateActiveWeek(dbPos, window.livePrices);
+  const records = buildWeeklyPerformanceRecords(dbPos, window.livePrices);
 
   // Cumulative performance math
   let cumPort = 1.0;
@@ -803,7 +727,7 @@ function renderHistoryPage() {
   alphaEl.style.backgroundColor = alpha >= 0 ? 'rgba(34, 197, 94, 0.08)' : 'rgba(239, 68, 68, 0.08)';
   alphaEl.style.color = alpha >= 0 ? 'var(--success)' : 'var(--danger)';
 
-  // CANLI TAKİP active week check
+  // Public PWA uses the latest published snapshot, not an intraday quote feed.
   const hasActive = records.some(r => !r.isCompleted);
   document.getElementById('live-tracking-badge').style.display = hasActive ? 'inline-flex' : 'none';
 
@@ -1144,6 +1068,7 @@ function openBacktestingSheet() {
 
   // Cumulative numbers
   const latestPoint = perfPoints[perfPoints.length - 1];
+  const firstPoint = perfPoints[0];
   const stratRet = latestPoint.strategy_return - 100.0;
   const benchRet = latestPoint.benchmark_return - 100.0;
   const alpha = stratRet - benchRet;
@@ -1152,12 +1077,18 @@ function openBacktestingSheet() {
   document.getElementById('bt-index-return').textContent = `${benchRet >= 0 ? '+' : ''}${benchRet.toFixed(1)}%`;
   
   const alphaEl = document.getElementById('bt-alpha-banner');
-  alphaEl.textContent = `10 Yıllık Model Alphası: ${alpha >= 0 ? '+' : ''}${alpha.toFixed(1)}%`;
+  const periodLabel = `${formatDateToTurkish(firstPoint.date)} – ${formatDateToTurkish(latestPoint.date)}`;
+  document.getElementById('bt-period-label').textContent = periodLabel;
+  alphaEl.textContent = `Dönemsel Model Alphası: ${alpha >= 0 ? '+' : ''}${alpha.toFixed(1)}%`;
   alphaEl.style.backgroundColor = alpha >= 0 ? 'rgba(34, 197, 94, 0.08)' : 'rgba(239, 68, 68, 0.08)';
   alphaEl.style.color = alpha >= 0 ? 'var(--success)' : 'var(--danger)';
 
   // Render completed transactions list
-  const closedPositions = queryAll('SELECT * FROM portfolio_history ORDER BY exit_date DESC, sort_order ASC');
+  const closedPositions = queryAll(`
+    SELECT * FROM portfolio_history
+    WHERE selection_date >= :startDate
+    ORDER BY exit_date DESC, sort_order ASC
+  `, { ':startDate': LIVE_TRACKING_START_DATE });
   const closedListEl = document.getElementById('bt-transactions-list');
   closedListEl.innerHTML = '';
 
@@ -1167,6 +1098,12 @@ function openBacktestingSheet() {
     closedPositions.forEach(pos => {
       const pnl = pos.pnl_pct || 0.0;
       const pnlClass = pnl >= 0 ? 'pos-text' : 'neg-text';
+      const holdingDays = pos.holding_days != null
+        ? pos.holding_days
+        : Math.max(
+            0,
+            Math.round((new Date(pos.exit_date) - new Date(pos.selection_date)) / 86400000)
+          );
 
       const card = document.createElement('div');
       card.className = 'card';
@@ -1175,7 +1112,7 @@ function openBacktestingSheet() {
           <div>
             <strong style="color:var(--primary); font-size:12px;">${pos.ticker}</strong>
             <div style="font-size:9px; color:var(--text-muted); margin-top:2px;">
-              ${formatDateToTurkish(pos.selection_date)} - ${formatDateToTurkish(pos.exit_date)} (${pos.holding_days} Gün)
+              ${formatDateToTurkish(pos.selection_date)} - ${formatDateToTurkish(pos.exit_date)} (${holdingDays} Gün)
             </div>
           </div>
           <div style="text-align:right;">
@@ -1232,14 +1169,14 @@ async function initApp() {
   const progressFill = document.getElementById('splash-progress');
   const retryBtn = document.getElementById('splash-retry-btn');
   
-  // 15-second failsafe timer
-  const failsafeTimer = setTimeout(() => {
+  // First launch downloads and opens a ~10 MB compressed snapshot. Slow
+  // mobile connections can legitimately take longer than 15 seconds.
+  const slowLoadTimer = setTimeout(() => {
     if (document.getElementById('splash-screen').style.display !== 'none') {
-      console.warn('[Failsafe] Load timeout triggered.');
-      statusEl.innerHTML = `<span style="color:var(--danger)">❌ Yükleme zaman aşımına uğradı!</span><br/>Bağlantınızı kontrol edip tekrar deneyin.`;
-      retryBtn.style.display = 'block';
+      console.warn('[Launch] Initial load is taking longer than expected.');
+      statusEl.textContent = 'İlk kurulum biraz uzun sürüyor; veriler indirilmeye devam ediyor...';
     }
-  }, 15000);
+  }, 20000);
 
   try {
     statusEl.textContent = '🔍 Manifest bilgileri sorgulanıyor...';
@@ -1320,8 +1257,7 @@ async function initApp() {
     dbInstance = new SQL.Database(rawBytes);
     progressFill.style.width = '100%';
     
-    // Clear failsafe timer on success
-    clearTimeout(failsafeTimer);
+    clearTimeout(slowLoadTimer);
     console.log('[DB] SQL.Database initialization completed successfully!');
 
     // Initialize live price mocks based on database rows
@@ -1345,7 +1281,7 @@ async function initApp() {
     }, 400);
 
   } catch(err) {
-    clearTimeout(failsafeTimer);
+    clearTimeout(slowLoadTimer);
     console.error('[Launch] App start failed:', err);
     statusEl.innerHTML = `<span style="color:var(--danger)">❌ Hata: ${err.message}</span>`;
     retryBtn.style.display = 'block';
@@ -1366,7 +1302,6 @@ window.addEventListener('load', () => {
   document.getElementById('open-backtest-btn').addEventListener('click', openBacktestingSheet);
   
   document.getElementById('refresh-db-btn').addEventListener('click', () => {
-    localStorage.removeItem('bist_weekly_records');
     window.location.reload();
   });
   

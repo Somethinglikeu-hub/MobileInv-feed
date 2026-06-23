@@ -18,8 +18,8 @@
   <meta name="theme-color" content="#0E0E10">
 
   <!-- Icons for PWA -->
-  <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/Somethinglikeu-hub/MobileInv-mobile-v2/main/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png">
-  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
+  <link rel="manifest" href="./manifest.webmanifest?v=5">
   
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,7 +30,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
   
   <!-- Stylesheet -->
-  <link rel="stylesheet" href="./index.css">
+  <link rel="stylesheet" href="./index.css?v=5">
   
   <!-- CDN Dependencies -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
@@ -38,7 +38,7 @@
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
   
   <!-- Main Application Logic (deferred) -->
-  <script src="./app.js" defer></script>
+  <script src="./app.js?v=5" defer></script>
 </head>
 <body>
 
@@ -233,8 +233,8 @@
           <!-- Backtesting Navigation Panel -->
           <div id="open-backtest-btn" class="backtest-nav-banner">
             <div class="banner-content">
-              <h3>Model Backtesting (10 Yıl)</h3>
-              <p>Simüle edilmiş 10 yıllık model performansı, işlem günlükleri ve getiri grafikleri.</p>
+              <h3>Model Backtesting</h3>
+              <p>Snapshot içinde kesintisiz yayınlanan model NAV dönemi ve karşılaştırmalı grafik.</p>
             </div>
             <span class="material-symbols-rounded">chevron_right</span>
           </div>
@@ -246,7 +246,7 @@
                 <h2>Reel Portföy Performansı</h2>
                 <span id="history-start-date" class="label">Başlangıç: —</span>
               </div>
-              <span id="live-tracking-badge" class="badge badge-live" style="display: none;">CANLI TAKİP</span>
+              <span id="live-tracking-badge" class="badge badge-live" style="display: none;">SON SNAPSHOT</span>
             </div>
 
             <div class="hero-metrics-grid">
@@ -559,7 +559,10 @@
         <button id="close-backtest-btn" class="sheet-close-btn">
           <span class="material-symbols-rounded">close</span>
         </button>
-        <h2>Model Backtesting (10 Yıl)</h2>
+        <div>
+          <h2>Model Backtesting</h2>
+          <span id="bt-period-label" class="label">—</span>
+        </div>
       </header>
 
       <div class="sheet-scroll-body">
@@ -575,18 +578,18 @@
               <span id="bt-index-return" class="value">—</span>
             </div>
           </div>
-          <div id="bt-alpha-banner" class="alpha-banner">10 Yıllık Model Alphası: +0.00%</div>
+          <div id="bt-alpha-banner" class="alpha-banner">Dönemsel Model Alphası: +0.00%</div>
         </div>
 
         <!-- ApexCharts: Backtest area chart -->
         <div class="detail-card">
-          <h4>Kümülatif Getiri Grafiği (10 Yıl)</h4>
+          <h4>Kümülatif NAV Grafiği</h4>
           <div id="backtest-area-chart" class="chart-container"></div>
         </div>
 
         <!-- Rebalance transaction log list -->
         <div class="detail-card">
-          <h4>Model İşlem Günlüğü (Tamamlananlar)</h4>
+          <h4>Gerçek Portföy Rotasyonları (Backtest Değildir)</h4>
           <div id="bt-transactions-list" class="transactions-log-list">
             <!-- Dynamically populated transaction logs -->
           </div>

@@ -1,23 +1,40 @@
-const CACHE_NAME = 'bist-picker-v4';
-const ASSETS = [
+const CACHE_NAME = 'bist-picker-shell-v5';
+const APP_SHELL = [
   './',
   './index.html',
-  './index.css',
-  './app.js',
-  './manifest.webmanifest',
+  './index.css?v=5',
+  './app.js?v=5',
+  './manifest.webmanifest?v=5',
+  './icons/icon-192.png',
+  './icons/icon-512.png'
+];
+const OPTIONAL_RUNTIME_ASSETS = [
   'https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js',
   'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js',
-  'https://cdn.jsdelivr.net/npm/apexcharts',
-  'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap',
-  'https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200'
+  'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.wasm',
+  'https://cdn.jsdelivr.net/npm/apexcharts'
 ];
 
 self.addEventListener('install', (e) => {
   console.log('[Service Worker] Install event');
   e.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
+    caches.open(CACHE_NAME).then(async (cache) => {
       console.log('[Service Worker] Caching app shell assets');
-      return cache.addAll(ASSETS);
+      await cache.addAll(
+        APP_SHELL.map(asset => new Request(asset, { cache: 'reload' }))
+      );
+
+      // CDN files are useful offline but must never make the PWA installation
+      // fail when one provider is temporarily unavailable.
+      await Promise.allSettled(
+        OPTIONAL_RUNTIME_ASSETS.map(async asset => {
+          const request = new Request(asset, { cache: 'reload' });
+          const response = await fetch(request);
+          if (response.ok || response.type === 'opaque') {
+            await cache.put(request, response);
+          }
+        })
+      );
     }).then(() => self.skipWaiting())
   );
 });
@@ -38,20 +55,49 @@ self.addEventListener('activate', (e) => {
   );
 });
 
+self.addEventListener('message', (e) => {
+  if (e.data?.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
+
 self.addEventListener('fetch', (e) => {
-  // We do not want to cache the database download file or manifest since they must be live/fresh
+  if (e.request.method !== 'GET') return;
+
   const url = new URL(e.request.url);
+
+  // Snapshot metadata and database content must always be checked online.
+  // The application itself falls back to the last IndexedDB snapshot offline.
   if (url.pathname.includes('mobile_snapshot.db.gz') || url.pathname.includes('manifest.json')) {
-    e.respondWith(fetch(e.request));
+    e.respondWith(fetch(e.request, { cache: 'no-store' }));
     return;
   }
 
-  // Network falling back to Cache strategy for general assets
+  // Keep page navigations fresh, but preserve an offline app-shell fallback.
+  if (e.request.mode === 'navigate') {
+    e.respondWith(
+      fetch(e.request)
+        .then((response) => {
+          if (response.ok) {
+            const copy = response.clone();
+            caches.open(CACHE_NAME).then(cache => cache.put('./index.html', copy));
+          }
+          return response;
+        })
+        .catch(async () => (
+          await caches.match('./index.html') ||
+          await caches.match('./')
+        ))
+    );
+    return;
+  }
+
+  // Network first makes installed PWAs receive new code immediately. Successful
+  // responses are retained for offline startup, including CDN dependencies.
   e.respondWith(
     fetch(e.request)
       .then((response) => {
-        // If valid network response, update cache
-        if (response && response.status === 200 && response.type === 'basic') {
+        if (response && (response.ok || response.type === 'opaque')) {
           const responseToCache = response.clone();
           caches.open(CACHE_NAME).then((cache) => {
             cache.put(e.request, responseToCache);
@@ -61,7 +107,9 @@ self.addEventListener('fetch', (e) => {
       })
       .catch(() => {
         // Fallback to cache if network request fails (Offline support)
-        return caches.match(e.request);
+        return caches.match(e.request).then(
+          cached => cached || caches.match(e.request, { ignoreSearch: true })
+        );
       })
   );
 });

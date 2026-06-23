@@ -1,21 +1,27 @@
 {
+  "id": "./",
   "name": "BIST Picker — Mobil Portföy Takip",
   "short_name": "BistPicker",
   "description": "Borsa İstanbul değer yatırımı disiplinlerini ve momentum filtrelerini çalıştıran akıllı portföy.",
-  "start_url": "./index.html",
+  "lang": "tr",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
   "background_color": "#0E0E10",
   "theme_color": "#0E0E10",
   "orientation": "portrait-primary",
+  "categories": ["finance", "business"],
   "icons": [
     {
-      "src": "https://raw.githubusercontent.com/Somethinglikeu-hub/MobileInv-mobile-v2/main/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png",
+      "src": "./icons/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "https://raw.githubusercontent.com/Somethinglikeu-hub/MobileInv-mobile-v2/main/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png",
+      "src": "./icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"

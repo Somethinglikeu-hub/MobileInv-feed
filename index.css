@@ -430,6 +430,109 @@ body {
    ========================================================================== */
 
 /* Signals Card */
+.decision-summary-card {
+  --stock-allocation: 100%;
+  background: linear-gradient(180deg, rgba(20, 20, 22, 0.96) 0%, rgba(19, 27, 31, 0.92) 100%);
+  border: 1px solid rgba(125, 211, 252, 0.22);
+  border-radius: 20px;
+  padding: 16px;
+  margin-bottom: 18px;
+  position: relative;
+  overflow: hidden;
+}
+
+.decision-summary-card::after {
+  content: "";
+  display: block;
+  height: 4px;
+  width: 100%;
+  border-radius: 999px;
+  background: linear-gradient(to right, var(--success) 0%, var(--success) var(--stock-allocation), var(--outline-variant) var(--stock-allocation), var(--outline-variant) 100%);
+  margin-top: 14px;
+}
+
+.decision-topline {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.decision-topline h3 {
+  font-size: 16px;
+  line-height: 1.25;
+  font-weight: 900;
+  margin-top: 4px;
+  color: var(--text);
+}
+
+.decision-metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 14px 0 10px 0;
+}
+
+.decision-metric {
+  min-width: 0;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 10px;
+}
+
+.decision-metric strong {
+  display: block;
+  font-family: var(--font-logo);
+  font-size: 17px;
+  font-weight: 900;
+  color: var(--text);
+  margin-top: 2px;
+  white-space: nowrap;
+}
+
+.decision-compare-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 11px;
+  color: var(--text-muted);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 10px;
+}
+
+.decision-compare-row strong {
+  color: var(--secondary);
+}
+
+.decision-note {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.45;
+  margin-top: 10px;
+}
+
+.decision-open-btn {
+  width: 100%;
+  min-height: 38px;
+  margin-top: 12px;
+  border: 1px solid rgba(125, 211, 252, 0.28);
+  border-radius: 12px;
+  background: rgba(125, 211, 252, 0.08);
+  color: var(--secondary);
+  font-size: 12px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.decision-open-btn span.material-symbols-rounded {
+  font-size: 18px;
+}
+
 .signals-card {
   background: linear-gradient(135deg, rgba(167, 139, 250, 0.08) 0%, rgba(20, 20, 22, 0.5) 100%);
   border: 1px solid rgba(167, 139, 250, 0.2);
@@ -895,6 +998,84 @@ body {
   line-height: 1.5;
 }
 
+.usage-card h3 {
+  color: var(--secondary);
+}
+
+.usage-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.flow-step {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 10px;
+  align-items: start;
+}
+
+.flow-step > span {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(125, 211, 252, 0.12);
+  color: var(--secondary);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.flow-step p {
+  margin-top: 0;
+}
+
+.flow-step strong {
+  color: var(--text);
+}
+
+.investor-grade-card {
+  border-color: rgba(234, 179, 8, 0.22);
+  background: linear-gradient(180deg, rgba(234, 179, 8, 0.055) 0%, rgba(20, 20, 22, 0.96) 100%);
+}
+
+.about-inline-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.about-inline-header h3 {
+  margin-bottom: 0;
+}
+
+.about-metric-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.about-metric-grid div {
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.about-metric-grid strong {
+  display: block;
+  font-family: var(--font-logo);
+  font-size: 17px;
+  font-weight: 900;
+  color: var(--text);
+  margin-top: 2px;
+}
+
 .about-weight-row {
   display: flex;
   justify-content: space-between;
@@ -1298,6 +1479,53 @@ body {
 .backtest-hero-card {
   background: linear-gradient(135deg, rgba(233, 30, 99, 0.08) 0%, rgba(94, 61, 191, 0.08) 100%);
   border-color: rgba(233, 30, 99, 0.15);
+}
+
+.section-title-row.compact {
+  margin-bottom: 12px;
+}
+
+.audit-check-grid {
+  display: grid;
+  gap: 8px;
+}
+
+.audit-check-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--outline);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.audit-check-label {
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.audit-check-row strong {
+  color: var(--text);
+  font-size: 11px;
+  text-align: right;
+}
+
+.audit-check-row.pass strong {
+  color: var(--success);
+}
+
+.audit-check-row.warn strong {
+  color: var(--warning);
+}
+
+.audit-note {
+  margin-top: 12px;
+  color: var(--text-muted);
+  font-size: 10px;
+  line-height: 1.45;
 }
 
 .transactions-log-list {

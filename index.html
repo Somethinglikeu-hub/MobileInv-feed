@@ -19,7 +19,7 @@
 
   <!-- Icons for PWA -->
   <link rel="apple-touch-icon" href="./icons/icon-192.png">
-  <link rel="manifest" href="./manifest.webmanifest?v=8">
+  <link rel="manifest" href="./manifest.webmanifest?v=9">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,15 +30,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
 
   <!-- Stylesheet -->
-  <link rel="stylesheet" href="./index.css?v=8">
+  <link rel="stylesheet" href="./index.css?v=9">
 
   <!-- Local runtime dependencies: first launch must not depend on a CDN. -->
-  <script src="./vendor/pako.min.js?v=8"></script>
-  <script src="./vendor/sql-wasm.js?v=8"></script>
-  <script src="./vendor/apexcharts.min.js?v=8"></script>
+  <script src="./vendor/pako.min.js?v=9"></script>
+  <script src="./vendor/sql-wasm.js?v=9"></script>
+  <script src="./vendor/apexcharts.min.js?v=9"></script>
 
   <!-- Main Application Logic (deferred) -->
-  <script src="./app.js?v=8" defer></script>
+  <script src="./app.js?v=9" defer></script>
 </head>
 <body>
 
@@ -90,6 +90,46 @@
             <span id="picks-count-badge" class="badge badge-accent">0 Hisse</span>
           </div>
 
+          <div class="decision-summary-card" aria-label="Haftalık karar özeti">
+            <div class="decision-topline">
+              <div>
+                <span class="label">Main V2 Karar Özeti</span>
+                <h3 id="decision-weekly-rule">Haftalık rebalans planı yükleniyor</h3>
+              </div>
+              <span id="decision-audit-badge" class="badge badge-delayed">AUDIT</span>
+            </div>
+
+            <div class="decision-metrics-grid">
+              <div class="decision-metric">
+                <span class="label">Portföy</span>
+                <strong id="decision-position-count">—</strong>
+              </div>
+              <div class="decision-metric">
+                <span class="label">Nakit</span>
+                <strong id="decision-cash-state">—</strong>
+              </div>
+              <div class="decision-metric">
+                <span class="label">4Y Model</span>
+                <strong id="decision-model-return">—</strong>
+              </div>
+              <div class="decision-metric">
+                <span class="label">Stres Testi</span>
+                <strong id="decision-stress-return">—</strong>
+              </div>
+            </div>
+
+            <div class="decision-compare-row">
+              <span>BIST100: <strong id="decision-bist-return">—</strong></span>
+              <span id="decision-price-source">Fiyat kaynağı: —</span>
+            </div>
+
+            <p id="decision-audit-note" class="decision-note">Backtest ve fiyat denetimi hazırlanıyor.</p>
+            <button type="button" id="decision-open-backtest" class="decision-open-btn">
+              <span class="material-symbols-rounded">query_stats</span>
+              <span>Backtesting Detayı</span>
+            </button>
+          </div>
+
           <div id="portfolio-list" class="list-container">
             <!-- Dynamically populated portfolio rows -->
           </div>
@@ -100,7 +140,7 @@
               <span class="material-symbols-rounded tint-tertiary">psychology</span>
               <h3>Zeki Sinyaller</h3>
             </div>
-            <p class="signals-desc">ALPHA Core modeli haftalık portföy rebalans kararları.</p>
+            <p class="signals-desc">Main V2 portföyünün haftalık rebalans kararları.</p>
             <div id="signals-list" class="list-container spaced-y">
               <!-- Dynamically populated suggested actions -->
             </div>
@@ -234,7 +274,7 @@
           <!-- Backtesting Navigation Panel -->
           <div id="open-backtest-btn" class="backtest-nav-banner">
             <div class="banner-content">
-              <h3>Model Backtesting</h3>
+              <h3>Main V2 Backtesting</h3>
               <p>Snapshot içinde kesintisiz yayınlanan model NAV dönemi ve karşılaştırmalı grafik.</p>
             </div>
             <span class="material-symbols-rounded">chevron_right</span>
@@ -277,6 +317,58 @@
           <div class="about-card">
             <h2>BIST Picker Hakkında</h2>
             <p>BIST Picker, Borsa İstanbul (BIST) hisse senetleri üzerinde bilimsel değer yatırımı disiplinlerini (Graham, Buffett, Piotroski, Magic Formula vb.) ve momentum filtrelerini çalıştıran, serverless bir karar destek modelidir.</p>
+          </div>
+
+          <div class="about-card usage-card">
+            <h3>Bu Programla Nasıl Yatırım Yapılır?</h3>
+            <div class="usage-flow">
+              <div class="flow-step">
+                <span>1</span>
+                <p><strong>Pazartesi ana portföyü kontrol et.</strong> Main V2'nin gösterdiği 5 hisse haftalık hedef portföydür; tek günlük fiyat hareketiyle liste dışına çıkma.</p>
+              </div>
+              <div class="flow-step">
+                <span>2</span>
+                <p><strong>AL / SAT / TUT sinyalini uygula.</strong> Yeni giren hisse AL, modelden düşen hisse SAT, güçlü kalan hisse TUT disiplinindedir.</p>
+              </div>
+              <div class="flow-step">
+                <span>3</span>
+                <p><strong>Nakit rejimini dikkate al.</strong> NORMAL tam hisse ağırlığıdır; CAUTION, DEFENSIVE ve RISK_OFF modlarında ekranda görünen nakit oranına göre riski azalt.</p>
+              </div>
+              <div class="flow-step">
+                <span>4</span>
+                <p><strong>Backtesting panelini haftalık oku.</strong> T+1 execution, slippage stres testi, drawdown ve survivorship uyarıları bozulursa portföyü mekanik biçimde büyütme.</p>
+              </div>
+              <div class="flow-step">
+                <span>5</span>
+                <p><strong>Kişisel risk limitini sabitle.</strong> Pozisyon büyüklüğünü ve maksimum zarar toleransını işlemden önce belirle; model güçlü olsa bile kaldıraç kullanma.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="about-card investor-grade-card">
+            <div class="about-inline-header">
+              <h3>Güven Kontrolü</h3>
+              <span class="badge badge-delayed">UYARIYLA GÜÇLÜ</span>
+            </div>
+            <div class="about-metric-grid">
+              <div>
+                <span class="label">T+1 4Y Model</span>
+                <strong>+686.4%</strong>
+              </div>
+              <div>
+                <span class="label">BIST100</span>
+                <strong>+112.9%</strong>
+              </div>
+              <div>
+                <span class="label">1.50% Stres</span>
+                <strong>+348.2%</strong>
+              </div>
+              <div>
+                <span class="label">Max DD</span>
+                <strong>-21.1%</strong>
+              </div>
+            </div>
+            <p>Modelin son investor-grade backtest sonucu güçlü; ancak survivorship/as-of evren riski tamamen kapanmadığı için bu ekran karar desteğidir, otomatik garanti değildir.</p>
           </div>
 
           <div class="about-card">
@@ -561,7 +653,7 @@
           <span class="material-symbols-rounded">close</span>
         </button>
         <div>
-          <h2>Model Backtesting</h2>
+          <h2>Main V2 Backtesting</h2>
           <span id="bt-period-label" class="label">—</span>
         </div>
       </header>
@@ -580,6 +672,36 @@
             </div>
           </div>
           <div id="bt-alpha-banner" class="alpha-banner">Dönemsel Model Alphası: +0.00%</div>
+        </div>
+
+        <div class="detail-card">
+          <div class="section-title-row compact">
+            <h4>Yatırımcı Güven Kontrolleri</h4>
+            <span id="bt-audit-status" class="badge badge-snapshot">SNAPSHOT</span>
+          </div>
+          <div id="bt-audit-grid" class="audit-check-grid">
+            <div class="audit-check-row">
+              <span class="audit-check-label">Execution</span>
+              <strong id="bt-audit-execution">—</strong>
+            </div>
+            <div class="audit-check-row">
+              <span class="audit-check-label">Slippage stres</span>
+              <strong id="bt-audit-slippage">—</strong>
+            </div>
+            <div class="audit-check-row">
+              <span class="audit-check-label">Max drawdown</span>
+              <strong id="bt-audit-drawdown">—</strong>
+            </div>
+            <div class="audit-check-row">
+              <span class="audit-check-label">Fiyat sıçrama audit</span>
+              <strong id="bt-audit-price-jumps">—</strong>
+            </div>
+            <div class="audit-check-row">
+              <span class="audit-check-label">Survivorship</span>
+              <strong id="bt-audit-survivorship">—</strong>
+            </div>
+          </div>
+          <p id="bt-audit-note" class="audit-note">—</p>
         </div>
 
         <!-- ApexCharts: Backtest area chart -->

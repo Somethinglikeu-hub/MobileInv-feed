@@ -6,6 +6,8 @@
 window.livePrices = {};
 window.livePriceDetails = {};
 window.snapshotPrices = {};
+window.feedManifest = null;
+window.feedBacktestAudit = null;
 let dbInstance = null;
 let activeDetailTicker = null;
 let livePriceRefreshTimer = null;
@@ -627,6 +629,7 @@ function renderPicksPage() {
   
   const portListEl = document.getElementById('portfolio-list');
   document.getElementById('picks-count-badge').textContent = `${positions.length} Hisse`;
+  renderDecisionSummary(home, positions);
   
   portListEl.innerHTML = '';
   if (positions.length === 0) {
@@ -1097,6 +1100,123 @@ function daysBetweenIsoDates(startDate, endDate) {
   return Math.max(0, Math.round((end - start) / 86400000));
 }
 
+function formatPercent(value, digits = 1) {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed)) return '—';
+  return `${parsed >= 0 ? '+' : ''}${parsed.toFixed(digits)}%`;
+}
+
+function setTextById(elementId, value) {
+  const element = document.getElementById(elementId);
+  if (element) element.textContent = value;
+}
+
+function getInvestorAuditSummary() {
+  const audit = window.feedBacktestAudit;
+  if (!audit || typeof audit !== 'object') {
+    return {
+      audit: null,
+      baseCase: null,
+      worstStress: null,
+      hasWarnings: true,
+      primaryWarning: 'Investor-grade audit manifest içinde bulunamadı.'
+    };
+  }
+
+  const cases = Array.isArray(audit.cases) ? audit.cases : [];
+  const baseCase = cases.find(item => item.case === 'base') || cases[0] || null;
+  const stressCases = cases.filter(item => item.case && item.case !== 'base');
+  const worstStress = stressCases.length > 0
+    ? stressCases.reduce((worst, item) => (
+        Number(item.total_return_pct ?? Infinity) < Number(worst.total_return_pct ?? Infinity) ? item : worst
+      ), stressCases[0])
+    : null;
+  const warningGate = (audit.gates || []).find(gate => gate.status !== 'pass');
+
+  return {
+    audit,
+    baseCase,
+    worstStress,
+    hasWarnings: Boolean(warningGate),
+    primaryWarning: warningGate?.detail || ''
+  };
+}
+
+function localizeAuditWarning(detail) {
+  const text = String(detail || '').trim();
+  if (!text) return 'Audit uyarısı detaylandırılmadı.';
+
+  const inactiveMatch = /^(\d+)\s+inactive priced companies/i.exec(text);
+  if (inactiveMatch) {
+    return `${inactiveMatch[1]} pasif fiyatlı şirket için delist/as-of evren kapsamı tamamlanmalı.`;
+  }
+
+  const worstStressMatch = /^Worst stress alpha:\s*([-+]?\d+(?:\.\d+)?)%/i.exec(text);
+  if (worstStressMatch) {
+    return `En sert slippage stresinde alpha ${formatPercent(Number(worstStressMatch[1]), 1)}.`;
+  }
+
+  return text;
+}
+
+function renderDecisionSummary(home, positions) {
+  const card = document.querySelector('.decision-summary-card');
+  if (!card) return;
+
+  const cashState = String(home?.cash_state || 'NORMAL');
+  const cashPct = Math.max(0, Math.min(1, finiteNumber(home?.cash_pct, 0)));
+  const stockPct = Math.max(0, 1 - cashPct);
+  const auditSummary = getInvestorAuditSummary();
+  const { audit, baseCase, worstStress, hasWarnings, primaryWarning } = auditSummary;
+
+  const quoteStatuses = positions.map(pos => getQuoteStatus(pos.ticker).label);
+  const liveLikeCount = quoteStatuses.filter(label => label !== 'SNAPSHOT').length;
+  const priceSourceText = positions.length > 0
+    ? `Fiyat kaynağı: ${liveLikeCount}/${positions.length} canlıya yakın`
+    : 'Fiyat kaynağı: portföy boş';
+
+  let weeklyRule = 'AL/SAT/TUT sinyallerine göre 5 hisse hedefini koru.';
+  if (positions.length === 0) {
+    weeklyRule = 'Portföy boş; veri yenile ve Main V2 seçimlerini kontrol et.';
+  } else if (cashState === 'RISK_OFF') {
+    weeklyRule = 'RISK_OFF aktif; model hisselerini izle ama pozisyonu korumacı tut.';
+  } else if (cashState === 'DEFENSIVE') {
+    weeklyRule = 'DEFENSIVE mod; hisse ağırlığını yarıya yakın tut.';
+  } else if (cashState === 'CAUTION') {
+    weeklyRule = 'CAUTION mod; yeni alımlarda nakit tamponunu koru.';
+  }
+
+  setTextById('decision-weekly-rule', weeklyRule);
+  setTextById('decision-position-count', `${positions.length} / 5`);
+  setTextById('decision-cash-state', `${cashState} • ${Math.round(cashPct * 100)}%`);
+  setTextById('decision-model-return', baseCase ? formatPercent(baseCase.total_return_pct, 1) : '—');
+  setTextById('decision-bist-return', baseCase ? formatPercent(baseCase.benchmark_return_pct, 1) : '—');
+  setTextById('decision-stress-return', worstStress
+    ? `${formatPercent(worstStress.total_return_pct, 1)} @ ${Number(worstStress.friction_round_trip_pct || 0).toFixed(2)}%`
+    : '—');
+  setTextById('decision-price-source', priceSourceText);
+
+  const badgeEl = document.getElementById('decision-audit-badge');
+  if (badgeEl) {
+    badgeEl.textContent = !audit ? 'SINIRLI' : (hasWarnings ? 'AUDIT UYARI' : 'AUDIT PASS');
+    badgeEl.className = !audit || hasWarnings ? 'badge badge-delayed' : 'badge badge-live';
+  }
+
+  const auditNote = !audit
+    ? 'Backtest audit manifestten okunamadı; History içindeki NAV eğrisi sınırlı fikir verir.'
+    : hasWarnings
+      ? `Backtest güçlü, fakat kontrol uyarısı var: ${localizeAuditWarning(primaryWarning)}`
+      : `T+1 backtest ${formatPercent(baseCase?.alpha_pct, 1)} alpha üretiyor; yine de işlem boyutu kişisel risk limitine göre ayarlanmalı.`;
+  setTextById('decision-audit-note', auditNote);
+
+  const cashAccent = cashState === 'NORMAL'
+    ? 'var(--success)'
+    : (cashState === 'CAUTION' ? 'var(--warning)' : 'var(--danger)');
+  const cashStateEl = document.getElementById('decision-cash-state');
+  if (cashStateEl) cashStateEl.style.color = cashAccent;
+  card.style.setProperty('--stock-allocation', `${Math.round(stockPct * 100)}%`);
+}
+
 // ==========================================================================
 // 8. Stock Details Overlay Sheet (Parity Visuals & Options)
 // ==========================================================================
@@ -1165,7 +1285,7 @@ function openStockDetail(ticker) {
     banner.className = 'signal-banner pos-text';
     banner.style.backgroundColor = 'rgba(34, 197, 94, 0.08)';
     banner.style.borderColor = 'rgba(34, 197, 94, 0.2)';
-    bannerText.textContent = 'Model Sinyali: ALPHA Core modeli yeni giriş listesinde, ALIM önerilir.';
+    bannerText.textContent = 'Model Sinyali: Main V2 modeli yeni giriş listesinde, ALIM önerilir.';
   } else {
     banner.style.display = 'none';
   }
@@ -1360,6 +1480,150 @@ function renderFactorHistoryChart(history) {
 // 9. Backtesting Overlay Sheet
 // ==========================================================================
 
+function summarizeBacktestFromNav(points) {
+  if (!Array.isArray(points) || points.length < 2) {
+    return {
+      fromSnapshotFallback: true,
+      cases: [],
+      gates: []
+    };
+  }
+
+  const navs = points
+    .map(point => ({
+      strategy: finiteNumber(point.strategy_return, null),
+      benchmark: finiteNumber(point.benchmark_return, null)
+    }))
+    .filter(point => point.strategy > 0 && point.benchmark > 0);
+
+  if (navs.length < 2) {
+    return {
+      fromSnapshotFallback: true,
+      cases: [],
+      gates: []
+    };
+  }
+
+  let runningMax = navs[0].strategy;
+  let maxDrawdown = 0;
+  let maxWeekly = -Infinity;
+  let minWeekly = Infinity;
+
+  for (let i = 1; i < navs.length; i += 1) {
+    const weeklyReturn = navs[i].strategy / navs[i - 1].strategy - 1.0;
+    maxWeekly = Math.max(maxWeekly, weeklyReturn);
+    minWeekly = Math.min(minWeekly, weeklyReturn);
+    runningMax = Math.max(runningMax, navs[i].strategy);
+    maxDrawdown = Math.min(maxDrawdown, navs[i].strategy / runningMax - 1.0);
+  }
+
+  const totalReturnPct = (navs[navs.length - 1].strategy / navs[0].strategy - 1.0) * 100;
+  const benchmarkReturnPct = (navs[navs.length - 1].benchmark / navs[0].benchmark - 1.0) * 100;
+  const baseCase = {
+    case: 'snapshot_nav',
+    total_return_pct: totalReturnPct,
+    benchmark_return_pct: benchmarkReturnPct,
+    alpha_pct: totalReturnPct - benchmarkReturnPct,
+    max_drawdown_pct: maxDrawdown * 100,
+    max_weekly_return_pct: Number.isFinite(maxWeekly) ? maxWeekly * 100 : null,
+    min_weekly_return_pct: Number.isFinite(minWeekly) ? minWeekly * 100 : null
+  };
+
+  return {
+    fromSnapshotFallback: true,
+    execution_mode: 'unknown',
+    cases: [baseCase],
+    gates: [
+      {
+        key: 'execution',
+        status: 'warn',
+        detail: 'Investor-grade JSON yok; execution varsayımı snapshot NAV içinde doğrulanamadı.'
+      },
+      {
+        key: 'slippage',
+        status: 'warn',
+        detail: 'Slippage stres raporu manifest içinde yok.'
+      },
+      {
+        key: 'drawdown',
+        status: baseCase.max_drawdown_pct >= -35 ? 'pass' : 'warn',
+        detail: `Max drawdown: ${baseCase.max_drawdown_pct.toFixed(1)}%`
+      },
+      {
+        key: 'price_jumps',
+        status: 'warn',
+        detail: 'Fiyat sıçrama audit raporu manifest içinde yok.'
+      },
+      {
+        key: 'survivorship',
+        status: 'warn',
+        detail: 'Survivorship audit raporu manifest içinde yok.'
+      }
+    ]
+  };
+}
+
+function setAuditRow(elementId, text, status = 'warn') {
+  const valueEl = document.getElementById(elementId);
+  if (!valueEl) return;
+  valueEl.textContent = text;
+  const row = valueEl.closest('.audit-check-row');
+  if (row) {
+    row.classList.remove('pass', 'warn');
+    row.classList.add(status === 'pass' ? 'pass' : 'warn');
+  }
+}
+
+function renderBacktestAuditPanel(perfPoints) {
+  const audit = window.feedBacktestAudit || summarizeBacktestFromNav(perfPoints);
+  const gates = new Map((audit.gates || []).map(gate => [gate.key, gate]));
+  const baseCase = (audit.cases || []).find(item => item.case === 'base') || (audit.cases || [])[0] || {};
+  const worstStress = (audit.cases || []).slice().reverse().find(item => item.case && item.case !== 'base') || null;
+
+  const executionGate = gates.get('execution') || {};
+  const executionMode = audit.execution_mode === 'next_open'
+    ? 'T+1 next open'
+    : (audit.execution_mode || 'NAV fallback');
+  setAuditRow('bt-audit-execution', executionMode, executionGate.status || 'warn');
+
+  const slippageGate = gates.get('slippage') || {};
+  const slippageText = worstStress
+    ? `${formatPercent(worstStress.alpha_pct, 1)} alpha @ ${Number(worstStress.friction_round_trip_pct || 0).toFixed(2)}%`
+    : 'Stres yok';
+  setAuditRow('bt-audit-slippage', slippageText, slippageGate.status || 'warn');
+
+  const drawdownGate = gates.get('drawdown') || {};
+  setAuditRow('bt-audit-drawdown', formatPercent(baseCase.max_drawdown_pct, 1), drawdownGate.status || 'warn');
+
+  const jumpGate = gates.get('price_jumps') || {};
+  const jumpCount = audit.price_jump_audit?.flag_count;
+  setAuditRow(
+    'bt-audit-price-jumps',
+    Number.isFinite(Number(jumpCount)) ? `${jumpCount} bayrak` : 'Bilinmiyor',
+    jumpGate.status || 'warn'
+  );
+
+  const survivalGate = gates.get('survivorship') || {};
+  const inactiveCount = audit.survivorship_audit?.inactive_priced_company_count;
+  setAuditRow(
+    'bt-audit-survivorship',
+    Number.isFinite(Number(inactiveCount)) ? `${inactiveCount} pasif hisse` : 'Eksik',
+    survivalGate.status || 'warn'
+  );
+
+  const statusEl = document.getElementById('bt-audit-status');
+  const hasWarnings = (audit.gates || []).some(gate => gate.status !== 'pass');
+  statusEl.textContent = audit.fromSnapshotFallback ? 'SINIRLI' : (hasWarnings ? 'UYARI' : 'PASS');
+  statusEl.className = hasWarnings || audit.fromSnapshotFallback ? 'badge badge-delayed' : 'badge badge-live';
+
+  const noteEl = document.getElementById('bt-audit-note');
+  if (audit.fromSnapshotFallback) {
+    noteEl.textContent = 'Investor-grade JSON manifestte yok; bu panel yalnızca snapshot NAV eğrisinden sınırlı kontrol yapıyor.';
+  } else {
+    noteEl.textContent = `${audit.start_date || '—'} / ${audit.end_date || '—'} raporu. Baz alpha ${formatPercent(baseCase.alpha_pct, 1)}; en sert slippage alpha ${worstStress ? formatPercent(worstStress.alpha_pct, 1) : '—'}.`;
+  }
+}
+
 function openBacktestingSheet() {
   const perfPoints = queryAll('SELECT date, strategy_return, benchmark_return FROM model_performance ORDER BY date ASC');
   if (perfPoints.length === 0) return;
@@ -1383,6 +1647,8 @@ function openBacktestingSheet() {
   alphaEl.textContent = `Dönemsel Model Alphası: ${alpha >= 0 ? '+' : ''}${alpha.toFixed(1)}%`;
   alphaEl.style.backgroundColor = alpha >= 0 ? 'rgba(34, 197, 94, 0.08)' : 'rgba(239, 68, 68, 0.08)';
   alphaEl.style.color = alpha >= 0 ? 'var(--success)' : 'var(--danger)';
+
+  renderBacktestAuditPanel(perfPoints);
 
   // Render completed transactions list
   const closedPositions = queryAll(`
@@ -1435,7 +1701,7 @@ function renderBacktestAreaChart(points) {
 
   const options = {
     series: [
-      { name: 'ALPHA Core Model', data: stratData },
+      { name: 'Main V2 Portfolio', data: stratData },
       { name: 'BIST 100 Endeksi', data: benchData }
     ],
     chart: { type: 'area', height: 250, toolbar: { show: false }, background: 'transparent' },
@@ -1485,6 +1751,8 @@ async function initApp() {
       const res = await fetch('./manifest.json?t=' + Date.now(), { cache: 'no-store' });
       if (res.ok) {
         manifest = validateSnapshotManifest(await res.json());
+        window.feedManifest = manifest;
+        window.feedBacktestAudit = manifest.backtest_audit || null;
         console.log('[DB] Live manifest found:', manifest.snapshot_version);
       } else {
         console.warn('[DB] Live manifest request failed with HTTP', res.status);
@@ -1496,6 +1764,9 @@ async function initApp() {
     statusEl.textContent = '🗃️ Önbellek kontrol ediliyor...';
     progressFill.style.width = '20%';
     const cached = await getCachedSnapshot();
+    if (!window.feedBacktestAudit && cached?.backtest_audit) {
+      window.feedBacktestAudit = cached.backtest_audit;
+    }
 
     let rawBytes = null;
     let snapshotSource = "";
@@ -1511,7 +1782,8 @@ async function initApp() {
           db_blob: rawBytes,
           sha256: manifest.snapshot.sha256,
           exported_at: manifest.exported_at,
-          snapshot_version: manifest.snapshot_version
+          snapshot_version: manifest.snapshot_version,
+          backtest_audit: manifest.backtest_audit || null
         });
       } catch(cacheErr) {
         console.warn('[DB] Failed writing database snapshot to browser IndexedDB:', cacheErr);
@@ -1552,7 +1824,7 @@ async function initApp() {
     progressFill.style.width = '90%';
     
     const SQL = await initSqlJs({
-      locateFile: filename => `./vendor/${filename}?v=8`
+      locateFile: filename => `./vendor/${filename}?v=9`
     });
 
     try {
@@ -1618,6 +1890,7 @@ window.addEventListener('load', () => {
   });
 
   document.getElementById('open-backtest-btn').addEventListener('click', openBacktestingSheet);
+  document.getElementById('decision-open-backtest')?.addEventListener('click', openBacktestingSheet);
   
   document.getElementById('refresh-db-btn').addEventListener('click', () => {
     window.location.reload();

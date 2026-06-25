@@ -8,6 +8,17 @@ MobileInv'in ana kullanıcı uygulamasıdır. Android APK artık birincil istemc
 - Canlıya yakın fiyat kaynağı: `live-data` branch'indeki `live_prices.json`
 - Çalışma biçimi: Tarayıcıdan açılır, Android/iOS ana ekranına kurulabilir ve son indirilen snapshot ile çevrimdışı çalışabilir.
 
+## Kullanım akışı
+
+PWA yatırım kararını tek ekranda toplamak için tasarlanır:
+
+1. `Picks` ekranında Main V2'nin aktif 5 hisse portföyü kontrol edilir.
+2. Aynı ekrandaki karar özeti; nakit rejimini, 4 yıllık T+1 backtest sonucunu, en sert slippage stresini ve audit uyarısını birlikte gösterir.
+3. `Zeki Sinyaller` bölümündeki `AL`, `SAT`, `TUT` kararları haftalık rebalans disiplinidir; tek günlük fiyat hareketleriyle model dışına çıkılmamalıdır.
+4. `Market` ekranındaki nakit rejimi NORMAL, CAUTION, DEFENSIVE veya RISK_OFF durumuna göre hisse/nakit ağırlığı belirler.
+5. `History > Backtesting` paneli her hafta güven kontrolü olarak okunur. T+1 execution, slippage, drawdown, fiyat-jump veya survivorship uyarısı bozulursa pozisyon büyütülmez.
+6. Program karar destek aracıdır. Pozisyon büyüklüğü, maksimum zarar toleransı ve nakit tamponu kullanıcı tarafından önceden belirlenmelidir.
+
 ## Geliştirme kuralları
 
 1. Kullanıcı arayüzü değişiklikleri öncelikle bu PWA üzerinde yapılır.
@@ -33,5 +44,12 @@ Her push'ta `.github/workflows/pwa-quality.yml` aşağıdaki kontrolleri çalı�
 History, backtest, snapshot üretimi, kurulu PWA güncellemesi, offline açılış, doğru ikonlar, yavaş mobil bağlantı başlangıcı, snapshot bütünlük kontrolü, bozuk cache kurtarma ve yerel runtime bağımlılıkları düzeltildi.
 
 Canlı fiyat tarafında `v8` ile PWA artık snapshot kapanış fiyatını `CANLI` diye göstermiyor. Backend'in 15 dakikalık workflow'u `live-data/live_prices.json` üretir; PWA bunu kullanır, başarısız olursa açık biçimde snapshot fallback'e döner.
+
+## 25 Haziran 2026 PWA geliştirmeleri
+
+- `Picks` ekranına Main V2 karar özeti eklendi: portföy doluluğu, nakit rejimi, 4 yıllık T+1 model getirisi, stres testi ve fiyat kaynağı aynı kartta gösterilir.
+- `Hakkında` ekranına programla nasıl yatırım yapılacağını anlatan haftalık kullanım rehberi eklendi.
+- Investor-grade güven kontrolü Hakkında ekranında kısa özet olarak görünür hale getirildi.
+- Asset ve service-worker cache sürümü `v9` yapıldı.
 
 Ayrıntılı teknik kayıt ana backend reposundaki `docs/PWA_MAIN_APP_AND_HISTORY_FIX_2026-06-23.md` dosyasındadır.

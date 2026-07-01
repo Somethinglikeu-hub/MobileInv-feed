@@ -1,12 +1,13 @@
 # MobileInv PWA
 
-MobileInv'in ana kullanıcı uygulamasıdır. Android APK artık birincil istemci değildir; ürünün kanonik arayüzü bu repodaki kurulabilir PWA/WebUI'dır.
+MobileInv'in tek aktif kullanıcı uygulamasıdır. Android APK artık geliştirilmez; ürünün kanonik arayüzü bu repodaki kurulabilir PWA/WebUI'dır.
 
 - Uygulama: https://somethinglikeu-hub.github.io/MobileInv-feed/
 - Yayın branch'i: `gh-pages`
 - Veri kaynağı: `manifest.json` ve `mobile_snapshot.db.gz`
 - Canlıya yakın fiyat kaynağı: `live-data` branch'indeki `live_prices.json`
 - Çalışma biçimi: Tarayıcıdan açılır, Android/iOS ana ekranına kurulabilir ve son indirilen snapshot ile çevrimdışı çalışabilir.
+- Ürün kapsamı: `MobileInv-mobile-v2` arşiv/legacy olarak durur; UI, History, Backtesting, canlı fiyat ve bildirim işleri bu PWA üzerinde yapılır.
 
 ## Kullanım akışı
 
@@ -27,7 +28,7 @@ PWA yatırım kararını tek ekranda toplamak için tasarlanır:
 4. Canlıya yakın fiyatlar PWA içinde tarayıcıdan Yahoo'ya doğrudan giderek değil, backend workflow'unun yayınladığı `live_prices.json` üzerinden okunur.
 5. Fiyat feed'i gelmezse uygulama snapshot fiyatıyla çalışır ve UI bunu `SNAPSHOT` olarak etiketler.
 6. Kurulu uygulamanın yeni kodu alabilmesi için asset sürümü ve service-worker cache sürümü gerektiğinde artırılır.
-7. Android native uygulama ancak ayrıca istenirse güncellenir.
+7. Android native uygulama aktif geliştirme dışıdır; dosyalar korunur ama Android'e yeni özellik, bug fix, UI, performans veya bildirim işi açılmaz.
 8. Pako, SQL.js/WASM ve ApexCharts runtime dosyaları `vendor/` altında sabitlenir; ana uygulama açılışı CDN erişimine bağlı bırakılmaz.
 
 ## Kalite kontrolleri

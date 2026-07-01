@@ -1,10 +1,145 @@
 {
-  "exported_at": "2026-07-01T09:16:13+00:00",
+  "backtest_audit": {
+    "cases": [
+      {
+        "alpha_pct": 584.1399,
+        "benchmark_return_pct": 112.9079,
+        "case": "base",
+        "friction_round_trip_pct": 0.4,
+        "max_drawdown_pct": -21.1274,
+        "max_weekly_return_pct": 11.206,
+        "min_weekly_return_pct": -10.6664,
+        "points": 209,
+        "rolling_52w_beat_benchmark_rate_pct": 99.3631,
+        "rolling_52w_min_alpha_pct": -5.7545,
+        "rolling_52w_min_return_pct": 19.9346,
+        "rolling_52w_positive_rate_pct": 100.0,
+        "rolling_52w_windows": 157,
+        "total_return_pct": 697.0478
+      },
+      {
+        "alpha_pct": 452.0007,
+        "benchmark_return_pct": 112.9079,
+        "case": "stress_0.75pct",
+        "friction_round_trip_pct": 0.75,
+        "max_drawdown_pct": -22.2072,
+        "max_weekly_return_pct": 11.1535,
+        "min_weekly_return_pct": -10.9464,
+        "points": 209,
+        "rolling_52w_beat_benchmark_rate_pct": 96.1783,
+        "rolling_52w_min_alpha_pct": -13.2916,
+        "rolling_52w_min_return_pct": 14.1305,
+        "rolling_52w_positive_rate_pct": 100.0,
+        "rolling_52w_windows": 157,
+        "total_return_pct": 564.9086
+      },
+      {
+        "alpha_pct": 371.1515,
+        "benchmark_return_pct": 112.9079,
+        "case": "stress_1.00pct",
+        "friction_round_trip_pct": 1.0,
+        "max_drawdown_pct": -22.9706,
+        "max_weekly_return_pct": 11.116,
+        "min_weekly_return_pct": -11.1464,
+        "points": 209,
+        "rolling_52w_beat_benchmark_rate_pct": 94.2675,
+        "rolling_52w_min_alpha_pct": -18.4479,
+        "rolling_52w_min_return_pct": 10.1521,
+        "rolling_52w_positive_rate_pct": 100.0,
+        "rolling_52w_windows": 157,
+        "total_return_pct": 484.0594
+      },
+      {
+        "alpha_pct": 237.5558,
+        "benchmark_return_pct": 112.9079,
+        "case": "stress_1.50pct",
+        "friction_round_trip_pct": 1.5,
+        "max_drawdown_pct": -24.5597,
+        "max_weekly_return_pct": 11.041,
+        "min_weekly_return_pct": -11.5464,
+        "points": 209,
+        "rolling_52w_beat_benchmark_rate_pct": 85.3503,
+        "rolling_52w_min_alpha_pct": -28.2202,
+        "rolling_52w_min_return_pct": 2.5939,
+        "rolling_52w_positive_rate_pct": 100.0,
+        "rolling_52w_windows": 157,
+        "total_return_pct": 350.4637
+      }
+    ],
+    "end_date": "2026-06-22",
+    "execution_mode": "next_open",
+    "gates": [
+      {
+        "detail": "Signals are tested with next available open fills.",
+        "key": "execution",
+        "label": "T+1 next-open execution",
+        "status": "pass"
+      },
+      {
+        "detail": "Worst stress alpha: 237.5558%",
+        "key": "slippage",
+        "label": "Slippage stress",
+        "status": "pass"
+      },
+      {
+        "detail": "Max drawdown: -21.1274%",
+        "key": "drawdown",
+        "label": "Drawdown sanity",
+        "status": "pass"
+      },
+      {
+        "detail": "0 suspicious jumps flagged.",
+        "key": "price_jumps",
+        "label": "Price jump audit",
+        "status": "pass"
+      },
+      {
+        "detail": "All inactive priced companies have as-of active-period coverage.",
+        "key": "survivorship",
+        "label": "As-of universe",
+        "status": "pass"
+      },
+      {
+        "detail": "209/209 rebalance dates have enough composite scores.",
+        "key": "score_coverage",
+        "label": "Historical score coverage",
+        "status": "pass"
+      }
+    ],
+    "generated_at": "2026-07-01T12:59:31+00:00",
+    "price_jump_audit": {
+      "flag_count": 0,
+      "ratio_threshold": 5.0,
+      "sample": [],
+      "scanned_price_rows": 551122
+    },
+    "score_coverage_audit": {
+      "end_date": "2026-06-22",
+      "expected_rebalance_dates": 209,
+      "first_usable_date": "2022-06-27",
+      "min_composite_rows": 50,
+      "start_date": "2022-06-27",
+      "status": "pass",
+      "usable_date_rate_pct": 100.0,
+      "usable_rebalance_dates": 209,
+      "weak_date_count": 0,
+      "weak_date_sample": []
+    },
+    "start_date": "2022-06-27",
+    "strategy_variant": "index_aware",
+    "survivorship_audit": {
+      "coverage_gap_count": 0,
+      "inactive_priced_company_count": 1,
+      "sample": [],
+      "status": "pass"
+    }
+  },
+  "exported_at": "2026-07-01T14:14:21+00:00",
   "snapshot": {
     "compression": "gzip",
     "filename": "mobile_snapshot.db.gz",
-    "sha256": "05a0f9c5d30be7f9bc6a1153fe43e147556f8eccdcef2301f18fc336b53581c8",
-    "size_bytes": 9992843,
+    "sha256": "261994b4478ddb0f0abfc474e9439df1b8322e31a621e08f0753061e400301ad",
+    "size_bytes": 10060654,
     "url": "https://raw.githubusercontent.com/Somethinglikeu-hub/MobileInv-feed/gh-pages/mobile_snapshot.db.gz"
   },
   "snapshot_version": 12

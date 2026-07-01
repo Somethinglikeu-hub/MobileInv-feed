@@ -1631,12 +1631,21 @@ function openBacktestingSheet() {
   // Render Apex Area Backtest Chart
   renderBacktestAreaChart(perfPoints);
 
-  // Cumulative numbers
+  // Cumulative numbers. Prefer the investor-grade manifest because it carries
+  // the audited T+1/slippage run; the snapshot NAV table is kept for the chart.
   const latestPoint = perfPoints[perfPoints.length - 1];
   const firstPoint = perfPoints[0];
-  const stratRet = latestPoint.strategy_return - 100.0;
-  const benchRet = latestPoint.benchmark_return - 100.0;
-  const alpha = stratRet - benchRet;
+  const auditSummary = getInvestorAuditSummary();
+  const auditBaseCase = auditSummary.baseCase;
+  const stratRet = auditBaseCase
+    ? finiteNumber(auditBaseCase.total_return_pct, 0)
+    : latestPoint.strategy_return - 100.0;
+  const benchRet = auditBaseCase
+    ? finiteNumber(auditBaseCase.benchmark_return_pct, 0)
+    : latestPoint.benchmark_return - 100.0;
+  const alpha = auditBaseCase
+    ? finiteNumber(auditBaseCase.alpha_pct, stratRet - benchRet)
+    : stratRet - benchRet;
 
   document.getElementById('bt-nav-return').textContent = `${stratRet >= 0 ? '+' : ''}${stratRet.toFixed(1)}%`;
   document.getElementById('bt-index-return').textContent = `${benchRet >= 0 ? '+' : ''}${benchRet.toFixed(1)}%`;

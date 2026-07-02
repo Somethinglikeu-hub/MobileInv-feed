@@ -2,6 +2,8 @@
 
 MobileInv'in tek aktif kullanıcı uygulamasıdır. Android APK artık geliştirilmez; ürünün kanonik arayüzü bu repodaki kurulabilir PWA/WebUI'dır.
 
+> **2 Temmuz 2026 operasyon notu:** Güncel ana handoff backend reposunda `docs/HANDOFF_2026-07-02_FABLE5.md` dosyasındadır. Public feed 2 Temmuz sabahı yeniden yayımlandı (`exported_at=2026-07-02T06:14:02+00:00`, `snapshot_date=2026-07-02`, `latest_price_date=2026-07-01`). Sabah run'larında `latest_price_date` önceki işlem günü olabilir; bu, bugünkü kapanış henüz oluşmadığı için normaldir.
+
 - Uygulama: https://somethinglikeu-hub.github.io/MobileInv-feed/
 - Yayın branch'i: `gh-pages`
 - Veri kaynağı: `manifest.json` ve `mobile_snapshot.db.gz`
@@ -30,6 +32,7 @@ PWA yatırım kararını tek ekranda toplamak için tasarlanır:
 6. Kurulu uygulamanın yeni kodu alabilmesi için asset sürümü ve service-worker cache sürümü gerektiğinde artırılır.
 7. Android native uygulama aktif geliştirme dışıdır; dosyalar korunur ama Android'e yeni özellik, bug fix, UI, performans veya bildirim işi açılmaz.
 8. Pako, SQL.js/WASM ve ApexCharts runtime dosyaları `vendor/` altında sabitlenir; ana uygulama açılışı CDN erişimine bağlı bırakılmaz.
+9. `manifest.json` bilinçli olarak küçük bir pointer dosyasıdır. Açık pozisyonlar, snapshot tarihi ve performans detayları `mobile_snapshot.db.gz` içindeki SQLite tablolardan okunur.
 
 ## Kalite kontrolleri
 
@@ -39,6 +42,14 @@ Her push'ta `.github/workflows/pwa-quality.yml` aşağıdaki kontrolleri çalı�
 - Gerekli PWA/runtime varlıklarının repoda bulunması
 - `manifest.json` içindeki snapshot boyutu ve SHA-256 değerinin gerçek dosyayla eşleşmesi
 - Service worker ve asset sürümlerinin beklenen sürümde olması
+
+2 Temmuz 2026 itibarıyla v10 asset/service-worker beklentileriyle doğrulanan son kontroller:
+
+```bash
+node --check app.js
+node --check sw.js
+node tests/pwa-static-check.mjs
+```
 
 ## 23 Haziran 2026 düzeltmeleri
 

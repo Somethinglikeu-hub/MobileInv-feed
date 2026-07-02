@@ -612,6 +612,52 @@ function renderPage(tab) {
 // 7. Page Render Implementations
 // ==========================================================================
 
+// --- Stale feed detection ---
+// Business days elapsed strictly after dateStr up to today. Morning cron
+// runs legitimately carry the previous close, so 0-1 business days is fresh.
+function businessDaysSince(dateStr) {
+  const start = new Date(`${dateStr}T00:00:00`);
+  if (Number.isNaN(start.getTime())) return null;
+  const now = new Date();
+  let count = 0;
+  const cursor = new Date(start);
+  cursor.setDate(cursor.getDate() + 1);
+  while (cursor <= now && count < 60) {
+    const dow = cursor.getDay();
+    if (dow !== 0 && dow !== 6) count += 1;
+    cursor.setDate(cursor.getDate() + 1);
+  }
+  return count;
+}
+
+function renderStaleFeedBanner() {
+  const container = document.getElementById('page-picks');
+  if (!container) return;
+  let banner = document.getElementById('stale-feed-banner');
+
+  const meta = queryOne('SELECT latest_price_date FROM snapshot_metadata WHERE id = 1');
+  const priceDate = meta?.latest_price_date;
+  const staleDays = priceDate ? businessDaysSince(priceDate) : null;
+
+  if (staleDays == null || staleDays <= 1) {
+    if (banner) banner.remove();
+    return;
+  }
+
+  if (!banner) {
+    banner = document.createElement('div');
+    banner.id = 'stale-feed-banner';
+    container.insertBefore(banner, container.firstElementChild);
+  }
+  const severe = staleDays >= 5;
+  banner.className = severe ? 'stale-banner stale-banner-severe' : 'stale-banner';
+  banner.innerHTML = `
+    <span class="material-symbols-rounded">${severe ? 'error' : 'warning'}</span>
+    <span>Veri ${staleDays} iş günü eski (son fiyat: ${escapeHtml(priceDate)}).
+      ${severe ? 'Feed durmuş olabilir — GitHub Actions kontrol edilmeli.' : 'Model kararları güncel olmayabilir.'}</span>
+  `;
+}
+
 // --- PAGE 1: PICKS (Home) ---
 function renderPicksPage() {
   const home = queryOne('SELECT * FROM home_summary WHERE id = 1');
@@ -619,6 +665,7 @@ function renderPicksPage() {
   if (home && home.macro_date) {
     updateDateEl.textContent = `Güncelleme: ${home.macro_date}`;
   }
+  renderStaleFeedBanner();
 
   const positions = queryAll(`
     SELECT op.*, c.name as fullname 
@@ -1833,7 +1880,7 @@ async function initApp() {
     progressFill.style.width = '90%';
     
     const SQL = await initSqlJs({
-      locateFile: filename => `./vendor/${filename}?v=10`
+      locateFile: filename => `./vendor/${filename}?v=11`
     });
 
     try {

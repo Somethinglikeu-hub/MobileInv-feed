@@ -1192,6 +1192,26 @@ body {
   margin-bottom: 16px;
 }
 
+.stale-banner {
+  background-color: rgba(234, 179, 8, 0.10);
+  border: 1px solid rgba(234, 179, 8, 0.30);
+  color: var(--warning);
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.stale-banner-severe {
+  background-color: rgba(239, 68, 68, 0.10);
+  border-color: rgba(239, 68, 68, 0.30);
+  color: var(--danger);
+}
+
 .detail-card {
   background: var(--surface);
   border: 1px solid var(--outline);

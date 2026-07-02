@@ -714,66 +714,19 @@ function renderPicksPage() {
     });
   }
 
-  // --- REBALANCE SIGNALS (Kotlin matching constraints) ---
+  // --- REBALANCE SIGNALS: derived from ACTUAL portfolio decisions.
+  // Previously re-derived client-side from scoring_latest top-12, which
+  // could contradict the real selector (sector caps, correlation filter,
+  // index-aware incumbent window). Now: rotation diff from open_positions
+  // + portfolio_history — exactly what the backend actually did.
+  const decisions = computeRebalanceDecisions(positions);
+  renderTradeDayCard(decisions);
+  renderIntraweekExits(decisions);
+
   const signalsListEl = document.getElementById('signals-list');
   signalsListEl.innerHTML = '';
 
-  const topScoring = queryAll(`
-    SELECT * FROM scoring_latest 
-    WHERE alpha_core_eligible = 1 
-    ORDER BY ranking_score DESC 
-    LIMIT 12
-  `);
-
-  const openTickers = new Set(positions.map(p => p.ticker));
-  const top12Tickers = new Set(topScoring.map(t => t.ticker));
-
-  const buys = [];
-  const holds = [];
-  const sells = [];
-
-  // 1. Buy: Top 5 eligible positions not in current portfolio
-  topScoring.slice(0, 5).forEach(row => {
-    if (!openTickers.has(row.ticker)) {
-      buys.push({ ticker: row.ticker, action: 'BUY', reason: 'Haftalık Model: Yeni giriş' });
-    }
-  });
-
-  // 2. Holds & Sells:
-  positions.forEach(pos => {
-    if (!top12Tickers.has(pos.ticker)) {
-      sells.push({ ticker: pos.ticker, action: 'SELL', reason: 'Model kriterlerinden tamamen düştü.' });
-    } else {
-      holds.push({ ticker: pos.ticker, action: 'HOLD', reason: 'Şirket hala güçlü, potansiyel devam ediyor.' });
-    }
-  });
-
-  // 3. Overflow target check: limit buys+holds to 5
-  const currentTargetCount = holds.length + buys.length;
-  if (currentTargetCount > 5) {
-    const overflow = currentTargetCount - 5;
-    const holdsWithScores = holds.map(h => {
-      const scoreRow = topScoring.find(t => t.ticker === h.ticker);
-      return { hold: h, score: scoreRow ? scoreRow.ranking_score : 0 };
-    });
-    holdsWithScores.sort((a, b) => a.score - b.score);
-
-    const strongestNewcomer = buys.length > 0 ? buys[0].ticker : "yeni fırsatlar";
-    
-    for (let i = 0; i < overflow; i++) {
-      const weakest = holdsWithScores[i].hold;
-      const idx = holds.indexOf(weakest);
-      if (idx !== -1) holds.splice(idx, 1);
-      
-      sells.push({
-        ticker: weakest.ticker,
-        action: 'SELL',
-        reason: `Hisse güçlü ancak ${strongestNewcomer}'a yer açmak için feda edildi.`
-      });
-    }
-  }
-
-  const finalSignals = [...buys, ...holds, ...sells];
+  const finalSignals = [...decisions.sells, ...decisions.buys, ...decisions.holds];
 
   if (finalSignals.length === 0) {
     signalsListEl.innerHTML = `<p style="color:var(--text-muted); font-size:11px; font-style:italic;">Haftalık rebalans kararı bulunmuyor.</p>`;
@@ -797,6 +750,167 @@ function renderPicksPage() {
       signalsListEl.appendChild(row);
     });
   }
+}
+
+// --- Rebalance decisions from actual position data -----------------------
+// rotationDate = the latest ALPHA selection date. On that date the selector
+// exits every prior position and re-enters the kept ones, so:
+//   HOLD = exited on rotationDate AND currently open
+//   BUY  = currently open, selected on rotationDate, NOT exited that day
+//   SELL = exited on rotationDate AND no longer open
+// Positions carried with an older selection_date (future continuity mode)
+// also count as HOLD. Risk exits AFTER the rotation (stop-loss / target /
+// thesis breaker, applied automatically by the backend) are listed apart.
+function computeRebalanceDecisions(positions) {
+  const result = { rotationDate: null, buys: [], holds: [], sells: [], riskExits: [] };
+
+  const rotationRow = queryOne(`
+    SELECT MAX(selection_date) AS d FROM open_positions WHERE portfolio = 'ALPHA'
+  `);
+  result.rotationDate = rotationRow?.d || null;
+  if (!result.rotationDate) return result;
+
+  const exitedOnRotation = queryAll(`
+    SELECT ticker, exit_price, pnl_pct FROM portfolio_history
+    WHERE portfolio = 'ALPHA' AND exit_date = :d
+    ORDER BY sort_order ASC
+  `, { ':d': result.rotationDate });
+  const exitedTickers = new Set(exitedOnRotation.map(r => r.ticker));
+  const openTickers = new Set(positions.map(p => p.ticker));
+
+  positions.forEach(pos => {
+    if (pos.selection_date === result.rotationDate && !exitedTickers.has(pos.ticker)) {
+      result.buys.push({
+        ticker: pos.ticker, action: 'BUY',
+        reason: `Haftalık rotasyon: portföye yeni girdi (referans ${finiteNumber(pos.entry_price).toFixed(2)} TL — Cuma kapanışı).`,
+      });
+    } else {
+      result.holds.push({
+        ticker: pos.ticker, action: 'HOLD',
+        reason: 'Rotasyonda korundu; işlem gerekmez.',
+      });
+    }
+  });
+
+  const seenSells = new Set();
+  exitedOnRotation.forEach(row => {
+    if (openTickers.has(row.ticker) || seenSells.has(row.ticker)) return;
+    seenSells.add(row.ticker);
+    const pnl = row.pnl_pct != null ? ` (${row.pnl_pct >= 0 ? '+' : ''}${finiteNumber(row.pnl_pct).toFixed(1)}%)` : '';
+    result.sells.push({
+      ticker: row.ticker, action: 'SELL',
+      reason: `Haftalık rotasyonda çıkarıldı${pnl}.`,
+    });
+  });
+
+  result.riskExits = queryAll(`
+    SELECT ticker, exit_date, exit_price, pnl_pct, exit_reason FROM portfolio_history
+    WHERE portfolio = 'ALPHA' AND exit_date > :d
+      AND exit_reason IN ('STOP_LOSS', 'TARGET', 'THESIS_BREAKER')
+    ORDER BY exit_date DESC, sort_order ASC
+  `, { ':d': result.rotationDate });
+
+  return result;
+}
+
+// --- Trade-day checklist card (rotation day only) -------------------------
+function tradeDoneKey(rotationDate) { return `bp_trade_done_${rotationDate}`; }
+
+function loadTradeDone(rotationDate) {
+  try { return new Set(JSON.parse(localStorage.getItem(tradeDoneKey(rotationDate)) || '[]')); }
+  catch { return new Set(); }
+}
+
+function saveTradeDone(rotationDate, doneSet) {
+  try { localStorage.setItem(tradeDoneKey(rotationDate), JSON.stringify([...doneSet])); } catch { /* quota */ }
+}
+
+function renderTradeDayCard(decisions) {
+  const container = document.getElementById('trade-day-container');
+  if (!container) return;
+  container.innerHTML = '';
+
+  const todayIso = new Date().toISOString().slice(0, 10);
+  const actionable = [...decisions.sells, ...decisions.buys];
+  if (decisions.rotationDate !== todayIso || actionable.length === 0) return;
+
+  const done = loadTradeDone(decisions.rotationDate);
+  const card = document.createElement('div');
+  card.className = 'trade-day-card';
+
+  const rows = actionable.map(sig => {
+    const isDone = done.has(sig.ticker);
+    const label = sig.action === 'SELL' ? 'SAT' : 'AL';
+    const cls = sig.action === 'SELL' ? 'trade-sell' : 'trade-buy';
+    return `
+      <button type="button" class="trade-step ${isDone ? 'trade-done' : ''}" data-ticker="${escapeHtml(sig.ticker)}">
+        <span class="material-symbols-rounded trade-check">${isDone ? 'check_circle' : 'radio_button_unchecked'}</span>
+        <span class="trade-ticker">${escapeHtml(sig.ticker)}</span>
+        <span class="trade-action ${cls}">${label}</span>
+      </button>`;
+  }).join('');
+
+  card.innerHTML = `
+    <div class="trade-day-header">
+      <span class="material-symbols-rounded">task_alt</span>
+      <div>
+        <h3>Bugün İşlem Günü</h3>
+        <p>Önce SAT, sonra AL. Emirleri açılışta ver; canlı fiyat etiketine bak. Satıra dokununca tamamlandı işaretlenir.</p>
+      </div>
+    </div>
+    ${rows}`;
+
+  card.querySelectorAll('.trade-step').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const ticker = btn.getAttribute('data-ticker');
+      const current = loadTradeDone(decisions.rotationDate);
+      if (current.has(ticker)) current.delete(ticker); else current.add(ticker);
+      saveTradeDone(decisions.rotationDate, current);
+      renderTradeDayCard(decisions);
+    });
+  });
+
+  container.appendChild(card);
+}
+
+// --- Intraweek risk exits (backend auto-closed positions) ------------------
+function renderIntraweekExits(decisions) {
+  const container = document.getElementById('intraweek-exits-container');
+  if (!container) return;
+  container.innerHTML = '';
+  if (!decisions.riskExits.length) return;
+
+  const reasonLabel = {
+    STOP_LOSS: 'Stop-loss tetiklendi',
+    TARGET: 'Hedef fiyata ulaştı',
+    THESIS_BREAKER: 'İçeriden satış uyarısı',
+  };
+
+  const rows = decisions.riskExits.map(row => {
+    const pnl = row.pnl_pct != null
+      ? `<span class="${row.pnl_pct >= 0 ? 'pos-text' : 'neg-text'}">${row.pnl_pct >= 0 ? '+' : ''}${finiteNumber(row.pnl_pct).toFixed(1)}%</span>` : '';
+    const price = row.exit_price != null ? `${finiteNumber(row.exit_price).toFixed(2)} TL` : '';
+    return `
+      <div class="risk-exit-row">
+        <div>
+          <strong>${escapeHtml(row.ticker)}</strong>
+          <span class="risk-exit-reason">${reasonLabel[row.exit_reason] || escapeHtml(row.exit_reason)} • ${escapeHtml(row.exit_date || '')}</span>
+        </div>
+        <div class="risk-exit-price">${price} ${pnl}</div>
+      </div>`;
+  }).join('');
+
+  container.innerHTML = `
+    <div class="risk-exit-card">
+      <div class="risk-exit-header">
+        <span class="material-symbols-rounded">notification_important</span>
+        <div>
+          <h3>Bu Hafta Çıkıldı</h3>
+          <p>Model bu pozisyonları otomatik kapattı. Sen de aynı gün brokerında sat; yeri Pazartesi rotasyonuna kadar nakitte kalır.</p>
+        </div>
+      </div>
+      ${rows}
+    </div>`;
 }
 
 // --- PAGE 2: BROWSE ---
@@ -1880,7 +1994,7 @@ async function initApp() {
     progressFill.style.width = '90%';
     
     const SQL = await initSqlJs({
-      locateFile: filename => `./vendor/${filename}?v=11`
+      locateFile: filename => `./vendor/${filename}?v=12`
     });
 
     try {

@@ -1212,6 +1212,138 @@ body {
   color: var(--danger);
 }
 
+/* Trade-day checklist (rotation day only) */
+.trade-day-card {
+  background: linear-gradient(135deg, rgba(255, 180, 138, 0.12), rgba(167, 139, 250, 0.08));
+  border: 1px solid rgba(255, 180, 138, 0.35);
+  border-radius: 16px;
+  padding: 14px;
+  margin-bottom: 16px;
+}
+
+.trade-day-header {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.trade-day-header > .material-symbols-rounded {
+  color: var(--primary);
+  font-size: 22px;
+}
+
+.trade-day-header h3 {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.trade-day-header p {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 2px;
+  line-height: 1.4;
+}
+
+.trade-step {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface);
+  border: 1px solid var(--outline);
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin-top: 6px;
+  cursor: pointer;
+  color: var(--text);
+}
+
+.trade-step .trade-check {
+  font-size: 18px;
+  color: var(--text-muted);
+}
+
+.trade-step.trade-done .trade-check {
+  color: var(--success);
+}
+
+.trade-step.trade-done .trade-ticker {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.trade-ticker {
+  font-weight: 800;
+  font-size: 13px;
+  flex: 1;
+  text-align: left;
+}
+
+.trade-action {
+  font-weight: 900;
+  font-size: 12px;
+}
+.trade-action.trade-sell { color: var(--danger); }
+.trade-action.trade-buy { color: var(--success); }
+
+/* Intraweek risk exits */
+.risk-exit-card {
+  background-color: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.30);
+  border-radius: 16px;
+  padding: 14px;
+  margin: 16px 0;
+}
+
+.risk-exit-header {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.risk-exit-header > .material-symbols-rounded {
+  color: var(--danger);
+  font-size: 22px;
+}
+
+.risk-exit-header h3 {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--danger);
+}
+
+.risk-exit-header p {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 2px;
+  line-height: 1.4;
+}
+
+.risk-exit-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-top: 1px solid rgba(239, 68, 68, 0.15);
+  font-size: 12px;
+}
+
+.risk-exit-reason {
+  display: block;
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.risk-exit-price {
+  font-size: 11px;
+  font-weight: 700;
+  text-align: right;
+}
+
 .detail-card {
   background: var(--surface);
   border: 1px solid var(--outline);

@@ -44,6 +44,52 @@ function mixedScalePercent(value) {
   return Math.abs(parsed) <= 1 ? parsed * 100 : parsed;
 }
 
+// Sector slugs in the snapshot are internal English identifiers; map them to
+// user-facing Turkish labels (fallback: prettified slug).
+const SECTOR_LABELS_TR = {
+  agriculture: 'Tarım',
+  airlines: 'Havayolu',
+  automotive: 'Otomotiv',
+  banking_private: 'Bankacılık (Özel)',
+  banking_state: 'Bankacılık (Kamu)',
+  cement: 'Çimento',
+  chemicals: 'Kimya',
+  construction: 'İnşaat',
+  defense: 'Savunma',
+  energy_oil_gas: 'Enerji (Petrol & Gaz)',
+  energy_power: 'Enerji (Elektrik)',
+  financial_services: 'Finansal Hizmetler',
+  food_production: 'Gıda Üretimi',
+  food_retail: 'Gıda Perakendesi',
+  glass: 'Cam',
+  healthcare_pharma: 'Sağlık & İlaç',
+  holding_diversified: 'Holding (Çeşitlendirilmiş)',
+  holding_industrial: 'Holding (Sınai)',
+  industrial_manufacturing: 'Sanayi İmalatı',
+  insurance: 'Sigorta',
+  logistics: 'Lojistik',
+  media: 'Medya',
+  mining: 'Madencilik',
+  other: 'Diğer',
+  paper: 'Kağıt & Ambalaj',
+  real_estate: 'Gayrimenkul (GYO)',
+  retail_general: 'Perakende (Genel)',
+  retail_specialty: 'Perakende (Özel)',
+  steel: 'Demir-Çelik',
+  technology_hardware: 'Teknoloji (Donanım)',
+  technology_software: 'Yazılım',
+  Software: 'Yazılım',
+  telecom: 'Telekomünikasyon',
+  textiles: 'Tekstil',
+  tourism_hotels: 'Turizm & Otelcilik',
+};
+
+function sectorLabel(slug) {
+  if (!slug) return '—';
+  if (SECTOR_LABELS_TR[slug]) return SECTOR_LABELS_TR[slug];
+  return String(slug).replace(/_/g, ' ').replace(/\b\w/g, ch => ch.toUpperCase());
+}
+
 function quoteAgeMs(quoteTime) {
   const timestamp = Date.parse(String(quoteTime || ''));
   return Number.isFinite(timestamp) ? Math.max(0, Date.now() - timestamp) : Infinity;
@@ -937,12 +983,15 @@ function populateSectorDropdown() {
   const sectors = queryAll('SELECT DISTINCT sector FROM scoring_latest WHERE sector IS NOT NULL ORDER BY sector');
   const dropdown = document.getElementById('filter-sector');
   dropdown.innerHTML = '<option value="">Sektör: Tümü</option>';
-  sectors.forEach(s => {
-    const opt = document.createElement('option');
-    opt.value = s.sector;
-    opt.textContent = s.sector;
-    dropdown.appendChild(opt);
-  });
+  sectors
+    .map(s => ({ value: s.sector, label: sectorLabel(s.sector) }))
+    .sort((a, b) => a.label.localeCompare(b.label, 'tr'))
+    .forEach(({ value, label }) => {
+      const opt = document.createElement('option');
+      opt.value = value;
+      opt.textContent = label;
+      dropdown.appendChild(opt);
+    });
 }
 
 function renderBrowsePage() {
@@ -1006,9 +1055,11 @@ function renderBrowsePage() {
   }
 
   rows.forEach(row => {
-    const alphaVal = finiteNumber(row.alpha);
+    // Show the same metric the default sort uses (ranking_score, 0-100).
+    // The old "+65.2%" rendering formatted the alpha SCORE like a return
+    // and made the score-sorted list look shuffled.
+    const scoreVal = finiteNumber(row.ranking_score, finiteNumber(row.alpha));
     const riskText = escapeHtml(row.risk || 'UNKNOWN');
-    const alphaClass = alphaVal >= 0 ? 'pos-text' : 'neg-text';
 
     const item = document.createElement('div');
     item.className = 'list-item-row';
@@ -1020,11 +1071,11 @@ function renderBrowsePage() {
         <div class="company-fullname">${escapeHtml(row.name || '—')}</div>
       </div>
       <div style="text-align: right;">
-        <div class="${alphaClass} tabular-nums" style="font-weight: 800; font-size: 14px;">
-          ${alphaVal >= 0 ? '+' : ''}${alphaVal.toFixed(1)}%
+        <div class="tabular-nums" style="font-weight: 800; font-size: 14px; color: var(--primary);">
+          ${scoreVal.toFixed(1)}
         </div>
         <div style="font-size: 10px; color: var(--text-muted); font-weight: bold; margin-top:2px;">
-          ${riskText} RİSK
+          SKOR • ${riskText} RİSK
         </div>
       </div>
     `;
@@ -1101,9 +1152,18 @@ function renderMarketPage() {
   cashProgress.style.width = `${cashPct * 100}%`;
   cashProgress.style.backgroundColor = stateColorMap[cashState] || 'var(--primary)';
 
+  // cash_notes carries raw state-machine tokens (e.g. "steady"); translate
+  // the known ones instead of leaking internals to the UI.
+  const cashNoteMap = {
+    steady: 'Sinyal sabit; kademe değişikliği beklenmiyor.',
+    cooldown: 'Geçiş sonrası bekleme süresi aktif; kademe kilitli.',
+    confirming_up: 'Stres sinyali doğrulanıyor; nakit kademesi yükselebilir.',
+    confirming_down: 'Rahatlama sinyali doğrulanıyor; hisse ağırlığı artabilir.',
+  };
   const notesEl = document.getElementById('macro-cash-notes');
-  if (home.cash_notes) {
-    notesEl.textContent = home.cash_notes;
+  const rawNote = String(home.cash_notes || '').trim();
+  if (rawNote) {
+    notesEl.textContent = cashNoteMap[rawNote.toLowerCase()] || rawNote;
     notesEl.style.display = 'block';
   } else {
     notesEl.style.display = 'none';
@@ -1328,7 +1388,23 @@ function renderDecisionSummary(home, positions) {
   const cashPct = Math.max(0, Math.min(1, finiteNumber(home?.cash_pct, 0)));
   const stockPct = Math.max(0, 1 - cashPct);
   const auditSummary = getInvestorAuditSummary();
-  const { audit, baseCase, worstStress, hasWarnings, primaryWarning } = auditSummary;
+  const { audit, worstStress, hasWarnings, primaryWarning } = auditSummary;
+  let baseCase = auditSummary.baseCase;
+
+  // The investor-grade audit JSON has never shipped in the manifest (the CI
+  // backtest only maintains the NAV series), so without this fallback the
+  // card permanently shows em-dashes. Fall back to the snapshot NAV series.
+  let navFallback = false;
+  let navStartDate = null;
+  if (!audit) {
+    const perf = queryAll('SELECT date, strategy_return, benchmark_return FROM model_performance ORDER BY date ASC');
+    const navSummary = summarizeBacktestFromNav(perf);
+    if (navSummary.cases.length > 0) {
+      baseCase = navSummary.cases[0];
+      navFallback = true;
+      navStartDate = perf[0]?.date || null;
+    }
+  }
 
   const quoteStatuses = positions.map(pos => getQuoteStatus(pos.ticker).label);
   const liveLikeCount = quoteStatuses.filter(label => label !== 'SNAPSHOT').length;
@@ -1359,15 +1435,18 @@ function renderDecisionSummary(home, positions) {
 
   const badgeEl = document.getElementById('decision-audit-badge');
   if (badgeEl) {
-    badgeEl.textContent = !audit ? 'SINIRLI' : (hasWarnings ? 'AUDIT UYARI' : 'AUDIT PASS');
+    badgeEl.textContent = navFallback ? 'NAV' : (!audit ? 'SINIRLI' : (hasWarnings ? 'AUDIT UYARI' : 'AUDIT PASS'));
     badgeEl.className = !audit || hasWarnings ? 'badge badge-delayed' : 'badge badge-live';
   }
 
-  const auditNote = !audit
-    ? 'Backtest audit manifestten okunamadı; History içindeki NAV eğrisi sınırlı fikir verir.'
-    : hasWarnings
-      ? `Backtest güçlü, fakat kontrol uyarısı var: ${localizeAuditWarning(primaryWarning)}`
-      : `T+1 backtest ${formatPercent(baseCase?.alpha_pct, 1)} alpha üretiyor; yine de işlem boyutu kişisel risk limitine göre ayarlanmalı.`;
+  const navYear = navStartDate ? navStartDate.slice(0, 4) : null;
+  const auditNote = navFallback
+    ? `Getiriler snapshot NAV serisinden (${navYear ? navYear + " başlangıçlı" : 'haftalık'} simülasyon). Slippage stres testi ancak investor-grade audit yayınlanınca görünür.`
+    : !audit
+      ? 'Backtest audit manifestten okunamadı; History içindeki NAV eğrisi sınırlı fikir verir.'
+      : hasWarnings
+        ? `Backtest güçlü, fakat kontrol uyarısı var: ${localizeAuditWarning(primaryWarning)}`
+        : `T+1 backtest ${formatPercent(baseCase?.alpha_pct, 1)} alpha üretiyor; yine de işlem boyutu kişisel risk limitine göre ayarlanmalı.`;
   setTextById('decision-audit-note', auditNote);
 
   const cashAccent = cashState === 'NORMAL'
@@ -1396,8 +1475,8 @@ function openStockDetail(ticker) {
   document.getElementById('detail-in-portfolio-badge').style.display = openPos ? 'inline-flex' : 'none';
 
   // Sectoral metadata
-  const sector = score.sector || company?.sector_custom || 'Tümü';
-  document.getElementById('detail-sector').textContent = sector;
+  const sector = score.sector || company?.sector_custom || null;
+  document.getElementById('detail-sector').textContent = sectorLabel(sector);
   const freeFloatPct = mixedScalePercent(company?.free_float_pct);
   document.getElementById('detail-float').textContent = freeFloatPct !== null
     ? `${freeFloatPct.toFixed(1)}%`
@@ -1420,40 +1499,42 @@ function openStockDetail(ticker) {
   detailIndicator.title = detailQuoteStatus.title;
   detailIndicator.style.display = livePrice > 0 ? 'inline-flex' : 'none';
 
-  // Smart rebalance warnings
+  // Smart rebalance warnings — from the ACTUAL rotation decisions (same
+  // source as the Picks page), not a client-side top-10/12 re-derivation
+  // that could contradict what the selector really did.
   const banner = document.getElementById('detail-signal-banner');
   const bannerText = document.getElementById('detail-signal-text');
 
-  // Compute smart action signal specifically for this stock
-  const allPositions = queryAll('SELECT * FROM open_positions');
-  const top10Scoring = queryAll('SELECT * FROM scoring_latest WHERE alpha_core_eligible = 1 ORDER BY ranking_score DESC LIMIT 10');
-  const openTickers = new Set(allPositions.map(p => p.ticker));
-  const top12Tickers = new Set(queryAll('SELECT ticker FROM scoring_latest WHERE alpha_core_eligible = 1 ORDER BY ranking_score DESC LIMIT 12').map(t => t.ticker));
+  const allPositions = queryAll('SELECT * FROM open_positions ORDER BY sort_order ASC');
+  const detailDecisions = computeRebalanceDecisions(allPositions);
 
-  let action = 'HOLD';
-  if (!openTickers.has(ticker)) {
-    if (top10Scoring.slice(0, 5).some(t => t.ticker === ticker)) action = 'BUY';
-  } else {
-    if (!top12Tickers.has(ticker)) action = 'SELL';
-  }
-
-  if (action === 'SELL') {
+  const riskExit = detailDecisions.riskExits.find(r => r.ticker === ticker);
+  if (riskExit) {
     banner.style.display = 'flex';
     banner.className = 'signal-banner';
-    bannerText.textContent = 'Model Sinyali: Model kriterlerinden tamamen düştü, SATIM önerilir.';
-  } else if (action === 'BUY') {
+    banner.style.backgroundColor = '';
+    banner.style.borderColor = '';
+    bannerText.textContent = `Model bu pozisyonu ${riskExit.exit_date} tarihinde otomatik kapattı (${riskExit.exit_reason === 'TARGET' ? 'hedef fiyat' : riskExit.exit_reason === 'THESIS_BREAKER' ? 'içeriden satış uyarısı' : 'stop-loss'}). Elinde varsa sat.`;
+  } else if (detailDecisions.sells.some(s => s.ticker === ticker)) {
+    banner.style.display = 'flex';
+    banner.className = 'signal-banner';
+    banner.style.backgroundColor = '';
+    banner.style.borderColor = '';
+    bannerText.textContent = 'Model bu hisseyi bu haftaki rotasyonda portföyden çıkardı — SATIŞ.';
+  } else if (detailDecisions.buys.some(s => s.ticker === ticker)) {
     banner.style.display = 'flex';
     banner.className = 'signal-banner pos-text';
     banner.style.backgroundColor = 'rgba(34, 197, 94, 0.08)';
     banner.style.borderColor = 'rgba(34, 197, 94, 0.2)';
-    bannerText.textContent = 'Model Sinyali: Main V2 modeli yeni giriş listesinde, ALIM önerilir.';
+    bannerText.textContent = 'Model bu hisseyi bu haftaki rotasyonda portföye aldı — ALIŞ.';
   } else {
     banner.style.display = 'none';
   }
 
-  // Price lane slider
-  const stopLoss = score.stop_loss_price || 0.0;
-  const targetPrice = score.target_price || 0.0;
+  // Price lane slider — open positions carry the real stop/target set at
+  // selection time; scoring_latest columns are only a fallback.
+  const stopLoss = finiteNumber(openPos?.stop_loss_price ?? score.stop_loss_price, 0);
+  const targetPrice = finiteNumber(openPos?.target_price ?? score.target_price, 0);
 
   document.getElementById('lane-stop-label').textContent = `Stop: ${stopLoss > 0 ? stopLoss.toFixed(2) + ' TL' : '—'}`;
   document.getElementById('lane-target-label').textContent = `Hedef: ${targetPrice > 0 ? targetPrice.toFixed(2) + ' TL' : '—'}`;
@@ -1478,11 +1559,17 @@ function openStockDetail(ticker) {
   const thesisList = document.getElementById('detail-thesis-list');
   thesisList.innerHTML = '';
   
+  // Factor columns are 0-100 normalized percentiles; a bullet means the
+  // stock is in roughly the top quarter for that factor. (The old 0.75
+  // thresholds fired for nearly every stock, and piotroskiRaw was a typo
+  // that rendered "undefined/9".)
   const thesisItems = [];
-  if ((score.buffett || 0) >= 0.75) thesisItems.push("Güçlü Buffett Sahip Kazanç Marjı ve istikrarlı nakit yaratımı.");
-  if ((score.graham || 0) >= 0.75) thesisItems.push("Graham formülüne göre yüksek güvenlik marjı (İçsel değer iskontosu).");
-  if ((score.momentum || 0) >= 0.75) thesisItems.push("Hisse fiyatı güçlü momentum ve teknik trend desteği barındırıyor.");
-  if ((score.piotroski || 0) >= 7.0) thesisItems.push(`Finansal sağlık rasyoları mükemmel (Piotroski F-Score: ${score.piotroskiRaw}/9).`);
+  const piotroskiRaw = finiteNumber(score.piotroski_raw, null);
+  if (finiteNumber(score.buffett) >= 75) thesisItems.push("Güçlü Buffett kalite profili: reel kârlılık ve istikrarlı nakit yaratımı.");
+  if (finiteNumber(score.graham) >= 75) thesisItems.push("Graham kriterlerine göre yüksek güvenlik marjı (içsel değer iskontosu).");
+  if (finiteNumber(score.dcf_mos) >= 75) thesisItems.push("DCF değerlemesine göre belirgin güvenlik marjı.");
+  if (finiteNumber(score.momentum) >= 75) thesisItems.push("Hisse fiyatı güçlü momentum ve trend desteği barındırıyor.");
+  if (piotroskiRaw !== null && piotroskiRaw >= 7) thesisItems.push(`Finansal sağlık rasyoları güçlü (Piotroski F-Score: ${piotroskiRaw.toFixed(0)}/9).`);
   
   if (thesisItems.length === 0) {
     thesisItems.push("Şirket genel model ağırlıkları bakımından dengeli skor yapısına sahip.");
@@ -1507,7 +1594,10 @@ function openStockDetail(ticker) {
   const bench = queryOne('SELECT * FROM sector_benchmarks WHERE sector = :sector LIMIT 1', { ':sector': sector });
   const benchText = document.getElementById('detail-benchmark-text');
   if (bench) {
-    benchText.textContent = `Şirket, kendi sektöründe yer alan ${bench.company_count} aktif firma ile karşılaştırılmıştır.`;
+    const peerCount = finiteNumber(bench.company_count, 0);
+    benchText.textContent = peerCount > 0
+      ? `Şirket, ${sectorLabel(sector)} sektöründeki ${peerCount.toFixed(0)} aktif firma ile karşılaştırılmıştır.`
+      : `Şirket, ${sectorLabel(sector)} sektör medyanı ile karşılaştırılmıştır.`;
     document.getElementById('bench-company-roe').textContent = metrics?.roe_adjusted ? `${(metrics.roe_adjusted * 100).toFixed(1)}%` : '—';
     document.getElementById('bench-sector-roe').textContent = bench.roe_median ? `${(bench.roe_median * 100).toFixed(1)}%` : '—';
     document.getElementById('bench-company-roa').textContent = metrics?.roa_adjusted ? `${(metrics.roa_adjusted * 100).toFixed(1)}%` : '—';
@@ -1737,20 +1827,25 @@ function setAuditRow(elementId, text, status = 'warn') {
 
 function renderBacktestAuditPanel(perfPoints) {
   const audit = window.feedBacktestAudit || summarizeBacktestFromNav(perfPoints);
+  const isNavFallback = Boolean(audit.fromSnapshotFallback);
   const gates = new Map((audit.gates || []).map(gate => [gate.key, gate]));
   const baseCase = (audit.cases || []).find(item => item.case === 'base') || (audit.cases || [])[0] || {};
-  const worstStress = (audit.cases || []).slice().reverse().find(item => item.case && item.case !== 'base') || null;
+  // The NAV-fallback summary has a single 'snapshot_nav' pseudo-case; it must
+  // not be mistaken for a slippage stress case (used to render the base alpha
+  // as "alpha @ 0.00%" nonsense).
+  const worstStress = (audit.cases || []).slice().reverse()
+    .find(item => item.case && item.case !== 'base' && item.case !== 'snapshot_nav') || null;
 
   const executionGate = gates.get('execution') || {};
-  const executionMode = audit.execution_mode === 'next_open'
-    ? 'T+1 next open'
-    : (audit.execution_mode || 'NAV fallback');
+  const executionMode = isNavFallback
+    ? '—'
+    : (audit.execution_mode === 'next_open' ? 'T+1 next open' : (audit.execution_mode || '—'));
   setAuditRow('bt-audit-execution', executionMode, executionGate.status || 'warn');
 
   const slippageGate = gates.get('slippage') || {};
   const slippageText = worstStress
     ? `${formatPercent(worstStress.alpha_pct, 1)} alpha @ ${Number(worstStress.friction_round_trip_pct || 0).toFixed(2)}%`
-    : 'Stres yok';
+    : (isNavFallback ? '—' : 'Stres yok');
   setAuditRow('bt-audit-slippage', slippageText, slippageGate.status || 'warn');
 
   const drawdownGate = gates.get('drawdown') || {};
@@ -1760,7 +1855,7 @@ function renderBacktestAuditPanel(perfPoints) {
   const jumpCount = audit.price_jump_audit?.flag_count;
   setAuditRow(
     'bt-audit-price-jumps',
-    Number.isFinite(Number(jumpCount)) ? `${jumpCount} bayrak` : 'Bilinmiyor',
+    Number.isFinite(Number(jumpCount)) ? `${jumpCount} bayrak` : '—',
     jumpGate.status || 'warn'
   );
 
@@ -1768,7 +1863,7 @@ function renderBacktestAuditPanel(perfPoints) {
   const inactiveCount = audit.survivorship_audit?.inactive_priced_company_count;
   setAuditRow(
     'bt-audit-survivorship',
-    Number.isFinite(Number(inactiveCount)) ? `${inactiveCount} pasif hisse` : 'Eksik',
+    Number.isFinite(Number(inactiveCount)) ? `${inactiveCount} pasif hisse` : '—',
     survivalGate.status || 'warn'
   );
 
@@ -1994,7 +2089,7 @@ async function initApp() {
     progressFill.style.width = '90%';
     
     const SQL = await initSqlJs({
-      locateFile: filename => `./vendor/${filename}?v=12`
+      locateFile: filename => `./vendor/${filename}?v=13`
     });
 
     try {

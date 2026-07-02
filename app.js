@@ -543,16 +543,29 @@ function buildWeeklyPerformanceRecords(dbPositions, livePrices) {
     ORDER BY selection_date ASC, exit_date ASC, sort_order ASC
   `, { ':startDate': LIVE_TRACKING_START_DATE });
 
-  const periods = new Map();
+  const activeStart = dbPositions
+    .map(position => position.selection_date)
+    .filter(Boolean)
+    .sort()
+    .pop() || null;
+
+  // Group by selection COHORT (rotation date) only. The old
+  // `selection|exit` pair key split a cohort into two pseudo-weeks when
+  // the pipeline stop-exited one name midweek (auto exits are live since
+  // 2026-07-02), double-counting that week in the cumulative product.
+  // A stopped position keeps its own realized exit; the freed slot sits
+  // in cash, so the equal-weight mean of per-position returns is exact.
+  // The still-active cohort is excluded here — it's rendered by the live
+  // block below together with its already-realized exits.
+  const cohorts = new Map();
   completedRows.forEach(row => {
-    const key = `${row.selection_date}|${row.exit_date}`;
-    if (!periods.has(key)) periods.set(key, []);
-    periods.get(key).push(row);
+    if (activeStart && row.selection_date === activeStart) return;
+    if (!cohorts.has(row.selection_date)) cohorts.set(row.selection_date, []);
+    cohorts.get(row.selection_date).push(row);
   });
 
   const records = [];
-  periods.forEach((rows, key) => {
-    const [startDate, endDate] = key.split('|');
+  cohorts.forEach((rows, startDate) => {
     const stockRecords = rows
       .filter(row => row.entry_price > 0 && row.exit_price != null)
       .map(row => ({
@@ -563,6 +576,7 @@ function buildWeeklyPerformanceRecords(dbPositions, livePrices) {
       }));
     if (stockRecords.length === 0) return;
 
+    const endDate = rows.map(row => row.exit_date).sort().pop();
     const bistStart = getPriceOnOrBefore('XU100', startDate);
     const bistEnd = getPriceOnOrBefore('XU100', endDate);
     if (!(bistStart > 0) || bistEnd == null) return;
@@ -579,14 +593,8 @@ function buildWeeklyPerformanceRecords(dbPositions, livePrices) {
     });
   });
 
-  const activeStart = dbPositions
-    .map(position => position.selection_date)
-    .filter(Boolean)
-    .sort()
-    .pop();
-
   if (activeStart && activeStart >= LIVE_TRACKING_START_DATE) {
-    const activeStocks = dbPositions
+    const liveStocks = dbPositions
       .filter(position => position.selection_date === activeStart)
       .map(position => {
         const entry = position.entry_price || position.current_price;
@@ -600,6 +608,20 @@ function buildWeeklyPerformanceRecords(dbPositions, livePrices) {
         };
       })
       .filter(Boolean);
+
+    // Positions from this cohort that the pipeline already closed
+    // (stop-loss / target) contribute their REALIZED return to the week.
+    const realizedStocks = completedRows
+      .filter(row => row.selection_date === activeStart
+        && row.entry_price > 0 && row.exit_price != null)
+      .map(row => ({
+        ticker: row.ticker,
+        entryPrice: row.entry_price,
+        exitPrice: row.exit_price,
+        returnPct: row.exit_price / row.entry_price - 1.0
+      }));
+
+    const activeStocks = [...liveStocks, ...realizedStocks];
 
     const bistStart = getPriceOnOrBefore('XU100', activeStart);
     const latestPriceDate = queryOne('SELECT latest_price_date FROM snapshot_metadata WHERE id = 1')?.latest_price_date;
@@ -2089,7 +2111,7 @@ async function initApp() {
     progressFill.style.width = '90%';
     
     const SQL = await initSqlJs({
-      locateFile: filename => `./vendor/${filename}?v=13`
+      locateFile: filename => `./vendor/${filename}?v=14`
     });
 
     try {

@@ -797,7 +797,7 @@ function renderPicksPage() {
   const finalSignals = [...decisions.sells, ...decisions.buys, ...decisions.holds];
 
   if (finalSignals.length === 0) {
-    signalsListEl.innerHTML = `<p style="color:var(--text-muted); font-size:11px; font-style:italic;">Haftalık rebalans kararı bulunmuyor.</p>`;
+    signalsListEl.innerHTML = `<p style="color:var(--text-muted); font-size:11px; font-style:italic;">Rotasyon kararı bulunmuyor.</p>`;
   } else {
     finalSignals.forEach(sig => {
       const colorMap = { BUY: 'var(--success)', SELL: 'var(--danger)', HOLD: 'var(--secondary)' };
@@ -818,6 +818,31 @@ function renderPicksPage() {
       signalsListEl.appendChild(row);
     });
   }
+}
+
+// --- Rotation cadence helpers ---------------------------------------------
+// Cadence is published by the backend in manifest.rotation (bi-weekly since
+// 2026-07-04, C1 calibration). Falls back to 2 weeks when the manifest
+// predates the field. Next rotation = last rotation Monday + N weeks.
+function getRotationInfo(rotationDate) {
+  const weeks = Number(window.feedManifest?.rotation?.rotation_weeks) > 0
+    ? Number(window.feedManifest.rotation.rotation_weeks) : 2;
+  let next = null;
+  if (rotationDate) {
+    const d = new Date(rotationDate + 'T00:00:00');
+    if (!Number.isNaN(d.getTime())) {
+      d.setDate(d.getDate() + weeks * 7);
+      next = d;
+    }
+  }
+  if (!next && window.feedManifest?.rotation?.next_rotation_date) {
+    const d = new Date(window.feedManifest.rotation.next_rotation_date + 'T00:00:00');
+    if (!Number.isNaN(d.getTime())) next = d;
+  }
+  const nextLabel = next
+    ? next.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', weekday: 'long' })
+    : null;
+  return { weeks, nextLabel };
 }
 
 // --- Rebalance decisions from actual position data -----------------------
@@ -850,12 +875,12 @@ function computeRebalanceDecisions(positions) {
     if (pos.selection_date === result.rotationDate && !exitedTickers.has(pos.ticker)) {
       result.buys.push({
         ticker: pos.ticker, action: 'BUY',
-        reason: `Haftalık rotasyon: portföye yeni girdi (referans ${finiteNumber(pos.entry_price).toFixed(2)} TL — Cuma kapanışı).`,
+        reason: `Rotasyon: portföye yeni girdi (referans ${finiteNumber(pos.entry_price).toFixed(2)} TL — Cuma kapanışı). Aldıktan sonra 2 hafta tut; stop uyarısı gelmedikçe sonraki rotasyona kadar satma.`,
       });
     } else {
       result.holds.push({
         ticker: pos.ticker, action: 'HOLD',
-        reason: 'Rotasyonda korundu; işlem gerekmez.',
+        reason: 'Rotasyonda korundu; işlem gerekmez. Sonraki rotasyona kadar tutmaya devam et.',
       });
     }
   });
@@ -867,7 +892,7 @@ function computeRebalanceDecisions(positions) {
     const pnl = row.pnl_pct != null ? ` (${row.pnl_pct >= 0 ? '+' : ''}${finiteNumber(row.pnl_pct).toFixed(1)}%)` : '';
     result.sells.push({
       ticker: row.ticker, action: 'SELL',
-      reason: `Haftalık rotasyonda çıkarıldı${pnl}.`,
+      reason: `Rotasyonda çıkarıldı${pnl}.`,
     });
   });
 
@@ -918,12 +943,16 @@ function renderTradeDayCard(decisions) {
       </button>`;
   }).join('');
 
+  const rotation = getRotationInfo(decisions.rotationDate);
+  const nextNote = rotation.nextLabel
+    ? ` Bugün aldıklarını ${rotation.weeks} hafta tut — sonraki rotasyon: ${rotation.nextLabel}.`
+    : ` Bugün aldıklarını ${rotation.weeks} hafta tut.`;
   card.innerHTML = `
     <div class="trade-day-header">
       <span class="material-symbols-rounded">task_alt</span>
       <div>
         <h3>Bugün İşlem Günü</h3>
-        <p>Önce SAT, sonra AL. Emirleri açılışta ver; canlı fiyat etiketine bak. Satıra dokununca tamamlandı işaretlenir.</p>
+        <p>Önce SAT, sonra AL. Emirleri açılışta ver; canlı fiyat etiketine bak. Satıra dokununca tamamlandı işaretlenir.${nextNote}</p>
       </div>
     </div>
     ${rows}`;
@@ -973,8 +1002,8 @@ function renderIntraweekExits(decisions) {
       <div class="risk-exit-header">
         <span class="material-symbols-rounded">notification_important</span>
         <div>
-          <h3>Bu Hafta Çıkıldı</h3>
-          <p>Model bu pozisyonları otomatik kapattı. Sen de aynı gün brokerında sat; yeri Pazartesi rotasyonuna kadar nakitte kalır.</p>
+          <h3>Rotasyon Arasında Çıkıldı</h3>
+          <p>Model bu pozisyonları otomatik kapattı (stop/hedef). Sen de aynı gün brokerında sat; yeri bir sonraki rotasyona kadar nakitte kalır.</p>
         </div>
       </div>
       ${rows}
@@ -1259,8 +1288,8 @@ function renderHistoryPage() {
     card.innerHTML = `
       <div class="collapsible-header">
         <div class="collapsible-header-left">
-          <span class="collapsible-header-title">${safeWeekLabel} Haftası</span>
-          <span class="collapsible-header-subtitle ${diffClass}">Haftalık Fark: ${diff >= 0 ? '+' : ''}${diff.toFixed(2)}%</span>
+          <span class="collapsible-header-title">${safeWeekLabel} Dönemi</span>
+          <span class="collapsible-header-subtitle ${diffClass}">Dönem Farkı: ${diff >= 0 ? '+' : ''}${diff.toFixed(2)}%</span>
         </div>
         <div class="collapsible-header-right">
           ${!rec.isCompleted ? '<span class="badge badge-live">AKTİF</span>' : ''}
@@ -1434,7 +1463,7 @@ function renderDecisionSummary(home, positions) {
     ? `Fiyat kaynağı: ${liveLikeCount}/${positions.length} canlıya yakın`
     : 'Fiyat kaynağı: portföy boş';
 
-  let weeklyRule = 'AL/SAT/TUT sinyallerine göre 5 hisse hedefini koru.';
+  let weeklyRule = 'AL/SAT/TUT sinyallerine göre 5 hisse hedefini koru; aldığını sonraki rotasyona kadar (2 hafta) tut.';
   if (positions.length === 0) {
     weeklyRule = 'Portföy boş; veri yenile ve Main V2 seçimlerini kontrol et.';
   } else if (cashState === 'RISK_OFF') {
@@ -1542,13 +1571,13 @@ function openStockDetail(ticker) {
     banner.className = 'signal-banner';
     banner.style.backgroundColor = '';
     banner.style.borderColor = '';
-    bannerText.textContent = 'Model bu hisseyi bu haftaki rotasyonda portföyden çıkardı — SATIŞ.';
+    bannerText.textContent = 'Model bu hisseyi bu rotasyonda portföyden çıkardı — SATIŞ.';
   } else if (detailDecisions.buys.some(s => s.ticker === ticker)) {
     banner.style.display = 'flex';
     banner.className = 'signal-banner pos-text';
     banner.style.backgroundColor = 'rgba(34, 197, 94, 0.08)';
     banner.style.borderColor = 'rgba(34, 197, 94, 0.2)';
-    bannerText.textContent = 'Model bu hisseyi bu haftaki rotasyonda portföye aldı — ALIŞ.';
+    bannerText.textContent = 'Model bu hisseyi bu rotasyonda portföye aldı — ALIŞ. 2 hafta tut; sonraki rotasyona kadar satma (stop uyarısı hariç).';
   } else {
     banner.style.display = 'none';
   }
@@ -2111,7 +2140,7 @@ async function initApp() {
     progressFill.style.width = '90%';
     
     const SQL = await initSqlJs({
-      locateFile: filename => `./vendor/${filename}?v=14`
+      locateFile: filename => `./vendor/${filename}?v=15`
     });
 
     try {

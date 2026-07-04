@@ -19,7 +19,7 @@
 
   <!-- Icons for PWA -->
   <link rel="apple-touch-icon" href="./icons/icon-192.png">
-  <link rel="manifest" href="./manifest.webmanifest?v=14">
+  <link rel="manifest" href="./manifest.webmanifest?v=15">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,15 +30,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
 
   <!-- Stylesheet -->
-  <link rel="stylesheet" href="./index.css?v=14">
+  <link rel="stylesheet" href="./index.css?v=15">
 
   <!-- Local runtime dependencies: first launch must not depend on a CDN. -->
-  <script src="./vendor/pako.min.js?v=14"></script>
-  <script src="./vendor/sql-wasm.js?v=14"></script>
-  <script src="./vendor/apexcharts.min.js?v=14"></script>
+  <script src="./vendor/pako.min.js?v=15"></script>
+  <script src="./vendor/sql-wasm.js?v=15"></script>
+  <script src="./vendor/apexcharts.min.js?v=15"></script>
 
   <!-- Main Application Logic (deferred) -->
-  <script src="./app.js?v=14" defer></script>
+  <script src="./app.js?v=15" defer></script>
 </head>
 <body>
 
@@ -90,11 +90,11 @@
             <span id="picks-count-badge" class="badge badge-accent">0 Hisse</span>
           </div>
 
-          <div class="decision-summary-card" aria-label="Haftalık karar özeti">
+          <div class="decision-summary-card" aria-label="Rotasyon karar özeti">
             <div class="decision-topline">
               <div>
                 <span class="label">Main V2 Karar Özeti</span>
-                <h3 id="decision-weekly-rule">Haftalık rebalans planı yükleniyor</h3>
+                <h3 id="decision-weekly-rule">Rotasyon planı yükleniyor</h3>
               </div>
               <span id="decision-audit-badge" class="badge badge-delayed">AUDIT</span>
             </div>
@@ -146,7 +146,7 @@
               <span class="material-symbols-rounded tint-tertiary">psychology</span>
               <h3>Zeki Sinyaller</h3>
             </div>
-            <p class="signals-desc">Modelin gerçekleşen haftalık rotasyon kararları (pozisyon verisinden).</p>
+            <p class="signals-desc">Modelin gerçekleşen rotasyon kararları (pozisyon verisinden). Rotasyon 2 haftada bir Pazartesi yapılır; alınan hisse sonraki rotasyona kadar tutulur.</p>
             <div id="signals-list" class="list-container spaced-y">
               <!-- Dynamically populated suggested actions -->
             </div>
@@ -311,7 +311,7 @@
 
           <!-- Weekly History Lists -->
           <div class="section-title-row">
-            <h2>Haftalık Performanslar</h2>
+            <h2>Rotasyon Dönemi Performansları</h2>
           </div>
           <div id="weekly-history-list" class="spaced-y">
             <!-- Dynamically populated weekly history records -->
@@ -330,11 +330,11 @@
             <div class="usage-flow">
               <div class="flow-step">
                 <span>1</span>
-                <p><strong>Pazartesi sabahı uygulamayı aç.</strong> Portföy yalnızca Pazartesi rotasyonunda değişir. Rotasyon günü en üstte "İşlem Günü" kartı çıkar: önce SAT, sonra AL emirlerini borsa açılışında (10:00) ver. Uygulamadaki giriş fiyatı Cuma kapanışıdır; senin alışın açılış fiyatı olur, küçük fark normaldir.</p>
+                <p><strong>Rotasyon 2 haftada bir Pazartesi yapılır.</strong> O gün en üstte "İşlem Günü" kartı çıkar (sonraki rotasyon tarihi kartta yazar): önce SAT, sonra AL emirlerini borsa açılışında (10:00) ver. Uygulamadaki giriş fiyatı Cuma kapanışıdır; senin alışın açılış fiyatı olur, küçük fark normaldir. <strong>Aldığın hisseyi 2 hafta tutacaksın</strong> — bu bilinçli bir tasarım: 2018-2026 backtestinde 2 haftalık tutma, haftalık al-sata göre hem getiride hem risk metriklerinde net üstün çıktı.</p>
               </div>
               <div class="flow-step">
                 <span>2</span>
-                <p><strong>Hafta içi yalnızca kırmızı uyarılara tepki ver.</strong> Model stop-loss / hedef fiyat tetiklenirse pozisyonu otomatik kapatır ve ekranda "Bu Hafta Çıkıldı" bölümünde gösterir — aynı gün sen de sat. Uyarı yoksa hiçbir şey yapma; skor oynamalarına göre işlem yapma.</p>
+                <p><strong>Rotasyonlar arasında yalnızca kırmızı uyarılara tepki ver.</strong> Model stop-loss / hedef fiyat tetiklenirse pozisyonu otomatik kapatır ve ekranda "Rotasyon Arasında Çıkıldı" bölümünde gösterir — aynı gün sen de sat; yeri sonraki rotasyona kadar nakitte kalır. Uyarı yoksa hiçbir şey yapma; ara haftadaki skor oynamalarına göre işlem yapma, erken satış modelin ölçülmüş avantajını bozar.</p>
               </div>
               <div class="flow-step">
                 <span>3</span>
@@ -410,7 +410,7 @@
             <h3>Portföy Yönetim Kuralları</h3>
             <ul class="about-rules-list">
               <li><strong>Konsantre Portföy:</strong> Model her rebalansta en fazla 5 ideal şirkete odaklanır; sektör başına en fazla 2 hisse ve yüksek korelasyonlu çiftler filtrelenir.</li>
-              <li><strong>Haftalık Kontrol:</strong> Portföy pozisyonları her hafta pazartesi sabahı güncellenen veritabanı ile rebalans işlemine tabi tutulur.</li>
+              <li><strong>2 Haftalık Rotasyon:</strong> Portföy 2 haftada bir Pazartesi sabahı rebalans edilir; alınan hisse bir sonraki rotasyona kadar (2 hafta) tutulur. Kadans, 2018-2026 walk-forward backtest kalibrasyonuyla seçildi (haftalık al-sata göre daha yüksek getiri, daha düşük drawdown ve yarıya yakın işlem maliyeti). Stop-loss kontrolü ise her gün çalışmaya devam eder.</li>
               <li><strong>Turnover Koruması:</strong> Portföydeki hisse, üst sıralamadan belirgin şekilde düşmedikçe modelde tutulur; gereksiz al-sat maliyeti azaltılır.</li>
               <li><strong>Otomatik Stop-Loss:</strong> Fiyat ATR-tabanlı stop seviyesinin (girişten ~%10-25) altına inerse veya hedef fiyata ulaşırsa model pozisyonu hafta içinde otomatik kapatır ve ekranda gösterir.</li>
               <li><strong>Nakit Koruma:</strong> Piyasa ve makro stres birleşince model otomatik olarak nakit koruma kademelerini (CAUTION, DEFENSIVE, RISK_OFF) etkinleştirir; kademeler yapışkandır, günlük gürültüyle değişmez.</li>

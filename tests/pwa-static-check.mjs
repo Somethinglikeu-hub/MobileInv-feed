@@ -31,9 +31,9 @@ for (const file of requiredFiles) {
 }
 
 for (const localRuntime of [
-  "./vendor/pako.min.js?v=14",
-  "./vendor/sql-wasm.js?v=14",
-  "./vendor/apexcharts.min.js?v=14",
+  "./vendor/pako.min.js?v=15",
+  "./vendor/sql-wasm.js?v=15",
+  "./vendor/apexcharts.min.js?v=15",
 ]) {
   if (!indexHtml.includes(localRuntime)) {
     throw new Error(`index.html does not reference local runtime: ${localRuntime}`);
@@ -44,8 +44,8 @@ if (/cdnjs\.cloudflare\.com\/ajax\/libs\/(?:pako|sql\.js)|cdn\.jsdelivr\.net\/np
   throw new Error("Core PWA runtime still depends on an external CDN.");
 }
 
-if (!serviceWorker.includes("bist-picker-shell-v14")) {
-  throw new Error("Service worker cache version was not bumped to v14.");
+if (!serviceWorker.includes("bist-picker-shell-v15")) {
+  throw new Error("Service worker cache version was not bumped to v15.");
 }
 
 if (!appJs.includes("Snapshot bütünlük kontrolü başarısız")) {
@@ -60,8 +60,12 @@ if (!appJs.includes("MobileInv-feed/live-data/live_prices.json")) {
   throw new Error("PWA near-live price feed URL is missing.");
 }
 
-if (!appJs.includes("./vendor/${filename}?v=14")) {
-  throw new Error("sql.js WASM locateFile cache version was not bumped to v14.");
+if (!appJs.includes("./vendor/${filename}?v=15")) {
+  throw new Error("sql.js WASM locateFile cache version was not bumped to v15.");
+}
+
+if (!appJs.includes("sonraki rotasyona kadar") || !indexHtml.includes("2 haftada bir Pazartesi")) {
+  throw new Error("Bi-weekly rotation hold-rule copy is missing from the PWA.");
 }
 
 if (appJs.includes("loadSimulatedLivePrices")) {

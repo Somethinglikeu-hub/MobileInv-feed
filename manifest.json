@@ -1,10 +1,15 @@
 {
-  "exported_at": "2026-07-03T17:51:03+00:00",
+  "exported_at": "2026-07-06T11:22:54+00:00",
+  "rotation": {
+    "cycle_start": "2026-06-29",
+    "next_rotation_date": "2026-07-13",
+    "rotation_weeks": 2
+  },
   "snapshot": {
     "compression": "gzip",
     "filename": "mobile_snapshot.db.gz",
-    "sha256": "c7ea950169c271f1f0989ba3958414bca2b05a4287429ef97e9cb4f10af075df",
-    "size_bytes": 10002633,
+    "sha256": "ad4bfcd753e088015cd154baeeb9de6ee3d8848703eaa12c2c647c11fbe87ef0",
+    "size_bytes": 9964202,
     "url": "https://raw.githubusercontent.com/Somethinglikeu-hub/MobileInv-feed/gh-pages/mobile_snapshot.db.gz"
   },
   "snapshot_version": 12

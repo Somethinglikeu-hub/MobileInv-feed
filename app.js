@@ -534,7 +534,145 @@ function getLatestSnapshotPrice(ticker) {
 
 const LIVE_TRACKING_START_DATE = '2026-05-21';
 
+// B1 continuity (v16): held positions keep their ORIGINAL selection_date and
+// no longer produce an exit row every rotation, so cohort-by-selection_date
+// grouping under-counts held names. When the snapshot carries
+// portfolio_cycle_marks (one ref price per position per rotation), period
+// records are built mark-to-mark; legacy snapshots fall back to the old
+// cohort logic below.
 function buildWeeklyPerformanceRecords(dbPositions, livePrices) {
+  let marks = [];
+  try {
+    marks = queryAll(`
+      SELECT * FROM portfolio_cycle_marks
+      WHERE cycle_date >= :startDate
+      ORDER BY cycle_date ASC, sort_order ASC
+    `, { ':startDate': LIVE_TRACKING_START_DATE });
+  } catch { /* pre-B1 snapshot — no marks table */ }
+
+  if (marks.length > 0) {
+    // Marks start at the first post-B1 rotation; earlier periods still come
+    // from the legacy cohort reconstruction so history doesn't lose them.
+    const firstMarkDate = marks[0].cycle_date;
+    const markRecords = buildCycleMarkRecords(marks, dbPositions, livePrices);
+    const legacyRecords = buildLegacyCohortRecords(dbPositions, livePrices)
+      .filter(rec => rec.weekStartDate < firstMarkDate && rec.isCompleted);
+    return [...legacyRecords, ...markRecords]
+      .sort((a, b) => a.weekStartDate.localeCompare(b.weekStartDate));
+  }
+  return buildLegacyCohortRecords(dbPositions, livePrices);
+}
+
+function buildCycleMarkRecords(marks, dbPositions, livePrices) {
+  const exitRows = queryAll(`
+    SELECT * FROM portfolio_history
+    WHERE exit_date IS NOT NULL AND exit_date > :startDate
+    ORDER BY exit_date ASC, sort_order ASC
+  `, { ':startDate': LIVE_TRACKING_START_DATE });
+
+  const byCycle = new Map();
+  marks.forEach(mark => {
+    if (!byCycle.has(mark.cycle_date)) byCycle.set(mark.cycle_date, []);
+    byCycle.get(mark.cycle_date).push(mark);
+  });
+  const cycleDates = [...byCycle.keys()].sort();
+  const records = [];
+
+  const findExit = (ticker, afterDate, uptoDate) => exitRows.find(row =>
+    row.ticker === ticker && row.exit_date > afterDate
+    && (!uptoDate || row.exit_date <= uptoDate));
+
+  // Completed periods: consecutive mark dates C1 -> C2. Per stock the period
+  // return is (next mark ref | realized exit) / this mark ref.
+  for (let i = 0; i < cycleDates.length - 1; i++) {
+    const c1 = cycleDates[i];
+    const c2 = cycleDates[i + 1];
+    const nextByTicker = new Map(byCycle.get(c2).map(m => [m.ticker, m]));
+    const stockRecords = [];
+    byCycle.get(c1).forEach(mark => {
+      const ref = finiteNumber(mark.ref_price);
+      if (!(ref > 0)) return;
+      const nextMark = nextByTicker.get(mark.ticker);
+      let endPrice = nextMark ? finiteNumber(nextMark.ref_price, null) : null;
+      if (endPrice == null) {
+        const exitRow = findExit(mark.ticker, c1, c2);
+        if (exitRow && exitRow.exit_price != null) endPrice = finiteNumber(exitRow.exit_price, null);
+      }
+      if (endPrice == null || !(endPrice > 0)) return;
+      stockRecords.push({
+        ticker: mark.ticker,
+        entryPrice: ref,
+        exitPrice: endPrice,
+        returnPct: endPrice / ref - 1.0,
+      });
+    });
+    if (stockRecords.length === 0) continue;
+
+    const bistStart = getPriceOnOrBefore('XU100', c1);
+    const bistEnd = getPriceOnOrBefore('XU100', c2);
+    if (!(bistStart > 0) || bistEnd == null) continue;
+    records.push({
+      weekStartDate: c1,
+      weekEndDate: c2,
+      positions: stockRecords,
+      portfolioReturn: stockRecords.reduce((s, r) => s + r.returnPct, 0) / stockRecords.length,
+      bist100StartPrice: bistStart,
+      bist100EndPrice: bistEnd,
+      bist100Return: bistEnd / bistStart - 1.0,
+      isCompleted: true,
+    });
+  }
+
+  // Active period: latest marks vs live/current prices, plus positions the
+  // pipeline already closed after that rotation (realized returns).
+  const cLast = cycleDates[cycleDates.length - 1];
+  const posByTicker = new Map(dbPositions.map(p => [p.ticker, p]));
+  const activeStocks = [];
+  byCycle.get(cLast).forEach(mark => {
+    const ref = finiteNumber(mark.ref_price);
+    if (!(ref > 0)) return;
+    const pos = posByTicker.get(mark.ticker);
+    if (pos) {
+      const latest = finiteNumber(livePrices[mark.ticker] ?? pos.current_price, null);
+      if (latest != null && latest > 0) {
+        activeStocks.push({
+          ticker: mark.ticker, entryPrice: ref, exitPrice: latest,
+          returnPct: latest / ref - 1.0,
+        });
+      }
+      return;
+    }
+    const exitRow = findExit(mark.ticker, cLast, null);
+    if (exitRow && exitRow.exit_price != null && finiteNumber(exitRow.exit_price) > 0) {
+      activeStocks.push({
+        ticker: mark.ticker, entryPrice: ref,
+        exitPrice: finiteNumber(exitRow.exit_price),
+        returnPct: finiteNumber(exitRow.exit_price) / ref - 1.0,
+      });
+    }
+  });
+
+  const bistStart = getPriceOnOrBefore('XU100', cLast);
+  const latestPriceDate = queryOne('SELECT latest_price_date FROM snapshot_metadata WHERE id = 1')?.latest_price_date;
+  const endDate = latestPriceDate || cLast;
+  const bistEnd = livePrices.XU100 || getPriceOnOrBefore('XU100', endDate);
+  if (activeStocks.length > 0 && bistStart > 0 && bistEnd != null) {
+    records.push({
+      weekStartDate: cLast,
+      weekEndDate: endDate,
+      positions: activeStocks,
+      portfolioReturn: activeStocks.reduce((s, r) => s + r.returnPct, 0) / activeStocks.length,
+      bist100StartPrice: bistStart,
+      bist100EndPrice: bistEnd,
+      bist100Return: bistEnd / bistStart - 1.0,
+      isCompleted: false,
+    });
+  }
+
+  return records.sort((a, b) => a.weekStartDate.localeCompare(b.weekStartDate));
+}
+
+function buildLegacyCohortRecords(dbPositions, livePrices) {
   const completedRows = queryAll(`
     SELECT * FROM portfolio_history
     WHERE selection_date >= :startDate
@@ -754,11 +892,24 @@ function renderPicksPage() {
       const live = finiteNumber(window.livePrices[pos.ticker] ?? pos.current_price, 0);
       const rawEntry = finiteNumber(pos.entry_price);
       const entry = rawEntry > 0 ? rawEntry : (live > 0 ? live : 1.0);
+      // B1 continuity: entry_price is the ORIGINAL cost basis, so this is
+      // the real P&L since entry (may span multiple rotations).
       const pnl = ((live / entry) - 1) * 100;
       const pnlClass = pnl >= 0 ? 'pos-text' : 'neg-text';
       const safeTicker = escapeHtml(pos.ticker);
       const safeName = escapeHtml(pos.fullname || pos.name || '—');
       const quoteStatus = getQuoteStatus(pos.ticker);
+
+      // Period P&L (since the latest rotation) — only shown when the
+      // position is actually carried from an earlier rotation.
+      const cycleRef = finiteNumber(pos.cycle_ref_price, null);
+      let periodLine = '';
+      if (cycleRef != null && cycleRef > 0 && live > 0
+          && pos.cycle_ref_date && pos.cycle_ref_date !== pos.selection_date) {
+        const periodPnl = ((live / cycleRef) - 1) * 100;
+        const periodClass = periodPnl >= 0 ? 'pos-text' : 'neg-text';
+        periodLine = `<div class="${periodClass} tabular-nums" style="font-size:9px; margin-top:1px;">Dönem: ${periodPnl >= 0 ? '+' : ''}${periodPnl.toFixed(1)}%</div>`;
+      }
 
       const row = document.createElement('div');
       row.className = 'list-item-row';
@@ -775,6 +926,7 @@ function renderPicksPage() {
           <div class="${pnlClass} tabular-nums" style="font-size:11px; font-weight:800; margin-top:2px;">
             ${pnl >= 0 ? '+' : ''}${pnl.toFixed(2)}%
           </div>
+          ${periodLine}
         </div>
       `;
       row.addEventListener('click', () => openStockDetail(pos.ticker));
@@ -857,10 +1009,16 @@ function getRotationInfo(rotationDate) {
 function computeRebalanceDecisions(positions) {
   const result = { rotationDate: null, buys: [], holds: [], sells: [], riskExits: [] };
 
-  const rotationRow = queryOne(`
-    SELECT MAX(selection_date) AS d FROM open_positions WHERE portfolio = 'ALPHA'
-  `);
-  result.rotationDate = rotationRow?.d || null;
+  // B1 continuity (v16): held positions keep their original selection_date,
+  // so the latest rotation is MAX(cycle_ref_date). Computed in JS from the
+  // already-loaded rows — queryOne swallows SQL errors, so a COALESCE(...)
+  // over a column that legacy snapshots lack would silently return null.
+  // Missing column -> undefined -> falls back to selection_date per row.
+  result.rotationDate = positions
+    .map(pos => pos.cycle_ref_date || pos.selection_date)
+    .filter(Boolean)
+    .sort()
+    .pop() || null;
   if (!result.rotationDate) return result;
 
   const exitedOnRotation = queryAll(`
@@ -878,9 +1036,13 @@ function computeRebalanceDecisions(positions) {
         reason: `Rotasyon: portföye yeni girdi (referans ${finiteNumber(pos.entry_price).toFixed(2)} TL — Cuma kapanışı). Aldıktan sonra 2 hafta tut; stop uyarısı gelmedikçe sonraki rotasyona kadar satma.`,
       });
     } else {
+      // Continuity: original entry date + real P&L since entry make the
+      // hold instruction concrete.
+      const heldSince = pos.selection_date
+        ? ` ${formatDateToTurkish(pos.selection_date)}'den beri portföyde` : '';
       result.holds.push({
         ticker: pos.ticker, action: 'HOLD',
-        reason: 'Rotasyonda korundu; işlem gerekmez. Sonraki rotasyona kadar tutmaya devam et.',
+        reason: `Rotasyonda korundu; işlem gerekmez.${heldSince ? heldSince + '.' : ''} Sonraki rotasyona kadar tutmaya devam et.`,
       });
     }
   });
@@ -2140,7 +2302,7 @@ async function initApp() {
     progressFill.style.width = '90%';
     
     const SQL = await initSqlJs({
-      locateFile: filename => `./vendor/${filename}?v=15`
+      locateFile: filename => `./vendor/${filename}?v=16`
     });
 
     try {

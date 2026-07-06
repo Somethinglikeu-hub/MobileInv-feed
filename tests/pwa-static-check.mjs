@@ -31,9 +31,9 @@ for (const file of requiredFiles) {
 }
 
 for (const localRuntime of [
-  "./vendor/pako.min.js?v=15",
-  "./vendor/sql-wasm.js?v=15",
-  "./vendor/apexcharts.min.js?v=15",
+  "./vendor/pako.min.js?v=16",
+  "./vendor/sql-wasm.js?v=16",
+  "./vendor/apexcharts.min.js?v=16",
 ]) {
   if (!indexHtml.includes(localRuntime)) {
     throw new Error(`index.html does not reference local runtime: ${localRuntime}`);
@@ -44,8 +44,8 @@ if (/cdnjs\.cloudflare\.com\/ajax\/libs\/(?:pako|sql\.js)|cdn\.jsdelivr\.net\/np
   throw new Error("Core PWA runtime still depends on an external CDN.");
 }
 
-if (!serviceWorker.includes("bist-picker-shell-v15")) {
-  throw new Error("Service worker cache version was not bumped to v15.");
+if (!serviceWorker.includes("bist-picker-shell-v16")) {
+  throw new Error("Service worker cache version was not bumped to v16.");
 }
 
 if (!appJs.includes("Snapshot bütünlük kontrolü başarısız")) {
@@ -60,12 +60,22 @@ if (!appJs.includes("MobileInv-feed/live-data/live_prices.json")) {
   throw new Error("PWA near-live price feed URL is missing.");
 }
 
-if (!appJs.includes("./vendor/${filename}?v=15")) {
-  throw new Error("sql.js WASM locateFile cache version was not bumped to v15.");
+if (!appJs.includes("./vendor/${filename}?v=16")) {
+  throw new Error("sql.js WASM locateFile cache version was not bumped to v16.");
 }
 
 if (!appJs.includes("sonraki rotasyona kadar") || !indexHtml.includes("2 haftada bir Pazartesi")) {
   throw new Error("Bi-weekly rotation hold-rule copy is missing from the PWA.");
+}
+
+// B1 continuity (v16): rotation detection must prefer cycle_ref_date and the
+// history must be able to build from portfolio_cycle_marks with a legacy
+// cohort fallback for pre-B1 snapshots. Rotation date is derived in JS (not
+// SQL) so a snapshot missing the column degrades cleanly instead of throwing.
+if (!appJs.includes("pos.cycle_ref_date || pos.selection_date")
+  || !appJs.includes("portfolio_cycle_marks")
+  || !appJs.includes("buildLegacyCohortRecords")) {
+  throw new Error("B1 continuity support is missing from the PWA.");
 }
 
 if (appJs.includes("loadSimulatedLivePrices")) {

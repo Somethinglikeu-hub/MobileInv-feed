@@ -1,5 +1,25 @@
 {
-  "exported_at": "2026-07-10T10:05:56+00:00",
+  "exported_at": "2026-07-10T17:29:38+00:00",
+  "real_returns": {
+    "deflated": {
+      "cpi_real": null,
+      "gram_gold": null,
+      "usd": null
+    },
+    "generated_at": "2026-07-10T17:29:37+00:00",
+    "nominal": {
+      "alpha_pct": 0.0,
+      "benchmark_return_pct": 0.0,
+      "cagr_pct": null,
+      "max_drawdown_pct": 0.0,
+      "sharpe": null,
+      "total_return_pct": 0.0
+    },
+    "window": {
+      "end": "2026-06-29",
+      "start": "2026-06-29"
+    }
+  },
   "rotation": {
     "cycle_start": "2026-06-29",
     "next_rotation_date": "2026-07-13",
@@ -8,8 +28,8 @@
   "snapshot": {
     "compression": "gzip",
     "filename": "mobile_snapshot.db.gz",
-    "sha256": "139fca7e98357bc84958ed2d499761bd213b020d851b12f1b359b5e6f47d178f",
-    "size_bytes": 9997040,
+    "sha256": "2e7e9cf8d4f5019244bc8bd8b5e3345e5e9e83235051c44adda6d01fd0d55cfd",
+    "size_bytes": 10077944,
     "url": "https://raw.githubusercontent.com/Somethinglikeu-hub/MobileInv-feed/gh-pages/mobile_snapshot.db.gz"
   },
   "snapshot_version": 12

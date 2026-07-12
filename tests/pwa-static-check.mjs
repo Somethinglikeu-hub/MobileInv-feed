@@ -8,6 +8,7 @@ const read = (path) => readFileSync(resolve(root, path), "utf8");
 const indexHtml = read("index.html");
 const serviceWorker = read("sw.js");
 const appJs = read("app.js");
+const indexCss = read("index.css");
 const manifest = JSON.parse(read("manifest.webmanifest"));
 const snapshotManifest = JSON.parse(read("manifest.json"));
 
@@ -31,9 +32,9 @@ for (const file of requiredFiles) {
 }
 
 for (const localRuntime of [
-  "./vendor/pako.min.js?v=16",
-  "./vendor/sql-wasm.js?v=16",
-  "./vendor/apexcharts.min.js?v=16",
+  "./vendor/pako.min.js?v=18",
+  "./vendor/sql-wasm.js?v=18",
+  "./vendor/apexcharts.min.js?v=18",
 ]) {
   if (!indexHtml.includes(localRuntime)) {
     throw new Error(`index.html does not reference local runtime: ${localRuntime}`);
@@ -44,8 +45,8 @@ if (/cdnjs\.cloudflare\.com\/ajax\/libs\/(?:pako|sql\.js)|cdn\.jsdelivr\.net\/np
   throw new Error("Core PWA runtime still depends on an external CDN.");
 }
 
-if (!serviceWorker.includes("bist-picker-shell-v16")) {
-  throw new Error("Service worker cache version was not bumped to v16.");
+if (!serviceWorker.includes("bist-picker-shell-v18")) {
+  throw new Error("Service worker cache version was not bumped to v18.");
 }
 
 if (!appJs.includes("Snapshot bütünlük kontrolü başarısız")) {
@@ -60,8 +61,8 @@ if (!appJs.includes("MobileInv-feed/live-data/live_prices.json")) {
   throw new Error("PWA near-live price feed URL is missing.");
 }
 
-if (!appJs.includes("./vendor/${filename}?v=16")) {
-  throw new Error("sql.js WASM locateFile cache version was not bumped to v16.");
+if (!appJs.includes("./vendor/${filename}?v=18")) {
+  throw new Error("sql.js WASM locateFile cache version was not bumped to v18.");
 }
 
 if (!appJs.includes("sonraki rotasyona kadar") || !indexHtml.includes("2 haftada bir Pazartesi")) {
@@ -76,6 +77,40 @@ if (!appJs.includes("pos.cycle_ref_date || pos.selection_date")
   || !appJs.includes("portfolio_cycle_marks")
   || !appJs.includes("buildLegacyCohortRecords")) {
   throw new Error("B1 continuity support is missing from the PWA.");
+}
+
+if (!appJs.includes("getMarketWidePriceDate")
+  || !appJs.includes("getBenchmarkEndPrice")
+  || !indexHtml.includes("data-health-card")) {
+  throw new Error("PWA data health and market-wide price-date safeguards are missing.");
+}
+
+if (!appJs.includes("summarizeQuoteCoverage")
+  || !appJs.includes("formatQuoteCoverage")
+  || appJs.includes("canlıya yakın`")) {
+  throw new Error("PWA quote coverage must separate fresh, delayed, and snapshot prices.");
+}
+
+if (!appJs.includes("Ham stres sinyali")
+  || !appJs.includes("en az 2/4 seviyesinde 5 iş günü")
+  || !appJs.includes("RİSK DIŞI (%75 Nakit)")) {
+  throw new Error("PWA cash-allocation explanation is missing or misleading.");
+}
+
+if (!appJs.includes("QUALITY_FLAG_META")
+  || !appJs.includes("DCF pahalı")
+  || !appJs.includes("Model hedef")
+  || !appJs.includes("TARGET_SOURCE_META")
+  || !appJs.includes("targetSourceMeta")
+  || !appJs.includes("inferTargetSource")
+  || !appJs.includes("200 günlük ortalamanın")
+  || !appJs.includes("parseQualityFlags")
+  || !indexCss.includes("mini-risk-chip")) {
+  throw new Error("PWA quality-flag risk chips are missing.");
+}
+
+if (!indexCss.includes("height: min(900px, 100vh)")) {
+  throw new Error("Desktop mobile frame must fit inside the viewport height.");
 }
 
 if (appJs.includes("loadSimulatedLivePrices")) {

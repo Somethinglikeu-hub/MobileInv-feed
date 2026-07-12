@@ -43,7 +43,7 @@ Her push'ta `.github/workflows/pwa-quality.yml` aşağıdaki kontrolleri çalı�
 - `manifest.json` içindeki snapshot boyutu ve SHA-256 değerinin gerçek dosyayla eşleşmesi
 - Service worker ve asset sürümlerinin beklenen sürümde olması
 
-2 Temmuz 2026 itibarıyla v10 asset/service-worker beklentileriyle doğrulanan son kontroller:
+12 Temmuz 2026 itibarıyla v18 asset/service-worker beklentileriyle doğrulanan son kontroller:
 
 ```bash
 node --check app.js

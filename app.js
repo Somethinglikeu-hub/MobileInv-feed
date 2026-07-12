@@ -8,6 +8,7 @@ window.livePriceDetails = {};
 window.snapshotPrices = {};
 window.feedManifest = null;
 window.feedBacktestAudit = null;
+window.liveFeedGeneratedAt = null;
 let dbInstance = null;
 let activeDetailTicker = null;
 let livePriceRefreshTimer = null;
@@ -42,6 +43,83 @@ function mixedScalePercent(value) {
   const parsed = Number(value);
   if (!Number.isFinite(parsed)) return null;
   return Math.abs(parsed) <= 1 ? parsed * 100 : parsed;
+}
+
+const QUALITY_FLAG_META = {
+  PIOTROSKI_LOW: {
+    label: 'Piotroski zayıf',
+    detail: 'Finansal sağlık skoru düşük; bilanço kalitesi ayrıca kontrol edilmeli.'
+  },
+  LIMITED_DATA: {
+    label: 'Veri sınırlı',
+    detail: 'Model kararı eksik veriyle üretilmiş; güven seviyesi daha düşük.'
+  },
+  DCF_OVERVALUED: {
+    label: 'DCF pahalı',
+    detail: 'DCF içsel değeri fiyata göre düşük; hedef fiyat skor/momentum varsayımından geliyor olabilir.'
+  },
+  WEAK_TECHNICAL: {
+    label: 'Teknik zayıf',
+    detail: 'Trend/teknik görünüm modelin risk eşiğine yakın veya zayıf.'
+  }
+};
+
+function parseQualityFlags(...payloads) {
+  for (const payload of payloads) {
+    if (!payload) continue;
+    try {
+      const parsed = Array.isArray(payload) ? payload : JSON.parse(payload);
+      if (Array.isArray(parsed)) {
+        return parsed
+          .map(item => String(item || '').trim())
+          .filter(Boolean);
+      }
+    } catch {
+      // Ignore malformed payloads; the UI should degrade to "no flags".
+    }
+  }
+  return [];
+}
+
+function qualityFlagLabel(flag) {
+  return QUALITY_FLAG_META[flag]?.label || String(flag || 'Bilinmeyen uyarı');
+}
+
+function qualityFlagDetail(flag) {
+  return QUALITY_FLAG_META[flag]?.detail || 'Model denetim bayrağı.';
+}
+
+const TARGET_SOURCE_META = {
+  DCF_INTRINSIC: {
+    label: 'DCF hedef',
+    detail: 'Hedef fiyat DCF içsel değerinden geliyor.'
+  },
+  DCF_CAPPED: {
+    label: 'DCF capli hedef',
+    detail: 'DCF hedefi üst sınırı aştığı için cap uygulanmış.'
+  },
+  SCORE_IMPLIED: {
+    label: 'Model hedef',
+    detail: 'Hedef fiyat değerleme değil; skor, momentum ve güven katsayısından türetilmiş model hedefi.'
+  },
+  SCORE_CAPPED: {
+    label: 'Capli model hedef',
+    detail: 'Model hedefi üst sınırı aştığı için cap uygulanmış.'
+  }
+};
+
+function targetSourceMeta(source) {
+  return TARGET_SOURCE_META[String(source || '').toUpperCase()] || {
+    label: 'Hedef',
+    detail: 'Hedef fiyat kaynağı snapshot içinde belirtilmemiş.'
+  };
+}
+
+function inferTargetSource(source, qualityFlags = []) {
+  const normalized = String(source || '').toUpperCase();
+  if (normalized && TARGET_SOURCE_META[normalized]) return normalized;
+  if (qualityFlags.includes('DCF_OVERVALUED')) return 'SCORE_IMPLIED';
+  return normalized || null;
 }
 
 // Sector slugs in the snapshot are internal English identifiers; map them to
@@ -449,8 +527,11 @@ function rerenderLivePriceConsumers() {
   }
   if (
     activeDetailTicker &&
+    !window.__bpSheetDragging &&
     document.getElementById('detail-sheet').classList.contains('open')
   ) {
+    // Skipped mid-drag: rebuilding the sheet's DOM would detach the touch
+    // target and freeze the gesture halfway.
     openStockDetail(activeDetailTicker);
   }
 }
@@ -470,6 +551,7 @@ async function refreshLivePrices() {
       throw new Error(`HTTP ${response.status}`);
     }
     const feed = validateLivePriceFeed(await response.json());
+    window.liveFeedGeneratedAt = feed.generated_at || null;
     const nextPrices = { ...window.snapshotPrices };
     const nextDetails = {};
     let updated = 0;
@@ -653,9 +735,9 @@ function buildCycleMarkRecords(marks, dbPositions, livePrices) {
   });
 
   const bistStart = getPriceOnOrBefore('XU100', cLast);
-  const latestPriceDate = queryOne('SELECT latest_price_date FROM snapshot_metadata WHERE id = 1')?.latest_price_date;
+  const latestPriceDate = getPriceDataState().stockPriceDate;
   const endDate = latestPriceDate || cLast;
-  const bistEnd = livePrices.XU100 || getPriceOnOrBefore('XU100', endDate);
+  const bistEnd = getBenchmarkEndPrice(endDate);
   if (activeStocks.length > 0 && bistStart > 0 && bistEnd != null) {
     records.push({
       weekStartDate: cLast,
@@ -762,9 +844,9 @@ function buildLegacyCohortRecords(dbPositions, livePrices) {
     const activeStocks = [...liveStocks, ...realizedStocks];
 
     const bistStart = getPriceOnOrBefore('XU100', activeStart);
-    const latestPriceDate = queryOne('SELECT latest_price_date FROM snapshot_metadata WHERE id = 1')?.latest_price_date;
+    const latestPriceDate = getPriceDataState().stockPriceDate;
     const endDate = latestPriceDate || activeStart;
-    const bistEnd = livePrices.XU100 || getPriceOnOrBefore('XU100', endDate);
+    const bistEnd = getBenchmarkEndPrice(endDate);
 
     if (activeStocks.length > 0 && bistStart > 0 && bistEnd != null) {
       records.push({
@@ -790,19 +872,32 @@ function buildLegacyCohortRecords(dbPositions, livePrices) {
 function setupNavigation() {
   const navItems = document.querySelectorAll('.nav-item');
   const tabPages = document.querySelectorAll('.tab-page');
+  const scroller = document.querySelector('.page-content');
+  // Native-app behaviour: each tab remembers its scroll position, and
+  // re-tapping the active tab scrolls it back to the top.
+  const tabScroll = {};
+  let currentTab = document.querySelector('.nav-item.active')?.dataset.tab || 'picks';
 
   navItems.forEach(item => {
     item.addEventListener('click', () => {
       const tab = item.getAttribute('data-tab');
-      
+
+      if (tab === currentTab) {
+        scroller?.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+      if (scroller) tabScroll[currentTab] = scroller.scrollTop;
+
       navItems.forEach(i => i.classList.remove('active'));
       tabPages.forEach(p => p.classList.remove('active'));
-      
+
       item.classList.add('active');
       const targetPage = document.getElementById(`page-${tab}`);
       if (targetPage) targetPage.classList.add('active');
 
       renderPage(tab);
+      if (scroller) scroller.scrollTop = tabScroll[tab] || 0;
+      currentTab = tab;
     });
   });
 }
@@ -836,13 +931,148 @@ function businessDaysSince(dateStr) {
   return count;
 }
 
+function getSnapshotMetadata() {
+  return queryOne('SELECT snapshot_date, latest_price_date, exported_at FROM snapshot_metadata WHERE id = 1') || {};
+}
+
+function getMarketWidePriceDate() {
+  const rows = queryAll(`
+    SELECT ph.date AS date, COUNT(DISTINCT ph.company_id) AS company_count
+    FROM price_history_730d ph
+    JOIN companies c ON c.id = ph.company_id
+    WHERE c.ticker != 'XU100'
+      AND c.is_active = 1
+    GROUP BY ph.date
+    ORDER BY ph.date DESC
+    LIMIT 20
+  `);
+  if (rows.length === 0) {
+    return getSnapshotMetadata().latest_price_date || null;
+  }
+
+  const maxCoverage = rows.reduce(
+    (max, row) => Math.max(max, finiteNumber(row.company_count, 0)),
+    0
+  );
+  const coverageFloor = Math.max(1, Math.floor(maxCoverage * 0.5));
+  const broadDate = rows.find(row => finiteNumber(row.company_count, 0) >= coverageFloor);
+  return broadDate?.date || rows[0]?.date || null;
+}
+
+function getPriceDataState() {
+  const metadata = getSnapshotMetadata();
+  const stockPriceDate = getMarketWidePriceDate();
+  const metadataPriceDate = metadata.latest_price_date || null;
+  return {
+    snapshotDate: metadata.snapshot_date || null,
+    exportedAt: metadata.exported_at || null,
+    metadataPriceDate,
+    stockPriceDate: stockPriceDate || metadataPriceDate,
+    hasMetadataMismatch: Boolean(
+      stockPriceDate && metadataPriceDate && stockPriceDate !== metadataPriceDate
+    )
+  };
+}
+
+function summarizeQuoteCoverage(tickers) {
+  const summary = {
+    total: tickers.length,
+    recent: 0,
+    delayed: 0,
+    snapshot: 0,
+    latestQuoteTime: null,
+    labels: []
+  };
+
+  tickers.forEach(ticker => {
+    const status = getQuoteStatus(ticker);
+    summary.labels.push(status.label);
+    if (status.label === '15 DK GEC.') {
+      summary.recent += 1;
+    } else if (status.label === 'SON İŞLEM') {
+      summary.delayed += 1;
+    } else {
+      summary.snapshot += 1;
+    }
+
+    const detail = window.livePriceDetails[ticker];
+    const quoteTimestamp = Date.parse(String(detail?.quote_time || ''));
+    const latestTimestamp = Date.parse(String(summary.latestQuoteTime || ''));
+    if (Number.isFinite(quoteTimestamp)
+        && (!Number.isFinite(latestTimestamp) || quoteTimestamp > latestTimestamp)) {
+      summary.latestQuoteTime = detail.quote_time;
+    }
+  });
+
+  return summary;
+}
+
+function formatQuoteCoverage(summary) {
+  if (!summary || summary.total === 0) return '—';
+  const parts = [`${summary.recent}/${summary.total} taze`];
+  if (summary.delayed > 0) parts.push(`${summary.delayed} son işlem`);
+  if (summary.snapshot > 0) parts.push(`${summary.snapshot} snapshot`);
+  return parts.join(' • ');
+}
+
+function getBenchmarkEndPrice(endDate) {
+  const nearLive = getQuoteStatus('XU100').label !== 'SNAPSHOT';
+  const liveBenchmark = finiteNumber(window.livePrices.XU100, 0);
+  if (nearLive && liveBenchmark > 0) return liveBenchmark;
+  return getPriceOnOrBefore('XU100', endDate);
+}
+
+function renderDataHealthCard(positions) {
+  const card = document.getElementById('data-health-card');
+  if (!card) return;
+
+  const state = getPriceDataState();
+  setTextById('health-snapshot-date', state.snapshotDate || '—');
+  setTextById('health-price-date', state.stockPriceDate || '—');
+
+  const quoteSummary = summarizeQuoteCoverage(positions.map(pos => pos.ticker));
+  setTextById('health-live-source', formatQuoteCoverage(quoteSummary));
+
+  const rotationDate = positions
+    .map(pos => pos.cycle_ref_date || pos.selection_date)
+    .filter(Boolean)
+    .sort()
+    .pop() || null;
+  const rotation = getRotationInfo(rotationDate);
+  setTextById('health-next-rotation', rotation.nextLabel || '—');
+
+  const noteEl = document.getElementById('health-data-note');
+  if (!noteEl) return;
+  const notes = [];
+  if (state.hasMetadataMismatch) {
+    notes.push(`Endeks tarihi ${state.metadataPriceDate}, hisse kapanışı ${state.stockPriceDate}. Portföy fiyatlarında hisse kapanışı esas alınıyor.`);
+  }
+  if (quoteSummary.delayed > 0) {
+    const latestLabel = formatQuoteTime(quoteSummary.latestQuoteTime);
+    notes.push(`Canlı feed taze değil: ${quoteSummary.delayed} hisse son işlem fiyatıyla gösteriliyor${latestLabel ? ` (son quote ${latestLabel})` : ''}.`);
+  }
+  if (quoteSummary.snapshot > 0) {
+    notes.push(`${quoteSummary.snapshot} hisse canlı feed'de yok; snapshot kapanışı kullanılıyor.`);
+  }
+
+  if (notes.length > 0) {
+    card.classList.add('warning');
+    noteEl.style.display = 'block';
+    noteEl.textContent = notes.join(' ');
+  } else {
+    card.classList.remove('warning');
+    noteEl.style.display = 'none';
+    noteEl.textContent = '';
+  }
+}
+
 function renderStaleFeedBanner() {
   const container = document.getElementById('page-picks');
   if (!container) return;
   let banner = document.getElementById('stale-feed-banner');
 
-  const meta = queryOne('SELECT latest_price_date FROM snapshot_metadata WHERE id = 1');
-  const priceDate = meta?.latest_price_date;
+  const priceState = getPriceDataState();
+  const priceDate = priceState.stockPriceDate;
   const staleDays = priceDate ? businessDaysSince(priceDate) : null;
 
   if (staleDays == null || staleDays <= 1) {
@@ -857,10 +1087,10 @@ function renderStaleFeedBanner() {
   }
   const severe = staleDays >= 5;
   banner.className = severe ? 'stale-banner stale-banner-severe' : 'stale-banner';
+  const message = `Veri ${staleDays} iş günü eski (son fiyat: ${escapeHtml(priceDate)}). ${severe ? 'Feed durmuş olabilir — GitHub Actions kontrol edilmeli.' : 'Model kararları güncel olmayabilir.'}`;
   banner.innerHTML = `
     <span class="material-symbols-rounded">${severe ? 'error' : 'warning'}</span>
-    <span>Veri ${staleDays} iş günü eski (son fiyat: ${escapeHtml(priceDate)}).
-      ${severe ? 'Feed durmuş olabilir — GitHub Actions kontrol edilmeli.' : 'Model kararları güncel olmayabilir.'}</span>
+    <span>${message}</span>
   `;
 }
 
@@ -868,7 +1098,10 @@ function renderStaleFeedBanner() {
 function renderPicksPage() {
   const home = queryOne('SELECT * FROM home_summary WHERE id = 1');
   const updateDateEl = document.getElementById('app-update-date');
-  if (home && home.macro_date) {
+  const priceState = getPriceDataState();
+  if (priceState.snapshotDate || priceState.stockPriceDate) {
+    updateDateEl.textContent = `Model: ${priceState.snapshotDate || '—'} • Fiyat: ${priceState.stockPriceDate || '—'}`;
+  } else if (home && home.macro_date) {
     updateDateEl.textContent = `Güncelleme: ${home.macro_date}`;
   }
   renderStaleFeedBanner();
@@ -882,6 +1115,7 @@ function renderPicksPage() {
   
   const portListEl = document.getElementById('portfolio-list');
   document.getElementById('picks-count-badge').textContent = `${positions.length} Hisse`;
+  renderDataHealthCard(positions);
   renderDecisionSummary(home, positions);
   
   portListEl.innerHTML = '';
@@ -899,6 +1133,12 @@ function renderPicksPage() {
       const safeTicker = escapeHtml(pos.ticker);
       const safeName = escapeHtml(pos.fullname || pos.name || '—');
       const quoteStatus = getQuoteStatus(pos.ticker);
+      const qualityFlags = parseQualityFlags(pos.quality_flags_json);
+      const qualityFlagLine = qualityFlags.length > 0
+        ? `<div class="portfolio-risk-chips">${qualityFlags.slice(0, 2).map(flag => (
+            `<span class="mini-risk-chip" title="${escapeHtml(qualityFlagDetail(flag))}">${escapeHtml(qualityFlagLabel(flag))}</span>`
+          )).join('')}</div>`
+        : '';
 
       // Period P&L (since the latest rotation) — only shown when the
       // position is actually carried from an earlier rotation.
@@ -911,6 +1151,36 @@ function renderPicksPage() {
         periodLine = `<div class="${periodClass} tabular-nums" style="font-size:9px; margin-top:1px;">Dönem: ${periodPnl >= 0 ? '+' : ''}${periodPnl.toFixed(1)}%</div>`;
       }
 
+      // Glanceable cost basis: entry price + entry date without opening detail.
+      let entryLine = '';
+      if (rawEntry > 0) {
+        let sinceShort = '';
+        if (pos.selection_date) {
+          const d = new Date(pos.selection_date + 'T00:00:00');
+          if (!Number.isNaN(d.getTime())) {
+            sinceShort = ' · ' + d.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' });
+          }
+        }
+        entryLine = `<div class="entry-line tabular-nums">Giriş ${rawEntry.toFixed(2)}${sinceShort}</div>`;
+      }
+
+      // Stop proximity: warn at a glance when price approaches the stop —
+      // and KEEP warning once it breaches (backend exit lands next cron;
+      // a vanishing chip would read as "danger passed").
+      const stopPrice = finiteNumber(pos.stop_loss_price, 0);
+      let stopChip = '';
+      if (stopPrice > 0 && live > 0) {
+        if (live <= stopPrice) {
+          stopChip = `<div class="stop-chip danger tabular-nums" title="Stop: ${stopPrice.toFixed(2)} TL">Stop kırıldı</div>`;
+        } else {
+          const stopDistPct = ((live - stopPrice) / live) * 100;
+          if (stopDistPct <= 8) {
+            const sev = stopDistPct <= 4 ? 'danger' : 'warn';
+            stopChip = `<div class="stop-chip ${sev} tabular-nums" title="Stop: ${stopPrice.toFixed(2)} TL">Stop'a %${stopDistPct.toFixed(1)}</div>`;
+          }
+        }
+      }
+
       const row = document.createElement('div');
       row.className = 'list-item-row';
       row.innerHTML = `
@@ -920,6 +1190,8 @@ function renderPicksPage() {
             <span class="${quoteStatus.className}" title="${escapeHtml(quoteStatus.title)}">${quoteStatus.label}</span>
           </div>
           <div class="company-fullname">${safeName}</div>
+          ${entryLine}
+          ${qualityFlagLine}
         </div>
         <div style="text-align: right;">
           <div class="tabular-nums" style="font-weight:700; font-size:14px;">${live.toFixed(2)} TL</div>
@@ -927,6 +1199,7 @@ function renderPicksPage() {
             ${pnl >= 0 ? '+' : ''}${pnl.toFixed(2)}%
           </div>
           ${periodLine}
+          ${stopChip}
         </div>
       `;
       row.addEventListener('click', () => openStockDetail(pos.ticker));
@@ -972,6 +1245,24 @@ function renderPicksPage() {
   }
 }
 
+// Days until the manifest's next rotation date; null when unknown/stale.
+function rotationCountdownText() {
+  const nextIso = window.feedManifest?.rotation?.next_rotation_date;
+  if (!nextIso) return null;
+  const next = new Date(nextIso + 'T00:00:00');
+  if (Number.isNaN(next.getTime())) return null;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const days = Math.round((next - today) / 86400000);
+  if (days < 0) return null; // stale manifest — don't show a wrong countdown
+  const dateLabel = next.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', weekday: 'long' });
+  let text;
+  if (days === 0) text = `Rotasyon günü BUGÜN — ${dateLabel}`;
+  else if (days === 1) text = `Sonraki rotasyon YARIN — ${dateLabel}`;
+  else text = `Sonraki rotasyona ${days} gün — ${dateLabel}`;
+  return { days, text };
+}
+
 // --- Rotation cadence helpers ---------------------------------------------
 // Cadence is published by the backend in manifest.rotation (bi-weekly since
 // 2026-07-04, C1 calibration). Falls back to 2 weeks when the manifest
@@ -980,16 +1271,16 @@ function getRotationInfo(rotationDate) {
   const weeks = Number(window.feedManifest?.rotation?.rotation_weeks) > 0
     ? Number(window.feedManifest.rotation.rotation_weeks) : 2;
   let next = null;
-  if (rotationDate) {
+  if (window.feedManifest?.rotation?.next_rotation_date) {
+    const d = new Date(window.feedManifest.rotation.next_rotation_date + 'T00:00:00');
+    if (!Number.isNaN(d.getTime())) next = d;
+  }
+  if (!next && rotationDate) {
     const d = new Date(rotationDate + 'T00:00:00');
     if (!Number.isNaN(d.getTime())) {
       d.setDate(d.getDate() + weeks * 7);
       next = d;
     }
-  }
-  if (!next && window.feedManifest?.rotation?.next_rotation_date) {
-    const d = new Date(window.feedManifest.rotation.next_rotation_date + 'T00:00:00');
-    if (!Number.isNaN(d.getTime())) next = d;
   }
   const nextLabel = next
     ? next.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', weekday: 'long' })
@@ -1125,6 +1416,7 @@ function renderTradeDayCard(decisions) {
       const current = loadTradeDone(decisions.rotationDate);
       if (current.has(ticker)) current.delete(ticker); else current.add(ticker);
       saveTradeDone(decisions.rotationDate, current);
+      try { navigator.vibrate?.(12); } catch { /* unsupported */ }
       renderTradeDayCard(decisions);
     });
   });
@@ -1186,7 +1478,12 @@ function setupBrowseFilters() {
     });
   });
 
-  document.getElementById('browse-search').addEventListener('input', renderBrowsePage);
+  // Debounced so fast typing re-queries SQLite once, not per keystroke.
+  let searchDebounce = null;
+  document.getElementById('browse-search').addEventListener('input', () => {
+    clearTimeout(searchDebounce);
+    searchDebounce = setTimeout(renderBrowsePage, 140);
+  });
   document.getElementById('filter-sector').addEventListener('change', renderBrowsePage);
   document.getElementById('filter-risk').addEventListener('change', renderBrowsePage);
   document.getElementById('filter-sort').addEventListener('change', renderBrowsePage);
@@ -1287,6 +1584,7 @@ function renderBrowsePage() {
         <div class="tabular-nums" style="font-weight: 800; font-size: 14px; color: var(--primary);">
           ${scoreVal.toFixed(1)}
         </div>
+        <div class="score-bar"><i style="width: ${Math.max(0, Math.min(100, scoreVal))}%;"></i></div>
         <div style="font-size: 10px; color: var(--text-muted); font-weight: bold; margin-top:2px;">
           SKOR • ${riskText} RİSK
         </div>
@@ -1351,7 +1649,7 @@ function renderMarketPage() {
     NORMAL: 'NORMAL (Hisse Ağırlıklı)',
     CAUTION: 'İHTİYAT (Seçici Nakit)',
     DEFENSIVE: 'SAVUNMA (Yüksek Nakit)',
-    RISK_OFF: 'RİSK DIŞI (Tam Nakit)'
+    RISK_OFF: 'RİSK DIŞI (%75 Nakit)'
   };
 
   const cashStateEl = document.getElementById('macro-cash-state');
@@ -1375,8 +1673,11 @@ function renderMarketPage() {
   };
   const notesEl = document.getElementById('macro-cash-notes');
   const rawNote = String(home.cash_notes || '').trim();
-  if (rawNote) {
-    notesEl.textContent = cashNoteMap[rawNote.toLowerCase()] || rawNote;
+  const rawSignal = finiteNumber(home.cash_raw_signal, null);
+  const rawSignalText = rawSignal !== null ? `Ham stres sinyali ${rawSignal}/4. ` : '';
+  const thresholdText = 'Nakit artışı için sinyalin en az 2/4 seviyesinde 5 iş günü kalması gerekir; sonraki kademeler 20 günlük bekleme sonrası tek tek yükselir.';
+  if (rawNote || rawSignal !== null) {
+    notesEl.textContent = `${rawSignalText}${cashNoteMap[rawNote.toLowerCase()] || rawNote || 'Nakit sinyali okunuyor.'} ${thresholdText}`;
     notesEl.style.display = 'block';
   } else {
     notesEl.style.display = 'none';
@@ -1619,10 +1920,9 @@ function renderDecisionSummary(home, positions) {
     }
   }
 
-  const quoteStatuses = positions.map(pos => getQuoteStatus(pos.ticker).label);
-  const liveLikeCount = quoteStatuses.filter(label => label !== 'SNAPSHOT').length;
+  const quoteSummary = summarizeQuoteCoverage(positions.map(pos => pos.ticker));
   const priceSourceText = positions.length > 0
-    ? `Fiyat kaynağı: ${liveLikeCount}/${positions.length} canlıya yakın`
+    ? `Fiyat kaynağı: ${formatQuoteCoverage(quoteSummary)}`
     : 'Fiyat kaynağı: portföy boş';
 
   let weeklyRule = 'AL/SAT/TUT sinyallerine göre 5 hisse hedefini koru; aldığını sonraki rotasyona kadar (2 hafta) tut.';
@@ -1637,6 +1937,18 @@ function renderDecisionSummary(home, positions) {
   }
 
   setTextById('decision-weekly-rule', weeklyRule);
+
+  // Countdown to the next rotation — the single question the user asks most.
+  const countdownEl = document.getElementById('decision-countdown');
+  if (countdownEl) {
+    const countdown = rotationCountdownText();
+    countdownEl.style.display = countdown ? 'inline-flex' : 'none';
+    if (countdown) {
+      countdownEl.textContent = countdown.text;
+      countdownEl.classList.toggle('today', countdown.days === 0);
+    }
+  }
+
   setTextById('decision-position-count', `${positions.length} / 5`);
   setTextById('decision-cash-state', `${cashState} • ${Math.round(cashPct * 100)}%`);
   setTextById('decision-model-return', baseCase ? formatPercent(baseCase.total_return_pct, 1) : '—');
@@ -1720,6 +2032,7 @@ function openStockDetail(ticker) {
 
   const allPositions = queryAll('SELECT * FROM open_positions ORDER BY sort_order ASC');
   const detailDecisions = computeRebalanceDecisions(allPositions);
+  const detailQualityFlags = parseQualityFlags(score.quality_flags_json, openPos?.quality_flags_json);
 
   const riskExit = detailDecisions.riskExits.find(r => r.ticker === ticker);
   if (riskExit) {
@@ -1748,9 +2061,16 @@ function openStockDetail(ticker) {
   // selection time; scoring_latest columns are only a fallback.
   const stopLoss = finiteNumber(openPos?.stop_loss_price ?? score.stop_loss_price, 0);
   const targetPrice = finiteNumber(openPos?.target_price ?? score.target_price, 0);
+  const targetSource = inferTargetSource(
+    openPos?.target_source || score.target_source,
+    detailQualityFlags
+  );
+  const targetMeta = targetSourceMeta(targetSource);
 
   document.getElementById('lane-stop-label').textContent = `Stop: ${stopLoss > 0 ? stopLoss.toFixed(2) + ' TL' : '—'}`;
-  document.getElementById('lane-target-label').textContent = `Hedef: ${targetPrice > 0 ? targetPrice.toFixed(2) + ' TL' : '—'}`;
+  const laneTargetLabel = document.getElementById('lane-target-label');
+  laneTargetLabel.textContent = `${targetMeta.label}: ${targetPrice > 0 ? targetPrice.toFixed(2) + ' TL' : '—'}`;
+  laneTargetLabel.title = targetMeta.detail;
   
   const laneProgressBar = document.getElementById('price-lane-progress');
   const lanePin = document.getElementById('price-lane-pin');
@@ -1778,10 +2098,15 @@ function openStockDetail(ticker) {
   // that rendered "undefined/9".)
   const thesisItems = [];
   const piotroskiRaw = finiteNumber(score.piotroski_raw, null);
+  const above200ma = score.above_200ma === null || score.above_200ma === undefined
+    ? null
+    : Number(score.above_200ma);
   if (finiteNumber(score.buffett) >= 75) thesisItems.push("Güçlü Buffett kalite profili: reel kârlılık ve istikrarlı nakit yaratımı.");
   if (finiteNumber(score.graham) >= 75) thesisItems.push("Graham kriterlerine göre yüksek güvenlik marjı (içsel değer iskontosu).");
   if (finiteNumber(score.dcf_mos) >= 75) thesisItems.push("DCF değerlemesine göre belirgin güvenlik marjı.");
   if (finiteNumber(score.momentum) >= 75) thesisItems.push("Hisse fiyatı güçlü momentum ve trend desteği barındırıyor.");
+  if (above200ma === 1) thesisItems.push("Fiyat 200 günlük ortalamanın üzerinde; düşen bıçak filtresi pozitif.");
+  if (above200ma === 0) thesisItems.push("Uyarı: fiyat 200 günlük ortalamanın altında; trend teyidi zayıf.");
   if (piotroskiRaw !== null && piotroskiRaw >= 7) thesisItems.push(`Finansal sağlık rasyoları güçlü (Piotroski F-Score: ${piotroskiRaw.toFixed(0)}/9).`);
   
   if (thesisItems.length === 0) {
@@ -1842,19 +2167,16 @@ function openStockDetail(ticker) {
   // Quality Flags check
   const flagsContainer = document.getElementById('adv-quality-flags');
   flagsContainer.innerHTML = '';
-  const rawFlags = score.quality_flags_json || openPos?.quality_flags_json || '[]';
-  let flagsList = [];
-  try {
-    flagsList = JSON.parse(rawFlags);
-  } catch(e) {}
+  const flagsList = detailQualityFlags;
   
   if (flagsList.length === 0) {
-    flagsContainer.innerHTML = '<span class="flag-tag">Herhangi bir denetim riski bulunmuyor</span>';
+    flagsContainer.innerHTML = '<span class="flag-tag pass">Denetim bayrağı yok</span>';
   } else {
     flagsList.forEach(f => {
       const tag = document.createElement('span');
-      tag.className = 'flag-tag';
-      tag.textContent = f;
+      tag.className = 'flag-tag warn';
+      tag.textContent = qualityFlagLabel(f);
+      tag.title = qualityFlagDetail(f);
       flagsContainer.appendChild(tag);
     });
   }
@@ -1868,7 +2190,108 @@ function openStockDetail(ticker) {
   renderFactorHistoryChart(factorHistory);
 
   // Open sliding sheet
-  document.getElementById('detail-sheet').classList.add('open');
+  openSheet('detail-sheet');
+}
+
+// --- Sheet open/close with hardware-back support ---------------------------
+// Opening a sheet pushes a history entry so the Android/browser back button
+// (and swipe-back) closes the sheet instead of leaving the app. The close
+// buttons route through history.back() so both paths stay in sync.
+function openSheet(id) {
+  const el = document.getElementById(id);
+  if (!el || el.classList.contains('open')) return;
+  el.classList.add('open');
+  try { history.pushState({ bpSheet: id }, ''); } catch { /* sandboxed */ }
+}
+
+function closeOpenSheets() {
+  let closed = false;
+  document.querySelectorAll('.overlay-sheet.open').forEach(el => {
+    el.classList.remove('open');
+    // Clear swipe leftovers in the same tick the class goes: base state is
+    // already translateX(100%), so this never causes visible motion.
+    el.style.transition = '';
+    el.style.transform = '';
+    closed = true;
+  });
+  if (closed) activeDetailTicker = null;
+  return closed;
+}
+
+// Guards the async history.back() round-trip: a second close request
+// (double-ESC / double-tap) before popstate lands would otherwise queue a
+// second back() and navigate the app itself away.
+let sheetCloseInFlight = false;
+
+function requestSheetClose() {
+  if (sheetCloseInFlight) return;
+  if (history.state?.bpSheet) {
+    sheetCloseInFlight = true;
+    history.back(); // popstate handler does the closing
+  } else {
+    closeOpenSheets();
+  }
+}
+
+// Swipe-right-to-close for overlay sheets (native sheet ergonomics).
+// Direction-locked: vertical scrolling wins, and drags starting on a chart
+// are ignored so ApexCharts touch interactions keep working.
+function enableSwipeToClose(sheetId) {
+  const sheet = document.getElementById(sheetId);
+  if (!sheet) return;
+  let startX = 0, startY = 0, dragging = false, locked = false, width = 1;
+
+  sheet.addEventListener('touchstart', (e) => {
+    if (!sheet.classList.contains('open') || e.touches.length !== 1) return;
+    if (e.target.closest('.chart-container')) return;
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    width = sheet.offsetWidth || 1;
+    dragging = true;
+    locked = false;
+  }, { passive: true });
+
+  sheet.addEventListener('touchmove', (e) => {
+    if (!dragging) return;
+    const dx = e.touches[0].clientX - startX;
+    const dy = e.touches[0].clientY - startY;
+    if (!locked) {
+      if (dx > 26 && Math.abs(dx) > 2 * Math.abs(dy)) {
+        locked = true;
+        window.__bpSheetDragging = true;
+        sheet.style.transition = 'none';
+      } else if (Math.abs(dy) > 14) {
+        dragging = false; // vertical intent — leave scrolling alone
+        return;
+      } else {
+        return;
+      }
+    }
+    e.preventDefault();
+    sheet.style.transform = `translateX(${Math.max(0, dx)}px)`;
+  }, { passive: false });
+
+  const finish = (e) => {
+    if (!dragging) return;
+    dragging = false;
+    if (!locked) return;
+    locked = false;
+    window.__bpSheetDragging = false;
+    const dx = (e.changedTouches?.[0]?.clientX ?? startX) - startX;
+    sheet.style.transition = '';
+    if (dx > width * 0.32) {
+      // Park the sheet offscreen inline, then close through the ONE shared
+      // path (requestSheetClose → history.back → popstate → closeOpenSheets,
+      // which also clears this inline transform). Closing the class here
+      // directly raced a queued back() against quick re-opens.
+      sheet.style.transform = 'translateX(100%)';
+      requestSheetClose();
+    } else {
+      sheet.style.transform = ''; // spring back to the .open position
+    }
+  };
+  sheet.addEventListener('touchend', finish);
+  sheet.addEventListener('touchcancel', finish);
 }
 
 function formatLargeMoney(val) {
@@ -2168,7 +2591,7 @@ function openBacktestingSheet() {
   }
 
   // Open sliding sheet
-  document.getElementById('backtest-sheet').classList.add('open');
+  openSheet('backtest-sheet');
 }
 
 function renderBacktestAreaChart(points) {
@@ -2302,7 +2725,7 @@ async function initApp() {
     progressFill.style.width = '90%';
     
     const SQL = await initSqlJs({
-      locateFile: filename => `./vendor/${filename}?v=16`
+      locateFile: filename => `./vendor/${filename}?v=18`
     });
 
     try {
@@ -2357,14 +2780,33 @@ async function initApp() {
 
 // Document Load Listener
 window.addEventListener('load', () => {
-  // Wire up close buttons
-  document.getElementById('close-detail-btn').addEventListener('click', () => {
-    document.getElementById('detail-sheet').classList.remove('open');
-    activeDetailTicker = null;
+  // Wire up close buttons (history-aware: hardware back also closes)
+  document.getElementById('close-detail-btn').addEventListener('click', requestSheetClose);
+  document.getElementById('close-backtest-btn').addEventListener('click', requestSheetClose);
+
+  // A reload while a sheet was open leaves its {bpSheet} entry in history;
+  // without this cleanup the next hardware-back press is silently swallowed.
+  if (history.state?.bpSheet) {
+    try { history.replaceState(null, ''); } catch { /* sandboxed */ }
+  }
+
+  window.addEventListener('popstate', () => {
+    sheetCloseInFlight = false;
+    closeOpenSheets();
+    // Forward-traversal can land back ON a {bpSheet} entry with no sheet
+    // visible — neutralize it so back keeps working one-press-one-action.
+    if (history.state?.bpSheet) {
+      try { history.replaceState(null, ''); } catch { /* sandboxed */ }
+    }
   });
-  
-  document.getElementById('close-backtest-btn').addEventListener('click', () => {
-    document.getElementById('backtest-sheet').classList.remove('open');
+
+  enableSwipeToClose('detail-sheet');
+  enableSwipeToClose('backtest-sheet');
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && document.querySelector('.overlay-sheet.open')) {
+      requestSheetClose();
+    }
   });
 
   document.getElementById('open-backtest-btn').addEventListener('click', openBacktestingSheet);

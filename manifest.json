@@ -1,31 +1,31 @@
 {
-  "exported_at": "2026-07-12T05:56:56+00:00",
+  "exported_at": "2026-07-12T11:21:47+00:00",
   "real_returns": {
     "deflated": {
       "cpi_real": {
-        "cagr_pct": -21.0343,
-        "max_drawdown_pct": -90.8567,
-        "total_return_pct": -85.8464
+        "cagr_pct": 2.9463,
+        "max_drawdown_pct": -45.2791,
+        "total_return_pct": 27.1763
       },
       "gram_gold": {
-        "cagr_pct": 6.7962,
-        "max_drawdown_pct": -28.4476,
-        "total_return_pct": 72.3536
+        "cagr_pct": 39.2284,
+        "max_drawdown_pct": -28.2972,
+        "total_return_pct": 1448.6766
       },
       "usd": {
-        "cagr_pct": 6.7962,
-        "max_drawdown_pct": -28.4476,
-        "total_return_pct": 72.3536
+        "cagr_pct": 39.2284,
+        "max_drawdown_pct": -28.2972,
+        "total_return_pct": 1448.6766
       }
     },
-    "generated_at": "2026-07-12T05:56:55+00:00",
+    "generated_at": "2026-07-12T11:21:46+00:00",
     "nominal": {
-      "alpha_pct": 72.3536,
-      "benchmark_return_pct": 0.0,
-      "cagr_pct": 6.7962,
-      "max_drawdown_pct": -28.4476,
-      "sharpe": 0.5592,
-      "total_return_pct": 72.3536
+      "alpha_pct": 901.4712,
+      "benchmark_return_pct": 547.2053,
+      "cagr_pct": 39.2284,
+      "max_drawdown_pct": -28.2972,
+      "sharpe": 1.3358,
+      "total_return_pct": 1448.6766
     },
     "window": {
       "end": "2026-06-29",
@@ -40,8 +40,8 @@
   "snapshot": {
     "compression": "gzip",
     "filename": "mobile_snapshot.db.gz",
-    "sha256": "03b288bafd8ecd8fcfca92718a9aa96b7702604af5a59dffc7bc6fc49a1b14e0",
-    "size_bytes": 10087779,
+    "sha256": "afdafb74befb3626e34e38e6343f448d12e33182e64fd9cea9609e88aa813515",
+    "size_bytes": 10092244,
     "url": "https://raw.githubusercontent.com/Somethinglikeu-hub/MobileInv-feed/gh-pages/mobile_snapshot.db.gz"
   },
   "snapshot_version": 12

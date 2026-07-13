@@ -1,5 +1,295 @@
 {
-  "exported_at": "2026-07-13T07:33:16+00:00",
+  "backtest_audit": {
+    "cases": [
+      {
+        "alpha_pct": 2487.2122,
+        "benchmark_return_pct": 553.3773,
+        "cagr_pct": 51.3496,
+        "case": "base",
+        "deflated": {
+          "cpi_real": {
+            "alpha_pct": 204.2482,
+            "benchmark_total_return_pct": -46.3451,
+            "cagr_pct": 12.0645,
+            "max_drawdown_pct": -46.4672,
+            "sharpe": 0.5395,
+            "total_return_pct": 157.9031
+          },
+          "gram_gold": {
+            "alpha_pct": 67.4854,
+            "benchmark_total_return_pct": -82.272,
+            "cagr_pct": -1.9054,
+            "max_drawdown_pct": -66.5379,
+            "sharpe": 0.109,
+            "total_return_pct": -14.7866
+          },
+          "usd": {
+            "alpha_pct": 207.3863,
+            "benchmark_total_return_pct": -45.5207,
+            "cagr_pct": 12.2702,
+            "max_drawdown_pct": -54.4191,
+            "sharpe": 0.5336,
+            "total_return_pct": 161.8656
+          }
+        },
+        "friction_round_trip_pct": 0.4,
+        "max_drawdown_pct": -24.6675,
+        "max_weekly_return_pct": 20.8331,
+        "min_weekly_return_pct": -12.1879,
+        "points": 218,
+        "rolling_52w_beat_benchmark_rate_pct": 75.3012,
+        "rolling_52w_min_alpha_pct": -55.6683,
+        "rolling_52w_min_return_pct": -9.0716,
+        "rolling_52w_positive_rate_pct": 98.7952,
+        "rolling_52w_windows": 166,
+        "sharpe_nominal": 1.5638,
+        "tail_risk": {
+          "cvar_5pct": -9.674,
+          "downside_deviation_pct": 2.8897,
+          "excess_kurtosis": 0.9337,
+          "skew": 0.5384,
+          "ulcer_index_pct": 11.1405,
+          "worst_period_pct": -12.1879
+        },
+        "total_return_pct": 3040.5895,
+        "years": 8.3176
+      },
+      {
+        "alpha_pct": 1719.4436,
+        "benchmark_return_pct": 553.3773,
+        "cagr_pct": 46.3336,
+        "case": "stress_0.75pct",
+        "deflated": {
+          "cpi_real": {
+            "alpha_pct": 141.1995,
+            "benchmark_total_return_pct": -46.3451,
+            "cagr_pct": 8.3505,
+            "max_drawdown_pct": -49.6998,
+            "sharpe": 0.4217,
+            "total_return_pct": 94.8544
+          },
+          "gram_gold": {
+            "alpha_pct": 47.0156,
+            "benchmark_total_return_pct": -82.1343,
+            "cagr_pct": -5.0682,
+            "max_drawdown_pct": -70.8267,
+            "sharpe": 0.0126,
+            "total_return_pct": -35.1187
+          },
+          "usd": {
+            "alpha_pct": 143.3464,
+            "benchmark_total_return_pct": -45.5293,
+            "cagr_pct": 8.5473,
+            "max_drawdown_pct": -60.2611,
+            "sharpe": 0.4213,
+            "total_return_pct": 97.8171
+          }
+        },
+        "friction_round_trip_pct": 0.75,
+        "max_drawdown_pct": -26.3451,
+        "max_weekly_return_pct": 20.7281,
+        "min_weekly_return_pct": -12.2404,
+        "points": 218,
+        "rolling_52w_beat_benchmark_rate_pct": 69.2771,
+        "rolling_52w_min_alpha_pct": -69.4949,
+        "rolling_52w_min_return_pct": -15.3347,
+        "rolling_52w_positive_rate_pct": 97.5904,
+        "rolling_52w_windows": 166,
+        "sharpe_nominal": 1.4459,
+        "tail_risk": {
+          "cvar_5pct": -9.8472,
+          "downside_deviation_pct": 2.9196,
+          "excess_kurtosis": 0.9461,
+          "skew": 0.5384,
+          "ulcer_index_pct": 12.1577,
+          "worst_period_pct": -12.2404
+        },
+        "total_return_pct": 2272.8209,
+        "years": 8.3176
+      },
+      {
+        "alpha_pct": 1288.2838,
+        "benchmark_return_pct": 553.3773,
+        "cagr_pct": 42.8477,
+        "case": "stress_1.00pct",
+        "deflated": {
+          "cpi_real": {
+            "alpha_pct": 105.793,
+            "benchmark_total_return_pct": -46.3451,
+            "cagr_pct": 5.7695,
+            "max_drawdown_pct": -51.8921,
+            "sharpe": 0.3378,
+            "total_return_pct": 59.4479
+          },
+          "gram_gold": {
+            "alpha_pct": 35.2353,
+            "benchmark_total_return_pct": -82.1298,
+            "cagr_pct": -7.3268,
+            "max_drawdown_pct": -73.5532,
+            "sharpe": -0.058,
+            "total_return_pct": -46.8945
+          },
+          "usd": {
+            "alpha_pct": 107.4077,
+            "benchmark_total_return_pct": -45.5262,
+            "cagr_pct": 5.9623,
+            "max_drawdown_pct": -63.9751,
+            "sharpe": 0.3412,
+            "total_return_pct": 61.8815
+          }
+        },
+        "friction_round_trip_pct": 1.0,
+        "max_drawdown_pct": -27.5227,
+        "max_weekly_return_pct": 20.6531,
+        "min_weekly_return_pct": -12.2779,
+        "points": 218,
+        "rolling_52w_beat_benchmark_rate_pct": 60.8434,
+        "rolling_52w_min_alpha_pct": -78.7777,
+        "rolling_52w_min_return_pct": -19.5484,
+        "rolling_52w_positive_rate_pct": 96.3855,
+        "rolling_52w_windows": 166,
+        "sharpe_nominal": 1.3618,
+        "tail_risk": {
+          "cvar_5pct": -9.971,
+          "downside_deviation_pct": 2.9447,
+          "excess_kurtosis": 0.9542,
+          "skew": 0.5381,
+          "ulcer_index_pct": 13.0096,
+          "worst_period_pct": -12.2779
+        },
+        "total_return_pct": 1841.661,
+        "years": 8.3176
+      },
+      {
+        "alpha_pct": 645.7868,
+        "benchmark_return_pct": 553.3773,
+        "cagr_pct": 36.1108,
+        "case": "stress_1.50pct",
+        "deflated": {
+          "cpi_real": {
+            "alpha_pct": 53.0316,
+            "benchmark_total_return_pct": -46.3451,
+            "cagr_pct": 0.7812,
+            "max_drawdown_pct": -58.2745,
+            "sharpe": 0.1705,
+            "total_return_pct": 6.6865
+          },
+          "gram_gold": {
+            "alpha_pct": 17.652,
+            "benchmark_total_return_pct": -82.1404,
+            "cagr_pct": -11.7037,
+            "max_drawdown_pct": -78.7004,
+            "sharpe": -0.1994,
+            "total_return_pct": -64.4884
+          },
+          "usd": {
+            "alpha_pct": 53.841,
+            "benchmark_total_return_pct": -45.5262,
+            "cagr_pct": 0.9649,
+            "max_drawdown_pct": -70.4052,
+            "sharpe": 0.1812,
+            "total_return_pct": 8.3148
+          }
+        },
+        "friction_round_trip_pct": 1.5,
+        "max_drawdown_pct": -31.1502,
+        "max_weekly_return_pct": 20.5031,
+        "min_weekly_return_pct": -12.5313,
+        "points": 218,
+        "rolling_52w_beat_benchmark_rate_pct": 55.4217,
+        "rolling_52w_min_alpha_pct": -95.9652,
+        "rolling_52w_min_return_pct": -27.3705,
+        "rolling_52w_positive_rate_pct": 89.759,
+        "rolling_52w_windows": 166,
+        "sharpe_nominal": 1.1937,
+        "tail_risk": {
+          "cvar_5pct": -10.2185,
+          "downside_deviation_pct": 2.98,
+          "excess_kurtosis": 0.9685,
+          "skew": 0.5368,
+          "ulcer_index_pct": 15.3233,
+          "worst_period_pct": -12.5313
+        },
+        "total_return_pct": 1199.1641,
+        "years": 8.3176
+      }
+    ],
+    "end_date": "2026-07-13",
+    "execution_mode": "same_day_open",
+    "gates": [
+      {
+        "detail": "Signals use the prior completed session and fill at the effective session's first available open.",
+        "key": "execution",
+        "label": "T-1 completed data -> T opening execution",
+        "status": "pass"
+      },
+      {
+        "detail": "Worst stress alpha: 645.7868%",
+        "key": "slippage",
+        "label": "Slippage stress",
+        "status": "pass"
+      },
+      {
+        "detail": "Max drawdown: -24.6675%",
+        "key": "drawdown",
+        "label": "Drawdown sanity",
+        "status": "pass"
+      },
+      {
+        "detail": "0 suspicious jumps flagged.",
+        "key": "price_jumps",
+        "label": "Price jump audit",
+        "status": "pass"
+      },
+      {
+        "detail": "2 inactive priced companies need delisted-name coverage.",
+        "key": "survivorship",
+        "label": "As-of universe",
+        "status": "warn"
+      }
+    ],
+    "generated_at": "2026-07-13T15:06:10+00:00",
+    "intra_window_trailing": true,
+    "price_jump_audit": {
+      "flag_count": 0,
+      "ratio_threshold": 5.0,
+      "sample": [],
+      "scanned_price_rows": 986615
+    },
+    "rebalance_anchor_date": "2026-06-29",
+    "rebalance_every_n_weeks": 2,
+    "start_date": "2018-03-19",
+    "strategy_variant": "index_aware",
+    "survivorship_audit": {
+      "inactive_priced_company_count": 2,
+      "sample": [
+        {
+          "delisting_date": null,
+          "first_price_date": "2024-03-25",
+          "last_price_date": "2026-01-09",
+          "price_rows": 448,
+          "ticker": "ROYAL"
+        },
+        {
+          "delisting_date": null,
+          "first_price_date": "2022-06-27",
+          "last_price_date": "2026-06-08",
+          "price_rows": 985,
+          "ticker": "YGYO"
+        }
+      ],
+      "status": "warn"
+    },
+    "trail_max_pct": 0.35,
+    "trail_min_pct": 0.2
+  },
+  "exported_at": "2026-07-13T15:17:57+00:00",
+  "live_tickers": {
+    "filename": "live_tickers.json",
+    "latest_price_date": "2026-07-13",
+    "ticker_count": 618,
+    "url": "https://raw.githubusercontent.com/Somethinglikeu-hub/MobileInv-feed/gh-pages/live_tickers.json"
+  },
   "real_returns": {
     "deflated": {
       "cpi_real": {
@@ -8,17 +298,17 @@
         "total_return_pct": 25.3009
       },
       "gram_gold": {
-        "cagr_pct": -10.1126,
+        "cagr_pct": -9.9908,
         "max_drawdown_pct": -70.9252,
-        "total_return_pct": -58.8009
+        "total_return_pct": -58.3346
       },
       "usd": {
-        "cagr_pct": 2.9359,
+        "cagr_pct": 2.9362,
         "max_drawdown_pct": -59.2008,
-        "total_return_pct": 27.2109
+        "total_return_pct": 27.2142
       }
     },
-    "generated_at": "2026-07-13T07:33:15+00:00",
+    "generated_at": "2026-07-13T15:17:56+00:00",
     "nominal": {
       "alpha_pct": 872.4624,
       "benchmark_return_pct": 553.3773,
@@ -40,9 +330,9 @@
   "snapshot": {
     "compression": "gzip",
     "filename": "mobile_snapshot.db.gz",
-    "sha256": "7a340729448b73189141a1aca84945b929bfc738d1dbed84cb9d83b00ff3cb40",
-    "size_bytes": 10072247,
+    "sha256": "060e5388ab20a77076ff59ff4bd165c90a3393c449c692348930c15673568ff5",
+    "size_bytes": 10072628,
     "url": "https://raw.githubusercontent.com/Somethinglikeu-hub/MobileInv-feed/gh-pages/mobile_snapshot.db.gz"
   },
-  "snapshot_version": 12
+  "snapshot_version": 13
 }

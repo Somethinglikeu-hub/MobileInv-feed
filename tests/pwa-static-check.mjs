@@ -14,6 +14,7 @@ const snapshotManifest = JSON.parse(read("manifest.json"));
 
 const requiredFiles = [
   "app.js",
+  "personal-portfolio.js",
   "index.css",
   "manifest.webmanifest",
   "icons/icon-192.png",
@@ -32,9 +33,9 @@ for (const file of requiredFiles) {
 }
 
 for (const localRuntime of [
-  "./vendor/pako.min.js?v=18",
-  "./vendor/sql-wasm.js?v=18",
-  "./vendor/apexcharts.min.js?v=18",
+  "./vendor/pako.min.js?v=19",
+  "./vendor/sql-wasm.js?v=19",
+  "./vendor/apexcharts.min.js?v=19",
 ]) {
   if (!indexHtml.includes(localRuntime)) {
     throw new Error(`index.html does not reference local runtime: ${localRuntime}`);
@@ -45,8 +46,8 @@ if (/cdnjs\.cloudflare\.com\/ajax\/libs\/(?:pako|sql\.js)|cdn\.jsdelivr\.net\/np
   throw new Error("Core PWA runtime still depends on an external CDN.");
 }
 
-if (!serviceWorker.includes("bist-picker-shell-v18")) {
-  throw new Error("Service worker cache version was not bumped to v18.");
+if (!serviceWorker.includes("bist-picker-shell-v19")) {
+  throw new Error("Service worker cache version was not bumped to v19.");
 }
 
 if (!appJs.includes("Snapshot bütünlük kontrolü başarısız")) {
@@ -61,8 +62,20 @@ if (!appJs.includes("MobileInv-feed/live-data/live_prices.json")) {
   throw new Error("PWA near-live price feed URL is missing.");
 }
 
-if (!appJs.includes("./vendor/${filename}?v=18")) {
-  throw new Error("sql.js WASM locateFile cache version was not bumped to v18.");
+if (!appJs.includes("./vendor/${filename}?v=19")) {
+  throw new Error("sql.js WASM locateFile cache version was not bumped to v19.");
+}
+
+if (!indexHtml.includes("./personal-portfolio.js?v=19")) {
+  throw new Error("Personal execution profile runtime is missing.");
+}
+
+if (!appJs.includes("const USER_STORE_NAME = 'user-data'")
+  || !appJs.includes("personalPositionResult")
+  || !appJs.includes("actualEntryFill")
+  || !indexHtml.includes("Midas · maliyet %0")
+  || !indexHtml.includes("Bu bilgi yalnız bu cihazda saklanır")) {
+  throw new Error("Private actual-fill and zero-cost broker profile support is incomplete.");
 }
 
 if (!appJs.includes("sonraki rotasyona kadar") || !indexHtml.includes("2 haftada bir Pazartesi")) {

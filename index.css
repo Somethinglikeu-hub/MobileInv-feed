@@ -1503,6 +1503,236 @@ body {
   padding-bottom: calc(40px + var(--safe-bottom));
 }
 
+/* ==========================================================================
+   Personal execution profile (local-only actual fills and broker costs)
+   ========================================================================== */
+
+.personal-profile-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin: 12px 0 8px;
+  padding: 12px;
+  background: linear-gradient(135deg, rgba(167, 139, 250, 0.10), rgba(125, 211, 252, 0.05));
+  border: 1px solid rgba(167, 139, 250, 0.25);
+  border-radius: var(--r-md);
+  box-shadow: var(--elev-card);
+}
+
+.personal-profile-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.personal-profile-copy strong {
+  font-size: 12px;
+  color: var(--text);
+}
+
+.personal-profile-copy > span:last-child {
+  max-width: 210px;
+  color: var(--text-muted);
+  font-size: 9px;
+  line-height: 1.35;
+}
+
+.personal-profile-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 7px;
+  flex-shrink: 0;
+}
+
+.return-view-switch {
+  display: inline-flex;
+  padding: 2px;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid var(--outline-variant);
+  border-radius: 999px;
+}
+
+.return-view-switch button {
+  min-width: 48px;
+  padding: 5px 9px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 9px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.return-view-switch button.active {
+  background: var(--tertiary);
+  color: #0e0e10;
+}
+
+.icon-text-btn,
+.fill-edit-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border: 0;
+  color: var(--secondary);
+  background: transparent;
+  font-size: 9px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.icon-text-btn .material-symbols-rounded,
+.fill-edit-btn .material-symbols-rounded {
+  font-size: 14px;
+}
+
+.fill-edit-btn {
+  margin-top: 5px;
+  padding: 3px 6px;
+  border: 1px solid rgba(125, 211, 252, 0.22);
+  border-radius: 999px;
+  background: rgba(125, 211, 252, 0.06);
+}
+
+.fill-edit-btn.has-actual {
+  color: var(--success);
+  border-color: rgba(34, 197, 94, 0.28);
+  background: rgba(34, 197, 94, 0.08);
+}
+
+.history-badges {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+}
+
+.personal-form-sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.personal-model-reference {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.personal-model-reference strong {
+  font-size: 24px;
+  font-family: var(--font-logo);
+  color: var(--primary);
+}
+
+.personal-model-reference p,
+.personal-privacy-note {
+  color: var(--text-muted);
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.personal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.personal-form label {
+  margin-top: 4px;
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.personal-form input[type='text'],
+.personal-form input[type='number'] {
+  width: 100%;
+  min-height: 46px;
+  padding: 11px 12px;
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+}
+
+.cost-input-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.cost-input-grid > div {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.personal-privacy-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin: 6px 0;
+  padding: 10px;
+  background: rgba(125, 211, 252, 0.05);
+  border: 1px solid rgba(125, 211, 252, 0.16);
+  border-radius: var(--r-sm);
+}
+
+.personal-privacy-note .material-symbols-rounded {
+  font-size: 15px;
+  color: var(--secondary);
+}
+
+.primary-form-btn,
+.secondary-form-btn {
+  min-height: 44px;
+  padding: 10px 14px;
+  border-radius: var(--r-sm);
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.primary-form-btn {
+  border: 0;
+  background: var(--primary);
+  color: #1a110c;
+}
+
+.secondary-form-btn {
+  border: 1px solid var(--outline-variant);
+  background: var(--surface);
+  color: var(--text-muted);
+}
+
+.backup-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+@media (max-width: 360px) {
+  .personal-profile-card {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .personal-profile-actions {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
 .signal-banner {
   background-color: rgba(239, 68, 68, 0.1);
   border: 1px solid rgba(239, 68, 68, 0.25);

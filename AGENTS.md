@@ -1,28 +1,46 @@
-# Agent Handoff
+# MobileInv-feed — Agent Entry Point
 
-Bu repo MobileInv'in tek aktif kullanıcı arayüzü olan PWA/WebUI'yi barındırır.
+Bu repo MobileInv'in tek aktif kullanıcı arayüzü olan PWA/WebUI'dir.
 
-## Önce Oku
+## Önce oku
 
-Ana backend reposundaki güncel handoff:
+Backend sibling checkout varsa:
 
-`MobileInv/docs/HANDOFF_2026-07-02_FABLE5.md`
+1. `../MobileInv/AGENTS.md`
+2. `../MobileInv/docs/CURRENT_STATE.md`
+3. `../MobileInv/docs/ARCHITECTURE.md`
+4. Model/performance işi için `../MobileInv/docs/MODEL_AND_BACKTEST.md`
+5. Yayın/arıza işi için `../MobileInv/docs/OPERATIONS.md`
 
-Bu feed repo için yerel özet:
+Eski dated handoff/progress belgelerini güncel talimat olarak kullanma.
 
-- Aktif branch: `gh-pages`
-- Public uygulama: https://somethinglikeu-hub.github.io/MobileInv-feed/
-- Veri dosyaları: `manifest.json` ve `mobile_snapshot.db.gz`
-- Canlıya yakın fiyat feed'i: `live-data` branch'indeki `live_prices.json`
-- Android artık aktif geliştirme hedefi değildir; UI ve ürün işleri PWA'da yapılır.
+## Repo sözleşmesi
 
-## Dikkat Edilecekler
+- Yayın branch'i `gh-pages`; public URL:
+  `https://somethinglikeu-hub.github.io/MobileInv-feed/`.
+- `manifest.json` pointer/özet; ayrıntı `mobile_snapshot.db.gz` içindedir.
+- `live-data` branch'indeki `live_prices.json` snapshot'tan bağımsız canlıya
+  yakın fiyat kaynağıdır.
+- `snapshot_date`, `exported_at`, `latest_price_date` ve quote zamanı ayrıdır.
+- `manifest.json` ve snapshot backend tarafından üretilir; UI işi sırasında
+  elle finansal veri/performans seed etme.
+- Asset veya service-worker sürümü değişirse `index.html`, `sw.js` ve
+  `tests/pwa-static-check.mjs` birlikte güncellenir.
+- `vendor/` runtime dosyaları CDN bağımlılığını kaldırır; lisans/sürüm birlikte
+  korunur.
+- `app.js` ve `index.css` büyük ama aktiftir. Sırf satır sayısı için bölme veya
+  silme yapma; refactor ayrı PR, statik + etkileşimli regresyon testi ister.
+- Android aktif geliştirme hedefi değildir.
 
-- `manifest.json` küçük bir pointer dosyasıdır; detaylı tarih/pozisyon/performance verileri gzipped SQLite snapshot içindedir.
-- `snapshot_date` feed'in üretildiği model snapshot tarihidir.
-- `latest_price_date` borsadaki son kapanış fiyat tarihidir. Sabah run'larında bugünün tarihi yerine önceki işlem günü görünmesi normal olabilir.
-- Asset veya service worker sürümü değişirse `tests/pwa-static-check.mjs` beklentilerini de güncelle.
-- Commit/push öncesi şu kontrolleri çalıştır:
-  `node --check app.js`
-  `node --check sw.js`
-  `node tests/pwa-static-check.mjs`
+## Zorunlu kontroller
+
+```powershell
+node --check app.js
+node --check sw.js
+node tests/pwa-static-check.mjs
+git diff --check
+```
+
+Görsel/etkileşim değişikliğinde ayrıca canlı veya yerel PWA'da portföy,
+Keşfet araması, sheet aç/kapat, History ve service-worker güncellemesi kontrol
+edilir.

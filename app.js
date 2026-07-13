@@ -1268,7 +1268,7 @@ function getPriceDataState() {
   const stockPriceDate = getMarketWidePriceDate();
   const metadataPriceDate = metadata.latest_price_date || null;
   return {
-    snapshotDate: metadata.snapshot_date || null,
+    portfolioDate: metadata.snapshot_date || null,
     exportedAt: metadata.exported_at || null,
     metadataPriceDate,
     stockPriceDate: stockPriceDate || metadataPriceDate,
@@ -1331,8 +1331,8 @@ function renderDataHealthCard(positions) {
   if (!card) return;
 
   const state = getPriceDataState();
-  setTextById('health-snapshot-date', state.snapshotDate || '—');
-  setTextById('health-price-date', state.stockPriceDate || '—');
+  setTextById('health-portfolio-date', state.portfolioDate || '—');
+  setTextById('health-signal-date', state.stockPriceDate || '—');
 
   const quoteSummary = summarizeQuoteCoverage(positions.map(pos => pos.ticker));
   setTextById('health-live-source', formatQuoteCoverage(quoteSummary));
@@ -1404,8 +1404,8 @@ function renderPicksPage() {
   const home = queryOne('SELECT * FROM home_summary WHERE id = 1');
   const updateDateEl = document.getElementById('app-update-date');
   const priceState = getPriceDataState();
-  if (priceState.snapshotDate || priceState.stockPriceDate) {
-    updateDateEl.textContent = `Sinyal: ${priceState.snapshotDate || '—'} • Fiyat: ${priceState.stockPriceDate || '—'}`;
+  if (priceState.portfolioDate || priceState.stockPriceDate) {
+    updateDateEl.textContent = `Portföy: ${priceState.portfolioDate || '—'} • Sinyal: ${priceState.stockPriceDate || '—'}`;
   } else if (home && home.macro_date) {
     updateDateEl.textContent = `Güncelleme: ${home.macro_date}`;
   }
@@ -3109,7 +3109,7 @@ async function initApp() {
     progressFill.style.width = '90%';
     
     const SQL = await initSqlJs({
-      locateFile: filename => `./vendor/${filename}?v=21`
+      locateFile: filename => `./vendor/${filename}?v=22`
     });
 
     try {

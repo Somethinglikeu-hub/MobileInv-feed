@@ -33,9 +33,9 @@ for (const file of requiredFiles) {
 }
 
 for (const localRuntime of [
-  "./vendor/pako.min.js?v=21",
-  "./vendor/sql-wasm.js?v=21",
-  "./vendor/apexcharts.min.js?v=21",
+  "./vendor/pako.min.js?v=22",
+  "./vendor/sql-wasm.js?v=22",
+  "./vendor/apexcharts.min.js?v=22",
 ]) {
   if (!indexHtml.includes(localRuntime)) {
     throw new Error(`index.html does not reference local runtime: ${localRuntime}`);
@@ -46,8 +46,8 @@ if (/cdnjs\.cloudflare\.com\/ajax\/libs\/(?:pako|sql\.js)|cdn\.jsdelivr\.net\/np
   throw new Error("Core PWA runtime still depends on an external CDN.");
 }
 
-if (!serviceWorker.includes("bist-picker-shell-v21")) {
-  throw new Error("Service worker cache version was not bumped to v21.");
+if (!serviceWorker.includes("bist-picker-shell-v22")) {
+  throw new Error("Service worker cache version was not bumped to v22.");
 }
 
 if (!appJs.includes("Snapshot bütünlük kontrolü başarısız")) {
@@ -62,12 +62,21 @@ if (!appJs.includes("MobileInv-feed/live-data/live_prices.json")) {
   throw new Error("PWA near-live price feed URL is missing.");
 }
 
-if (!appJs.includes("./vendor/${filename}?v=21")) {
-  throw new Error("sql.js WASM locateFile cache version was not bumped to v21.");
+if (!appJs.includes("./vendor/${filename}?v=22")) {
+  throw new Error("sql.js WASM locateFile cache version was not bumped to v22.");
 }
 
-if (!indexHtml.includes("./personal-portfolio.js?v=21")) {
+if (!indexHtml.includes("./personal-portfolio.js?v=22")) {
   throw new Error("Personal execution profile runtime is missing.");
+}
+
+if (!indexHtml.includes("Portföy Tarihi")
+  || !indexHtml.includes("health-portfolio-date")
+  || !indexHtml.includes("Sinyal Verisi")
+  || !indexHtml.includes("health-signal-date")
+  || !appJs.includes("Portföy: ${priceState.portfolioDate")
+  || !appJs.includes("Sinyal: ${priceState.stockPriceDate")) {
+  throw new Error("Portfolio effective date and T-1 signal date labels are not separated.");
 }
 
 if (!appJs.includes("pos.signal_date")

@@ -436,6 +436,7 @@ async function setPersonalReturnView(view) {
 function openPersonalFillEditor(position) {
   const modelEntry = finiteNumber(position.entry_price, null);
   const selectionDate = String(position.selection_date || '');
+  const signalDate = String(position.signal_date || selectionDate);
   activePersonalFillContext = {
     ticker: String(position.ticker || '').toUpperCase(),
     selectionDate,
@@ -444,8 +445,8 @@ function openPersonalFillEditor(position) {
   const current = personalFillFor(position.ticker, selectionDate);
   document.getElementById('personal-fill-title').textContent = `${position.ticker} Gerçek İşlem`;
   document.getElementById('personal-fill-date').textContent = selectionDate
-    ? `Model seçim tarihi: ${formatDateToTurkish(selectionDate)}`
-    : 'Model seçim tarihi yok';
+    ? `Portföy: ${formatDateToTurkish(selectionDate)} · Veri: ${formatDateToTurkish(signalDate)}`
+    : 'Portföy tarihi yok';
   document.getElementById('personal-model-entry').textContent = modelEntry > 0
     ? `${modelEntry.toFixed(2)} TL`
     : '—';
@@ -860,12 +861,16 @@ function personalCyclePositionResult({
 // cohort logic below.
 function buildWeeklyPerformanceRecords(dbPositions, livePrices) {
   let marks = [];
+  const todayDate = localIsoDate();
   try {
     marks = queryAll(`
       SELECT * FROM portfolio_cycle_marks
-      WHERE cycle_date >= :startDate
+      WHERE cycle_date >= :startDate AND cycle_date <= :todayDate
       ORDER BY cycle_date ASC, sort_order ASC
-    `, { ':startDate': LIVE_TRACKING_START_DATE });
+    `, {
+      ':startDate': LIVE_TRACKING_START_DATE,
+      ':todayDate': todayDate,
+    });
   } catch { /* pre-B1 snapshot — no marks table */ }
 
   if (marks.length > 0) {
@@ -882,11 +887,21 @@ function buildWeeklyPerformanceRecords(dbPositions, livePrices) {
 }
 
 function buildCycleMarkRecords(marks, dbPositions, livePrices) {
+  const todayDate = localIsoDate();
   const exitRows = queryAll(`
     SELECT * FROM portfolio_history
     WHERE exit_date IS NOT NULL AND exit_date > :startDate
+      AND exit_date <= :todayDate
     ORDER BY exit_date ASC, sort_order ASC
-  `, { ':startDate': LIVE_TRACKING_START_DATE });
+  `, {
+    ':startDate': LIVE_TRACKING_START_DATE,
+    ':todayDate': todayDate,
+  });
+  const pendingExitRows = queryAll(`
+    SELECT * FROM portfolio_history
+    WHERE exit_date > :todayDate
+    ORDER BY exit_date ASC, sort_order ASC
+  `, { ':todayDate': todayDate });
 
   const byCycle = new Map();
   marks.forEach(mark => {
@@ -899,6 +914,7 @@ function buildCycleMarkRecords(marks, dbPositions, livePrices) {
   const findExit = (ticker, afterDate, uptoDate) => exitRows.find(row =>
     row.ticker === ticker && row.exit_date > afterDate
     && (!uptoDate || row.exit_date <= uptoDate));
+  const findPendingExit = ticker => pendingExitRows.find(row => row.ticker === ticker);
   const selectionDateFor = (ticker, cycleDate) => {
     const candidates = [
       ...dbPositions.filter(row => row.ticker === ticker),
@@ -962,7 +978,7 @@ function buildCycleMarkRecords(marks, dbPositions, livePrices) {
     const ref = finiteNumber(mark.ref_price);
     if (!(ref > 0)) return;
     const pos = posByTicker.get(mark.ticker);
-    if (pos) {
+    if (pos && (!pos.selection_date || pos.selection_date <= todayDate)) {
       const latest = finiteNumber(livePrices[mark.ticker] ?? pos.current_price, null);
       if (latest != null && latest > 0) {
         activeStocks.push(personalCyclePositionResult({
@@ -974,6 +990,18 @@ function buildCycleMarkRecords(marks, dbPositions, livePrices) {
           includeSellCost: true,
         }));
       }
+      return;
+    }
+    const pendingExit = findPendingExit(mark.ticker);
+    if (pendingExit && finiteNumber(pendingExit.exit_price, null) > 0) {
+      activeStocks.push(personalCyclePositionResult({
+        ticker: mark.ticker,
+        selectionDate: pendingExit.selection_date || cLast,
+        cycleStart: cLast,
+        modelEntryPrice: ref,
+        modelExitPrice: finiteNumber(pendingExit.exit_price),
+        includeSellCost: false,
+      }));
       return;
     }
     const exitRow = findExit(mark.ticker, cLast, null);
@@ -1010,15 +1038,21 @@ function buildCycleMarkRecords(marks, dbPositions, livePrices) {
 }
 
 function buildLegacyCohortRecords(dbPositions, livePrices) {
+  const todayDate = localIsoDate();
   const completedRows = queryAll(`
     SELECT * FROM portfolio_history
     WHERE selection_date >= :startDate
       AND selection_date IS NOT NULL
       AND exit_date IS NOT NULL
+      AND exit_date <= :todayDate
     ORDER BY selection_date ASC, exit_date ASC, sort_order ASC
-  `, { ':startDate': LIVE_TRACKING_START_DATE });
+  `, {
+    ':startDate': LIVE_TRACKING_START_DATE,
+    ':todayDate': todayDate,
+  });
 
   const activeStart = dbPositions
+    .filter(position => !position.selection_date || position.selection_date <= todayDate)
     .map(position => position.selection_date)
     .filter(Boolean)
     .sort()
@@ -1371,7 +1405,7 @@ function renderPicksPage() {
   const updateDateEl = document.getElementById('app-update-date');
   const priceState = getPriceDataState();
   if (priceState.snapshotDate || priceState.stockPriceDate) {
-    updateDateEl.textContent = `Model: ${priceState.snapshotDate || '—'} • Fiyat: ${priceState.stockPriceDate || '—'}`;
+    updateDateEl.textContent = `Sinyal: ${priceState.snapshotDate || '—'} • Fiyat: ${priceState.stockPriceDate || '—'}`;
   } else if (home && home.macro_date) {
     updateDateEl.textContent = `Güncelleme: ${home.macro_date}`;
   }
@@ -1432,15 +1466,22 @@ function renderPicksPage() {
       if (rawEntry > 0) {
         const actualFill = personalFillFor(pos.ticker, pos.selection_date);
         let sinceShort = '';
+        let signalShort = '';
         if (pos.selection_date) {
           const d = new Date(pos.selection_date + 'T00:00:00');
           if (!Number.isNaN(d.getTime())) {
-            sinceShort = ' · ' + d.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' });
+            sinceShort = ' · portföy ' + d.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' });
+          }
+        }
+        if (pos.signal_date && pos.signal_date !== pos.selection_date) {
+          const d = new Date(pos.signal_date + 'T00:00:00');
+          if (!Number.isNaN(d.getTime())) {
+            signalShort = ' · veri ' + d.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' });
           }
         }
         entryLine = actualFill?.actualEntryFill > 0
-          ? `<div class="entry-line tabular-nums">Gerçek ${actualFill.actualEntryFill.toFixed(2)} · Model ${rawEntry.toFixed(2)}${sinceShort}</div>`
-          : `<div class="entry-line tabular-nums">Model giriş ${rawEntry.toFixed(2)}${sinceShort}</div>`;
+          ? `<div class="entry-line tabular-nums">Gerçek ${actualFill.actualEntryFill.toFixed(2)} · Model ref ${rawEntry.toFixed(2)}${signalShort}${sinceShort}</div>`
+          : `<div class="entry-line tabular-nums">Model ref ${rawEntry.toFixed(2)}${signalShort}${sinceShort}</div>`;
       }
       const actualFill = personalFillFor(pos.ticker, pos.selection_date);
       const fillButton = pos.selection_date
@@ -1604,7 +1645,8 @@ function computeRebalanceDecisions(positions) {
   if (!result.rotationDate) return result;
 
   const exitedOnRotation = queryAll(`
-    SELECT ticker, exit_price, pnl_pct FROM portfolio_history
+    SELECT ticker, selection_date, entry_price, exit_price, pnl_pct
+    FROM portfolio_history
     WHERE portfolio = 'ALPHA' AND exit_date = :d
     ORDER BY sort_order ASC
   `, { ':d': result.rotationDate });
@@ -1615,7 +1657,8 @@ function computeRebalanceDecisions(positions) {
     if (pos.selection_date === result.rotationDate && !exitedTickers.has(pos.ticker)) {
       result.buys.push({
         ticker: pos.ticker, action: 'BUY',
-        reason: `Rotasyon: portföye yeni girdi (referans ${finiteNumber(pos.entry_price).toFixed(2)} TL — Cuma kapanışı). Aldıktan sonra 2 hafta tut; stop uyarısı gelmedikçe sonraki rotasyona kadar satma.`,
+        reason: `Rotasyon: portföye yeni girdi (model ref ${finiteNumber(pos.entry_price).toFixed(2)} TL — ${formatDateToTurkish(pos.signal_date || pos.selection_date)} tamamlanmış kapanışı). Gerçek alışını kaydet; stop uyarısı gelmedikçe sonraki rotasyona kadar tut.`,
+        fillPosition: pos,
       });
     } else {
       // Continuity: original entry date + real P&L since entry make the
@@ -1637,11 +1680,19 @@ function computeRebalanceDecisions(positions) {
     result.sells.push({
       ticker: row.ticker, action: 'SELL',
       reason: `Rotasyonda çıkarıldı${pnl}.`,
+      fillPosition: {
+        ticker: row.ticker,
+        selection_date: row.selection_date,
+        signal_date: row.selection_date,
+        entry_price: row.entry_price,
+      },
     });
   });
 
   result.riskExits = queryAll(`
-    SELECT ticker, exit_date, exit_price, pnl_pct, exit_reason FROM portfolio_history
+    SELECT ticker, selection_date, entry_price,
+           exit_date, exit_price, pnl_pct, exit_reason
+    FROM portfolio_history
     WHERE portfolio = 'ALPHA' AND exit_date > :d
       AND exit_reason IN ('STOP_LOSS', 'TARGET', 'THESIS_BREAKER')
     ORDER BY exit_date DESC, sort_order ASC
@@ -1667,9 +1718,11 @@ function renderTradeDayCard(decisions) {
   if (!container) return;
   container.innerHTML = '';
 
-  const todayIso = new Date().toISOString().slice(0, 10);
+  const todayIso = localIsoDate();
   const actionable = [...decisions.sells, ...decisions.buys];
-  if (decisions.rotationDate !== todayIso || actionable.length === 0) return;
+  const daysUntilRotation = daysBetweenIsoDates(todayIso, decisions.rotationDate);
+  if (daysUntilRotation == null || daysUntilRotation < 0 || daysUntilRotation > 1 || actionable.length === 0) return;
+  const isTomorrow = daysUntilRotation === 1;
 
   const done = loadTradeDone(decisions.rotationDate);
   const card = document.createElement('div');
@@ -1680,35 +1733,45 @@ function renderTradeDayCard(decisions) {
     const label = sig.action === 'SELL' ? 'SAT' : 'AL';
     const cls = sig.action === 'SELL' ? 'trade-sell' : 'trade-buy';
     return `
-      <button type="button" class="trade-step ${isDone ? 'trade-done' : ''}" data-ticker="${escapeHtml(sig.ticker)}">
-        <span class="material-symbols-rounded trade-check">${isDone ? 'check_circle' : 'radio_button_unchecked'}</span>
-        <span class="trade-ticker">${escapeHtml(sig.ticker)}</span>
-        <span class="trade-action ${cls}">${label}</span>
-      </button>`;
+      <div class="trade-step ${isDone ? 'trade-done' : ''}" data-ticker="${escapeHtml(sig.ticker)}">
+        <button type="button" class="trade-toggle" data-trade-toggle="${escapeHtml(sig.ticker)}">
+          <span class="material-symbols-rounded trade-check">${isDone ? 'check_circle' : 'radio_button_unchecked'}</span>
+          <span class="trade-ticker">${escapeHtml(sig.ticker)}</span>
+          <span class="trade-action ${cls}">${label}</span>
+        </button>
+        <button type="button" class="trade-fill-button" data-trade-fill="${escapeHtml(sig.ticker)}" aria-label="${escapeHtml(sig.ticker)} gerçek işlem fiyatını gir">
+          <span class="material-symbols-rounded">edit</span>
+        </button>
+      </div>`;
   }).join('');
 
   const rotation = getRotationInfo(decisions.rotationDate);
+  const actionDay = isTomorrow ? 'Yarın' : 'Bugün';
   const nextNote = rotation.nextLabel
-    ? ` Bugün aldıklarını ${rotation.weeks} hafta tut — sonraki rotasyon: ${rotation.nextLabel}.`
-    : ` Bugün aldıklarını ${rotation.weeks} hafta tut.`;
+    ? ` ${actionDay} aldıklarını ${rotation.weeks} hafta tut — sonraki rotasyon: ${rotation.nextLabel}.`
+    : ` ${actionDay} aldıklarını ${rotation.weeks} hafta tut.`;
   card.innerHTML = `
     <div class="trade-day-header">
       <span class="material-symbols-rounded">task_alt</span>
       <div>
-        <h3>Bugün İşlem Günü</h3>
-        <p>Önce SAT, sonra AL. Emirleri açılışta ver; canlı fiyat etiketine bak. Satıra dokununca tamamlandı işaretlenir.${nextNote}</p>
+        <h3>${isTomorrow ? 'Yarın İşlem Günü' : 'Bugün İşlem Günü'}</h3>
+        <p>Portföy açılıştan önce hazır. Önce SAT, sonra AL; emirleri ${isTomorrow ? 'yarın ' : ''}açılışta ver ve gerçek fiyatını kaydet.${nextNote}</p>
       </div>
     </div>
     ${rows}`;
 
-  card.querySelectorAll('.trade-step').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const ticker = btn.getAttribute('data-ticker');
+  card.querySelectorAll('.trade-step').forEach(row => {
+    const ticker = row.getAttribute('data-ticker');
+    row.querySelector('[data-trade-toggle]')?.addEventListener('click', () => {
       const current = loadTradeDone(decisions.rotationDate);
       if (current.has(ticker)) current.delete(ticker); else current.add(ticker);
       saveTradeDone(decisions.rotationDate, current);
       try { navigator.vibrate?.(12); } catch { /* unsupported */ }
       renderTradeDayCard(decisions);
+    });
+    row.querySelector('[data-trade-fill]')?.addEventListener('click', () => {
+      const signal = actionable.find(item => item.ticker === ticker);
+      if (signal?.fillPosition) openPersonalFillEditor(signal.fillPosition);
     });
   });
 
@@ -1733,12 +1796,15 @@ function renderIntraweekExits(decisions) {
       ? `<span class="${row.pnl_pct >= 0 ? 'pos-text' : 'neg-text'}">${row.pnl_pct >= 0 ? '+' : ''}${finiteNumber(row.pnl_pct).toFixed(1)}%</span>` : '';
     const price = row.exit_price != null ? `${finiteNumber(row.exit_price).toFixed(2)} TL` : '';
     return `
-      <div class="risk-exit-row">
+      <div class="risk-exit-row" data-risk-exit="${escapeHtml(row.ticker)}">
         <div>
           <strong>${escapeHtml(row.ticker)}</strong>
           <span class="risk-exit-reason">${reasonLabel[row.exit_reason] || escapeHtml(row.exit_reason)} • ${escapeHtml(row.exit_date || '')}</span>
         </div>
         <div class="risk-exit-price">${price} ${pnl}</div>
+        <button type="button" class="trade-fill-button" data-risk-fill="${escapeHtml(row.ticker)}" aria-label="${escapeHtml(row.ticker)} gerçek satış fiyatını gir">
+          <span class="material-symbols-rounded">edit</span>
+        </button>
       </div>`;
   }).join('');
 
@@ -1753,6 +1819,19 @@ function renderIntraweekExits(decisions) {
       </div>
       ${rows}
     </div>`;
+  container.querySelectorAll('[data-risk-fill]').forEach(button => {
+    button.addEventListener('click', () => {
+      const ticker = button.getAttribute('data-risk-fill');
+      const row = decisions.riskExits.find(item => item.ticker === ticker);
+      if (!row) return;
+      openPersonalFillEditor({
+        ticker: row.ticker,
+        selection_date: row.selection_date,
+        signal_date: row.selection_date,
+        entry_price: row.entry_price,
+      });
+    });
+  });
 }
 
 // --- PAGE 2: BROWSE ---
@@ -2128,6 +2207,10 @@ function daysBetweenIsoDates(startDate, endDate) {
   return Math.max(0, Math.round((end - start) / 86400000));
 }
 
+function localIsoDate(value = new Date()) {
+  return `${value.getFullYear()}-${String(value.getMonth() + 1).padStart(2, '0')}-${String(value.getDate()).padStart(2, '0')}`;
+}
+
 function formatPercent(value, digits = 1) {
   const parsed = Number(value);
   if (!Number.isFinite(parsed)) return '—';
@@ -2264,7 +2347,7 @@ function renderDecisionSummary(home, positions) {
       ? 'Backtest audit manifestten okunamadı; History içindeki NAV eğrisi sınırlı fikir verir.'
       : hasWarnings
         ? `Backtest güçlü, fakat kontrol uyarısı var: ${localizeAuditWarning(primaryWarning)}`
-        : `T+1 backtest ${formatPercent(baseCase?.alpha_pct, 1)} alpha üretiyor; yine de işlem boyutu kişisel risk limitine göre ayarlanmalı.`;
+        : `${audit.execution_mode === 'same_day_open' ? 'T-1→T açılış' : 'T+1'} backtest ${formatPercent(baseCase?.alpha_pct, 1)} alpha üretiyor; yine de işlem boyutu kişisel risk limitine göre ayarlanmalı.`;
   setTextById('decision-audit-note', auditNote);
 
   const cashAccent = cashState === 'NORMAL'
@@ -2771,7 +2854,9 @@ function renderBacktestAuditPanel(perfPoints) {
   const executionGate = gates.get('execution') || {};
   const executionMode = isNavFallback
     ? '—'
-    : (audit.execution_mode === 'next_open' ? 'T+1 next open' : (audit.execution_mode || '—'));
+    : (audit.execution_mode === 'same_day_open'
+      ? 'T-1 veri → T açılış'
+      : (audit.execution_mode === 'next_open' ? 'T+1 next open' : (audit.execution_mode || '—')));
   setAuditRow('bt-audit-execution', executionMode, executionGate.status || 'warn');
 
   const slippageGate = gates.get('slippage') || {};
@@ -2820,7 +2905,7 @@ function openBacktestingSheet() {
   renderBacktestAreaChart(perfPoints);
 
   // Cumulative numbers. Prefer the investor-grade manifest because it carries
-  // the audited T+1/slippage run; the snapshot NAV table is kept for the chart.
+  // the audited execution/slippage run; snapshot NAV remains the chart source.
   const latestPoint = perfPoints[perfPoints.length - 1];
   const firstPoint = perfPoints[0];
   const auditSummary = getInvestorAuditSummary();
@@ -2850,9 +2935,12 @@ function openBacktestingSheet() {
   // Render completed transactions list
   const closedPositions = queryAll(`
     SELECT * FROM portfolio_history
-    WHERE selection_date >= :startDate
+    WHERE selection_date >= :startDate AND exit_date <= :todayDate
     ORDER BY exit_date DESC, sort_order ASC
-  `, { ':startDate': LIVE_TRACKING_START_DATE });
+  `, {
+    ':startDate': LIVE_TRACKING_START_DATE,
+    ':todayDate': localIsoDate(),
+  });
   const closedListEl = document.getElementById('bt-transactions-list');
   closedListEl.innerHTML = '';
 
@@ -3021,7 +3109,7 @@ async function initApp() {
     progressFill.style.width = '90%';
     
     const SQL = await initSqlJs({
-      locateFile: filename => `./vendor/${filename}?v=19`
+      locateFile: filename => `./vendor/${filename}?v=21`
     });
 
     try {

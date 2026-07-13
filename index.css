@@ -1815,6 +1815,32 @@ body {
   color: var(--text);
   transition: background 0.18s, border-color 0.18s, transform 0.15s var(--ease-out);
 }
+.trade-toggle {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+.trade-fill-button {
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--outline);
+  border-radius: 999px;
+  background: var(--surface-raised);
+  color: var(--primary);
+  cursor: pointer;
+}
+.trade-fill-button .material-symbols-rounded { font-size: 16px; }
 .trade-step:hover {
   border-color: var(--outline-variant);
 }

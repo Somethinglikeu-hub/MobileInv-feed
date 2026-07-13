@@ -33,9 +33,9 @@ for (const file of requiredFiles) {
 }
 
 for (const localRuntime of [
-  "./vendor/pako.min.js?v=19",
-  "./vendor/sql-wasm.js?v=19",
-  "./vendor/apexcharts.min.js?v=19",
+  "./vendor/pako.min.js?v=21",
+  "./vendor/sql-wasm.js?v=21",
+  "./vendor/apexcharts.min.js?v=21",
 ]) {
   if (!indexHtml.includes(localRuntime)) {
     throw new Error(`index.html does not reference local runtime: ${localRuntime}`);
@@ -46,8 +46,8 @@ if (/cdnjs\.cloudflare\.com\/ajax\/libs\/(?:pako|sql\.js)|cdn\.jsdelivr\.net\/np
   throw new Error("Core PWA runtime still depends on an external CDN.");
 }
 
-if (!serviceWorker.includes("bist-picker-shell-v19")) {
-  throw new Error("Service worker cache version was not bumped to v19.");
+if (!serviceWorker.includes("bist-picker-shell-v21")) {
+  throw new Error("Service worker cache version was not bumped to v21.");
 }
 
 if (!appJs.includes("Snapshot bütünlük kontrolü başarısız")) {
@@ -62,12 +62,23 @@ if (!appJs.includes("MobileInv-feed/live-data/live_prices.json")) {
   throw new Error("PWA near-live price feed URL is missing.");
 }
 
-if (!appJs.includes("./vendor/${filename}?v=19")) {
-  throw new Error("sql.js WASM locateFile cache version was not bumped to v19.");
+if (!appJs.includes("./vendor/${filename}?v=21")) {
+  throw new Error("sql.js WASM locateFile cache version was not bumped to v21.");
 }
 
-if (!indexHtml.includes("./personal-portfolio.js?v=19")) {
+if (!indexHtml.includes("./personal-portfolio.js?v=21")) {
   throw new Error("Personal execution profile runtime is missing.");
+}
+
+if (!appJs.includes("pos.signal_date")
+  || !appJs.includes("same_day_open")
+  || !appJs.includes("T-1 veri")
+  || !appJs.includes("Yarın İşlem Günü")
+  || !appJs.includes("cycle_date <= :todayDate")
+  || !appJs.includes("exit_date <= :todayDate")
+  || !appJs.includes("data-trade-fill")
+  || !appJs.includes("data-risk-fill")) {
+  throw new Error("Pre-open T-1 signal / T execution contract is missing from the PWA.");
 }
 
 if (!appJs.includes("const USER_STORE_NAME = 'user-data'")

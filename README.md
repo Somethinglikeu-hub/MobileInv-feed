@@ -1,49 +1,50 @@
 # MobileInv PWA
 
-MobileInv'in tek aktif kullanıcı uygulamasıdır. Android APK artık geliştirilmez; ürünün kanonik arayüzü bu repodaki kurulabilir PWA/WebUI'dır.
+MobileInv'in kurulabilir, offline-first ve tek aktif kullanıcı uygulaması.
 
-> **2 Temmuz 2026 operasyon notu:** Güncel ana handoff backend reposunda `docs/HANDOFF_2026-07-02_FABLE5.md` dosyasındadır. Public feed 2 Temmuz sabahı yeniden yayımlandı (`exported_at=2026-07-02T06:14:02+00:00`, `snapshot_date=2026-07-02`, `latest_price_date=2026-07-01`). Sabah run'larında `latest_price_date` önceki işlem günü olabilir; bu, bugünkü kapanış henüz oluşmadığı için normaldir.
-
-- Uygulama: https://somethinglikeu-hub.github.io/MobileInv-feed/
+- Canlı: [BIST Picker PWA](https://somethinglikeu-hub.github.io/MobileInv-feed/)
 - Yayın branch'i: `gh-pages`
-- Veri kaynağı: `manifest.json` ve `mobile_snapshot.db.gz`
-- Canlıya yakın fiyat kaynağı: `live-data` branch'indeki `live_prices.json`
-- Çalışma biçimi: Tarayıcıdan açılır, Android/iOS ana ekranına kurulabilir ve son indirilen snapshot ile çevrimdışı çalışabilir.
-- Ürün kapsamı: `MobileInv-mobile-v2` arşiv/legacy olarak durur; UI, History, Backtesting, canlı fiyat ve bildirim işleri bu PWA üzerinde yapılır.
+- Canlıya yakın fiyat branch'i: `live-data`
+- Güncel shell/cache sözleşmesi: `v18`
 
-## Kullanım akışı
+Android repo arşivdir; yeni UI, History, Backtesting, fiyat ve karar görünürlüğü
+işleri bu PWA'da yapılır.
 
-PWA yatırım kararını tek ekranda toplamak için tasarlanır:
+## Veri akışı
 
-1. `Picks` ekranında Main V2'nin aktif 5 hisse portföyü kontrol edilir.
-2. Aynı ekrandaki karar özeti; nakit rejimini, 4 yıllık T+1 backtest sonucunu, en sert slippage stresini ve audit uyarısını birlikte gösterir.
-3. `Zeki Sinyaller` bölümündeki `AL`, `SAT`, `TUT` kararları haftalık rebalans disiplinidir; tek günlük fiyat hareketleriyle model dışına çıkılmamalıdır.
-4. `Market` ekranındaki nakit rejimi NORMAL, CAUTION, DEFENSIVE veya RISK_OFF durumuna göre hisse/nakit ağırlığı belirler.
-5. `History > Backtesting` paneli her hafta güven kontrolü olarak okunur. T+1 execution, slippage, drawdown, fiyat-jump veya survivorship uyarısı bozulursa pozisyon büyütülmez.
-6. Program karar destek aracıdır. Pozisyon büyüklüğü, maksimum zarar toleransı ve nakit tamponu kullanıcı tarafından önceden belirlenmelidir.
+```text
+MobileInv backend
+  ├─ manifest.json + mobile_snapshot.db.gz ─► gh-pages
+  └─ live_prices.json ──────────────────────► live-data
+                                                │
+                                                ▼
+                                           PWA/WebUI
+```
 
-## Geliştirme kuralları
+- `manifest.json` küçük pointer ve doğrulama özetidir.
+- Şirketler, skorlar, pozisyonlar, history ve performans gzip SQLite snapshot
+  içindedir.
+- Live feed yoksa PWA son işlem/snapshot fiyatına düşer ve kaynağı etiketler.
+- Quote zamanı, model tarihi ve son kapanış tarihi birbirinin yerine kullanılmaz.
+- History/performance yalnız backend snapshot sözleşmesinden okunur; sabit veya
+  `localStorage` performans verisi üretilmez.
 
-1. Kullanıcı arayüzü değişiklikleri öncelikle bu PWA üzerinde yapılır.
-2. History ve performans değerleri yalnızca merkezi snapshot verilerinden hesaplanır; `localStorage` veya sabit seed performans verisi kullanılmaz.
-3. `manifest.json` ve `mobile_snapshot.db.gz`, Python backend'deki snapshot export koduyla üretilir.
-4. Canlıya yakın fiyatlar PWA içinde tarayıcıdan Yahoo'ya doğrudan giderek değil, backend workflow'unun yayınladığı `live_prices.json` üzerinden okunur.
-5. Fiyat feed'i gelmezse uygulama snapshot fiyatıyla çalışır ve UI bunu `SNAPSHOT` olarak etiketler.
-6. Kurulu uygulamanın yeni kodu alabilmesi için asset sürümü ve service-worker cache sürümü gerektiğinde artırılır.
-7. Android native uygulama aktif geliştirme dışıdır; dosyalar korunur ama Android'e yeni özellik, bug fix, UI, performans veya bildirim işi açılmaz.
-8. Pako, SQL.js/WASM ve ApexCharts runtime dosyaları `vendor/` altında sabitlenir; ana uygulama açılışı CDN erişimine bağlı bırakılmaz.
-9. `manifest.json` bilinçli olarak küçük bir pointer dosyasıdır. Açık pozisyonlar, snapshot tarihi ve performans detayları `mobile_snapshot.db.gz` içindeki SQLite tablolardan okunur.
+Model, backtest ve bilinen risklerin kanonik açıklaması backend reposundaki
+`docs/CURRENT_STATE.md` ve `docs/MODEL_AND_BACKTEST.md` dosyalarındadır.
 
-## Kalite kontrolleri
+## Ana dosyalar
 
-Her push'ta `.github/workflows/pwa-quality.yml` aşağıdaki kontrolleri çalıştırır:
+| Dosya | Rol |
+|---|---|
+| `index.html` | PWA shell ve erişilebilir DOM iskeleti |
+| `app.js` | SQLite yükleme, read model, sayfalar ve etkileşimler |
+| `index.css` | Mobil tasarım ve responsive davranış |
+| `sw.js` | Offline cache ve asset güncelleme |
+| `manifest.webmanifest` | Kurulum metadata'sı |
+| `vendor/` | Sabitlenmiş Pako, SQL.js/WASM ve ApexCharts |
+| `tests/pwa-static-check.mjs` | Asset, cache, snapshot hash ve kritik UI sözleşmeleri |
 
-- `app.js` ve `sw.js` JavaScript sözdizimi
-- Gerekli PWA/runtime varlıklarının repoda bulunması
-- `manifest.json` içindeki snapshot boyutu ve SHA-256 değerinin gerçek dosyayla eşleşmesi
-- Service worker ve asset sürümlerinin beklenen sürümde olması
-
-12 Temmuz 2026 itibarıyla v18 asset/service-worker beklentileriyle doğrulanan son kontroller:
+## Geliştirme ve kalite
 
 ```bash
 node --check app.js
@@ -51,17 +52,23 @@ node --check sw.js
 node tests/pwa-static-check.mjs
 ```
 
-## 23 Haziran 2026 düzeltmeleri
+Her push'ta `.github/workflows/pwa-quality.yml` aynı çekirdek kontrolleri
+çalıştırır. UI davranışı değiştiyse ayrıca tarayıcıda:
 
-History, backtest, snapshot üretimi, kurulu PWA güncellemesi, offline açılış, doğru ikonlar, yavaş mobil bağlantı başlangıcı, snapshot bütünlük kontrolü, bozuk cache kurtarma ve yerel runtime bağımlılıkları düzeltildi.
+1. Portföy ve veri-sağlığı kartı,
+2. Keşfet arama/filtre,
+3. hisse ve backtest sheet'leri,
+4. Piyasa/Geçmiş/Hakkında sekmeleri,
+5. offline/service-worker güncellemesi
 
-Canlı fiyat tarafında `v8` ile PWA artık snapshot kapanış fiyatını `CANLI` diye göstermiyor. Backend'in 15 dakikalık workflow'u `live-data/live_prices.json` üretir; PWA bunu kullanır, başarısız olursa açık biçimde snapshot fallback'e döner.
+kontrol edilir.
 
-## 25 Haziran 2026 PWA geliştirmeleri
+## Yayın güvenliği
 
-- `Picks` ekranına Main V2 karar özeti eklendi: portföy doluluğu, nakit rejimi, 4 yıllık T+1 model getirisi, stres testi ve fiyat kaynağı aynı kartta gösterilir.
-- `Hakkında` ekranına programla nasıl yatırım yapılacağını anlatan haftalık kullanım rehberi eklendi.
-- Investor-grade güven kontrolü Hakkında ekranında kısa özet olarak görünür hale getirildi.
-- Asset ve service-worker cache sürümü `v9` yapıldı.
-
-Ayrıntılı teknik kayıt ana backend reposundaki `docs/PWA_MAIN_APP_AND_HISTORY_FIX_2026-06-23.md` dosyasındadır.
+- Snapshot SHA-256 manifest ile eşleşmelidir.
+- Eski snapshot yeni feed'i bilinçsizce ezemez.
+- Asset/cache versiyonları birlikte artırılır.
+- Generated manifest/snapshot UI PR'ına elle eklenmez; backend publish run'ı
+  üretir.
+- Yanlış yayın force-push ile değil revert commit/PR ve yeni Pages deploy ile
+  geri alınır.

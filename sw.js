@@ -1,17 +1,17 @@
-const CACHE_NAME = 'bist-picker-shell-v23';
+const CACHE_NAME = 'bist-picker-shell-v24';
 const APP_SHELL = [
   './',
   './index.html',
-  './index.css?v=23',
-  './app.js?v=23',
-  './personal-portfolio.js?v=23',
-  './manifest.webmanifest?v=23',
+  './index.css?v=24',
+  './app.js?v=24',
+  './portfolio-costs.js?v=24',
+  './manifest.webmanifest?v=24',
   './icons/icon-192.png',
   './icons/icon-512.png',
-  './vendor/pako.min.js?v=23',
-  './vendor/sql-wasm.js?v=23',
-  './vendor/sql-wasm.wasm?v=23',
-  './vendor/apexcharts.min.js?v=23'
+  './vendor/pako.min.js?v=24',
+  './vendor/sql-wasm.js?v=24',
+  './vendor/sql-wasm.wasm?v=24',
+  './vendor/apexcharts.min.js?v=24'
 ];
 
 self.addEventListener('install', (e) => {

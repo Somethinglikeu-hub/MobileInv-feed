@@ -14,7 +14,7 @@ const snapshotManifest = JSON.parse(read("manifest.json"));
 
 const requiredFiles = [
   "app.js",
-  "personal-portfolio.js",
+  "portfolio-costs.js",
   "index.css",
   "manifest.webmanifest",
   "icons/icon-192.png",
@@ -33,9 +33,9 @@ for (const file of requiredFiles) {
 }
 
 for (const localRuntime of [
-  "./vendor/pako.min.js?v=23",
-  "./vendor/sql-wasm.js?v=23",
-  "./vendor/apexcharts.min.js?v=23",
+  "./vendor/pako.min.js?v=24",
+  "./vendor/sql-wasm.js?v=24",
+  "./vendor/apexcharts.min.js?v=24",
 ]) {
   if (!indexHtml.includes(localRuntime)) {
     throw new Error(`index.html does not reference local runtime: ${localRuntime}`);
@@ -46,8 +46,8 @@ if (/cdnjs\.cloudflare\.com\/ajax\/libs\/(?:pako|sql\.js)|cdn\.jsdelivr\.net\/np
   throw new Error("Core PWA runtime still depends on an external CDN.");
 }
 
-if (!serviceWorker.includes("bist-picker-shell-v23")) {
-  throw new Error("Service worker cache version was not bumped to v23.");
+if (!serviceWorker.includes("bist-picker-shell-v24")) {
+  throw new Error("Service worker cache version was not bumped to v24.");
 }
 
 if (!appJs.includes("Snapshot bütünlük kontrolü başarısız")) {
@@ -62,12 +62,12 @@ if (!appJs.includes("MobileInv-feed/live-data/live_prices.json")) {
   throw new Error("PWA near-live price feed URL is missing.");
 }
 
-if (!appJs.includes("./vendor/${filename}?v=23")) {
-  throw new Error("sql.js WASM locateFile cache version was not bumped to v23.");
+if (!appJs.includes("./vendor/${filename}?v=24")) {
+  throw new Error("sql.js WASM locateFile cache version was not bumped to v24.");
 }
 
-if (!indexHtml.includes("./personal-portfolio.js?v=23")) {
-  throw new Error("Personal execution profile runtime is missing.");
+if (!indexHtml.includes("./portfolio-costs.js?v=24")) {
+  throw new Error("Portfolio cost profile runtime is missing.");
 }
 
 if (!indexHtml.includes("Model Audit") || indexHtml.includes("4Y Model")) {
@@ -88,18 +88,17 @@ if (!appJs.includes("pos.signal_date")
   || !appJs.includes("T-1 veri")
   || !appJs.includes("Yarın İşlem Günü")
   || !appJs.includes("cycle_date <= :todayDate")
-  || !appJs.includes("exit_date <= :todayDate")
-  || !appJs.includes("data-trade-fill")
-  || !appJs.includes("data-risk-fill")) {
+  || !appJs.includes("exit_date <= :todayDate")) {
   throw new Error("Pre-open T-1 signal / T execution contract is missing from the PWA.");
 }
 
-if (!appJs.includes("const USER_STORE_NAME = 'user-data'")
-  || !appJs.includes("personalPositionResult")
-  || !appJs.includes("actualEntryFill")
+if (!appJs.includes("PortfolioCosts.normalizeSettings")
+  || !appJs.includes("PortfolioCosts.calculateTradeReturn")
+  || !appJs.includes("returnCostSettings")
   || !indexHtml.includes("Midas · maliyet %0")
-  || !indexHtml.includes("Bu bilgi yalnız bu cihazda saklanır")) {
-  throw new Error("Private actual-fill and zero-cost broker profile support is incomplete.");
+  || !indexHtml.includes("cost-profile-label")
+  || !indexHtml.includes("işlem kaydı tutulmaz")) {
+  throw new Error("Broker-cost profile (gross/net) wiring is incomplete.");
 }
 
 if (!appJs.includes("sonraki rotasyona kadar") || !indexHtml.includes("2 haftada bir Pazartesi")) {

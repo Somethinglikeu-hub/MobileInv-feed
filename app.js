@@ -12,8 +12,7 @@ window.liveFeedGeneratedAt = null;
 let dbInstance = null;
 let activeDetailTicker = null;
 let livePriceRefreshTimer = null;
-let personalPortfolioProfile = PersonalPortfolio.normalizeProfile();
-let activePersonalFillContext = null;
+let returnCostSettings = PortfolioCosts.normalizeSettings();
 
 const LIVE_PRICE_FEED_URL = 'https://raw.githubusercontent.com/Somethinglikeu-hub/MobileInv-feed/live-data/live_prices.json';
 const LIVE_PRICE_REFRESH_MS = 60_000;
@@ -260,10 +259,10 @@ if ('serviceWorker' in navigator) {
 // ==========================================================================
 
 const IDB_NAME = 'BistPickerCache';
-const IDB_VERSION = 2;
+const IDB_VERSION = 3;
 const STORE_NAME = 'snapshots';
-const USER_STORE_NAME = 'user-data';
-const PERSONAL_PROFILE_ID = 'personal-portfolio-profile';
+const LEGACY_USER_STORE_NAME = 'user-data';
+const RETURN_COST_SETTINGS_KEY = 'bp_return_cost_settings_v1';
 
 function openIDB() {
   return new Promise((resolve, reject) => {
@@ -278,8 +277,8 @@ function openIDB() {
         if (!db.objectStoreNames.contains(STORE_NAME)) {
           db.createObjectStore(STORE_NAME, { keyPath: 'id' });
         }
-        if (!db.objectStoreNames.contains(USER_STORE_NAME)) {
-          db.createObjectStore(USER_STORE_NAME, { keyPath: 'id' });
+        if (db.objectStoreNames.contains(LEGACY_USER_STORE_NAME)) {
+          db.deleteObjectStore(LEGACY_USER_STORE_NAME);
         }
       };
       request.onsuccess = (e) => {
@@ -344,50 +343,40 @@ async function deleteCachedSnapshot() {
   }
 }
 
-async function getStoredPersonalPortfolioProfile() {
+function loadReturnCostSettings() {
   try {
-    const db = await openIDB();
-    return await new Promise((resolve, reject) => {
-      const tx = db.transaction(USER_STORE_NAME, 'readonly');
-      const req = tx.objectStore(USER_STORE_NAME).get(PERSONAL_PROFILE_ID);
-      req.onsuccess = () => resolve(PersonalPortfolio.normalizeProfile(req.result?.profile));
-      req.onerror = () => reject(req.error);
-    });
-  } catch (err) {
-    console.warn('[Personal] Profile load failed; using Midas zero-cost default:', err);
-    return PersonalPortfolio.normalizeProfile();
+    return PortfolioCosts.normalizeSettings(JSON.parse(
+      localStorage.getItem(RETURN_COST_SETTINGS_KEY) || '{}'
+    ));
+  } catch {
+    return PortfolioCosts.normalizeSettings();
   }
 }
 
-async function savePersonalPortfolioProfile(profile) {
-  const normalized = PersonalPortfolio.normalizeProfile(profile);
-  const db = await openIDB();
-  await new Promise((resolve, reject) => {
-    const tx = db.transaction(USER_STORE_NAME, 'readwrite');
-    const req = tx.objectStore(USER_STORE_NAME).put({
-      id: PERSONAL_PROFILE_ID,
-      profile: normalized,
-    });
-    req.onsuccess = () => resolve(true);
-    req.onerror = () => reject(req.error);
-  });
-  personalPortfolioProfile = normalized;
-  return normalized;
+function saveReturnCostSettings(settings) {
+  returnCostSettings = PortfolioCosts.normalizeSettings(settings);
+  try {
+    localStorage.setItem(RETURN_COST_SETTINGS_KEY, JSON.stringify(returnCostSettings));
+  } catch { /* private mode / quota */ }
+  return returnCostSettings;
 }
 
-function personalFillFor(ticker, selectionDate) {
-  return PersonalPortfolio.getFill(personalPortfolioProfile, ticker, selectionDate);
-}
-
-function personalPositionResult(position, exitPrice, options = {}) {
-  return PersonalPortfolio.positionReturn(personalPortfolioProfile, {
-    ticker: position.ticker,
-    selectionDate: position.selection_date,
-    modelEntryPrice: position.entry_price,
-    modelExitPrice: exitPrice,
-    includeBuyCost: options.includeBuyCost !== false,
-    includeSellCost: options.includeSellCost !== false,
-  });
+function modelPositionResult(position, exitPrice, options = {}) {
+  const entryPrice = finiteNumber(position.entry_price, null);
+  const normalizedExit = finiteNumber(exitPrice, null);
+  return {
+    entryPrice,
+    exitPrice: normalizedExit,
+    returnFraction: PortfolioCosts.calculateTradeReturn({
+      entryPrice,
+      exitPrice: normalizedExit,
+      buyCostPct: returnCostSettings.buyCostPct,
+      sellCostPct: returnCostSettings.sellCostPct,
+      view: returnCostSettings.returnView,
+      includeBuyCost: options.includeBuyCost !== false,
+      includeSellCost: options.includeSellCost !== false,
+    }),
+  };
 }
 
 function formatCostRate(value) {
@@ -395,151 +384,61 @@ function formatCostRate(value) {
   return number.toLocaleString('tr-TR', { maximumFractionDigits: 3 });
 }
 
-function refreshPersonalProfileUi() {
-  const profile = PersonalPortfolio.normalizeProfile(personalPortfolioProfile);
-  const totalCost = profile.buyCostPct + profile.sellCostPct;
+function refreshReturnCostUi() {
+  const settings = PortfolioCosts.normalizeSettings(returnCostSettings);
+  const totalCost = settings.buyCostPct + settings.sellCostPct;
   const brokerLabel = totalCost === 0
-    ? `${profile.broker} · maliyet %0`
-    : `${profile.broker} · alış %${formatCostRate(profile.buyCostPct)} / satış %${formatCostRate(profile.sellCostPct)}`;
-  const label = document.getElementById('personal-broker-label');
+    ? `${settings.broker} · maliyet %0`
+    : `${settings.broker} · alış %${formatCostRate(settings.buyCostPct)} / satış %${formatCostRate(settings.sellCostPct)}`;
+  const label = document.getElementById('cost-profile-label');
   if (label) label.textContent = brokerLabel;
 
   document.querySelectorAll('[data-return-view]').forEach(button => {
-    const active = button.dataset.returnView === profile.returnView;
+    const active = button.dataset.returnView === settings.returnView;
     button.classList.toggle('active', active);
     button.setAttribute('aria-pressed', String(active));
   });
 
   const historyMode = document.getElementById('history-return-mode');
   if (historyMode) {
-    historyMode.textContent = `${profile.returnView === 'gross' ? 'BRÜT' : 'NET'} · ${profile.broker.toUpperCase()}`;
+    historyMode.textContent = `${settings.returnView === 'gross' ? 'BRÜT' : 'NET'} · ${settings.broker.toUpperCase()}`;
   }
 }
 
-function rerenderPersonalReturns() {
-  refreshPersonalProfileUi();
+function rerenderModelReturns() {
+  refreshReturnCostUi();
   if (!dbInstance) return;
-  renderPicksPage();
   if (document.getElementById('page-history')?.classList.contains('active')) {
     renderHistoryPage();
   }
 }
 
-async function setPersonalReturnView(view) {
-  await savePersonalPortfolioProfile({
-    ...personalPortfolioProfile,
+function setReturnView(view) {
+  saveReturnCostSettings({
+    ...returnCostSettings,
     returnView: view === 'gross' ? 'gross' : 'net',
   });
-  rerenderPersonalReturns();
-}
-
-function openPersonalFillEditor(position) {
-  const modelEntry = finiteNumber(position.entry_price, null);
-  const selectionDate = String(position.selection_date || '');
-  const signalDate = String(position.signal_date || selectionDate);
-  activePersonalFillContext = {
-    ticker: String(position.ticker || '').toUpperCase(),
-    selectionDate,
-    modelEntry,
-  };
-  const current = personalFillFor(position.ticker, selectionDate);
-  document.getElementById('personal-fill-title').textContent = `${position.ticker} Gerçek İşlem`;
-  document.getElementById('personal-fill-date').textContent = selectionDate
-    ? `Portföy: ${formatDateToTurkish(selectionDate)} · Veri: ${formatDateToTurkish(signalDate)}`
-    : 'Portföy tarihi yok';
-  document.getElementById('personal-model-entry').textContent = modelEntry > 0
-    ? `${modelEntry.toFixed(2)} TL`
-    : '—';
-  document.getElementById('actual-entry-fill').value = current?.actualEntryFill || '';
-  document.getElementById('actual-exit-fill').value = current?.actualExitFill || '';
-  document.getElementById('delete-personal-fill-btn').style.display = current ? 'block' : 'none';
-  openSheet('personal-fill-sheet');
-}
-
-async function saveActivePersonalFill(event) {
-  event.preventDefault();
-  if (!activePersonalFillContext) return;
-  const actualEntryFill = finiteNumber(document.getElementById('actual-entry-fill').value, null);
-  const actualExitFill = finiteNumber(document.getElementById('actual-exit-fill').value, null);
-  if (!(actualEntryFill > 0)) {
-    document.getElementById('actual-entry-fill').setCustomValidity('Gerçek alış fiyatı sıfırdan büyük olmalı.');
-    document.getElementById('actual-entry-fill').reportValidity();
-    return;
-  }
-  document.getElementById('actual-entry-fill').setCustomValidity('');
-
-  const key = PersonalPortfolio.fillKey(
-    activePersonalFillContext.ticker,
-    activePersonalFillContext.selectionDate,
-  );
-  const fills = { ...personalPortfolioProfile.fills };
-  fills[key] = {
-    ticker: activePersonalFillContext.ticker,
-    selectionDate: activePersonalFillContext.selectionDate,
-    actualEntryFill,
-    actualExitFill: actualExitFill > 0 ? actualExitFill : null,
-    updatedAt: new Date().toISOString(),
-  };
-  await savePersonalPortfolioProfile({ ...personalPortfolioProfile, fills });
-  requestSheetClose();
-  rerenderPersonalReturns();
-}
-
-async function deleteActivePersonalFill() {
-  if (!activePersonalFillContext) return;
-  const key = PersonalPortfolio.fillKey(
-    activePersonalFillContext.ticker,
-    activePersonalFillContext.selectionDate,
-  );
-  const fills = { ...personalPortfolioProfile.fills };
-  delete fills[key];
-  await savePersonalPortfolioProfile({ ...personalPortfolioProfile, fills });
-  requestSheetClose();
-  rerenderPersonalReturns();
+  rerenderModelReturns();
 }
 
 function openCostProfileEditor() {
-  const profile = PersonalPortfolio.normalizeProfile(personalPortfolioProfile);
-  document.getElementById('broker-name').value = profile.broker;
-  document.getElementById('buy-cost-pct').value = profile.buyCostPct;
-  document.getElementById('sell-cost-pct').value = profile.sellCostPct;
+  const settings = PortfolioCosts.normalizeSettings(returnCostSettings);
+  document.getElementById('broker-name').value = settings.broker;
+  document.getElementById('buy-cost-pct').value = settings.buyCostPct;
+  document.getElementById('sell-cost-pct').value = settings.sellCostPct;
   openSheet('cost-profile-sheet');
 }
 
-async function saveCostProfile(event) {
+function saveCostProfile(event) {
   event.preventDefault();
-  await savePersonalPortfolioProfile({
-    ...personalPortfolioProfile,
+  saveReturnCostSettings({
+    ...returnCostSettings,
     broker: document.getElementById('broker-name').value,
     buyCostPct: document.getElementById('buy-cost-pct').value,
     sellCostPct: document.getElementById('sell-cost-pct').value,
   });
   requestSheetClose();
-  rerenderPersonalReturns();
-}
-
-function exportPersonalPortfolioProfile() {
-  const payload = JSON.stringify({
-    schema: 'mobileinv-personal-portfolio',
-    exportedAt: new Date().toISOString(),
-    profile: PersonalPortfolio.normalizeProfile(personalPortfolioProfile),
-  }, null, 2);
-  const url = URL.createObjectURL(new Blob([payload], { type: 'application/json' }));
-  const anchor = document.createElement('a');
-  anchor.href = url;
-  anchor.download = `mobileinv-personal-profile-${new Date().toISOString().slice(0, 10)}.json`;
-  anchor.click();
-  setTimeout(() => URL.revokeObjectURL(url), 0);
-}
-
-async function importPersonalPortfolioProfile(file) {
-  if (!file) return;
-  const parsed = JSON.parse(await file.text());
-  if (parsed?.schema !== 'mobileinv-personal-portfolio' || !parsed.profile) {
-    throw new Error('Geçersiz MobileInv kişisel profil yedeği.');
-  }
-  await savePersonalPortfolioProfile(parsed.profile);
-  rerenderPersonalReturns();
+  rerenderModelReturns();
 }
 
 function validateSnapshotManifest(value) {
@@ -821,7 +720,7 @@ function getLatestSnapshotPrice(ticker) {
 
 const LIVE_TRACKING_START_DATE = '2026-05-21';
 
-function personalCyclePositionResult({
+function modelCyclePositionResult({
   ticker,
   selectionDate,
   cycleStart,
@@ -829,17 +728,14 @@ function personalCyclePositionResult({
   modelExitPrice,
   includeSellCost,
 }) {
-  const fill = personalFillFor(ticker, selectionDate);
-  const useActualEntry = selectionDate === cycleStart && fill?.actualEntryFill > 0;
-  const useActualExit = includeSellCost && fill?.actualExitFill > 0;
-  const entryPrice = useActualEntry ? fill.actualEntryFill : finiteNumber(modelEntryPrice, null);
-  const exitPrice = useActualExit ? fill.actualExitFill : finiteNumber(modelExitPrice, null);
-  const returnFraction = PersonalPortfolio.calculateTradeReturn({
+  const entryPrice = finiteNumber(modelEntryPrice, null);
+  const exitPrice = finiteNumber(modelExitPrice, null);
+  const returnFraction = PortfolioCosts.calculateTradeReturn({
     entryPrice,
     exitPrice,
-    buyCostPct: personalPortfolioProfile.buyCostPct,
-    sellCostPct: personalPortfolioProfile.sellCostPct,
-    view: personalPortfolioProfile.returnView,
+    buyCostPct: returnCostSettings.buyCostPct,
+    sellCostPct: returnCostSettings.sellCostPct,
+    view: returnCostSettings.returnView,
     includeBuyCost: selectionDate === cycleStart,
     includeSellCost,
   });
@@ -848,8 +744,6 @@ function personalCyclePositionResult({
     entryPrice,
     exitPrice,
     returnPct: returnFraction,
-    entrySource: useActualEntry ? 'actual' : 'model',
-    exitSource: useActualExit ? 'actual' : 'model',
   };
 }
 
@@ -943,7 +837,7 @@ function buildCycleMarkRecords(marks, dbPositions, livePrices) {
         if (exitRow && exitRow.exit_price != null) endPrice = finiteNumber(exitRow.exit_price, null);
       }
       if (endPrice == null || !(endPrice > 0)) return;
-      stockRecords.push(personalCyclePositionResult({
+      stockRecords.push(modelCyclePositionResult({
         ticker: mark.ticker,
         selectionDate: exitRow?.selection_date || selectionDateFor(mark.ticker, c1),
         cycleStart: c1,
@@ -981,7 +875,7 @@ function buildCycleMarkRecords(marks, dbPositions, livePrices) {
     if (pos && (!pos.selection_date || pos.selection_date <= todayDate)) {
       const latest = finiteNumber(livePrices[mark.ticker] ?? pos.current_price, null);
       if (latest != null && latest > 0) {
-        activeStocks.push(personalCyclePositionResult({
+        activeStocks.push(modelCyclePositionResult({
           ticker: mark.ticker,
           selectionDate: pos.selection_date || cLast,
           cycleStart: cLast,
@@ -994,7 +888,7 @@ function buildCycleMarkRecords(marks, dbPositions, livePrices) {
     }
     const pendingExit = findPendingExit(mark.ticker);
     if (pendingExit && finiteNumber(pendingExit.exit_price, null) > 0) {
-      activeStocks.push(personalCyclePositionResult({
+      activeStocks.push(modelCyclePositionResult({
         ticker: mark.ticker,
         selectionDate: pendingExit.selection_date || cLast,
         cycleStart: cLast,
@@ -1006,7 +900,7 @@ function buildCycleMarkRecords(marks, dbPositions, livePrices) {
     }
     const exitRow = findExit(mark.ticker, cLast, null);
     if (exitRow && exitRow.exit_price != null && finiteNumber(exitRow.exit_price) > 0) {
-      activeStocks.push(personalCyclePositionResult({
+      activeStocks.push(modelCyclePositionResult({
         ticker: mark.ticker,
         selectionDate: exitRow.selection_date || cLast,
         cycleStart: cLast,
@@ -1078,14 +972,12 @@ function buildLegacyCohortRecords(dbPositions, livePrices) {
     const stockRecords = rows
       .filter(row => row.entry_price > 0 && row.exit_price != null)
       .map(row => {
-        const result = personalPositionResult(row, row.exit_price);
+        const result = modelPositionResult(row, row.exit_price);
         return {
           ticker: row.ticker,
           entryPrice: result.entryPrice,
           exitPrice: result.exitPrice,
           returnPct: result.returnFraction,
-          entrySource: result.entrySource,
-          exitSource: result.exitSource,
         };
       })
       .filter(row => row.returnPct != null);
@@ -1114,15 +1006,13 @@ function buildLegacyCohortRecords(dbPositions, livePrices) {
       .map(position => {
         const modelEntry = position.entry_price || position.current_price;
         const latest = livePrices[position.ticker] || position.current_price || modelEntry;
-        const result = personalPositionResult(position, latest);
+        const result = modelPositionResult(position, latest);
         if (!(result.entryPrice > 0) || result.exitPrice == null || result.returnFraction == null) return null;
         return {
           ticker: position.ticker,
           entryPrice: result.entryPrice,
           exitPrice: result.exitPrice,
           returnPct: result.returnFraction,
-          entrySource: result.entrySource,
-          exitSource: result.exitSource,
         };
       })
       .filter(Boolean);
@@ -1133,14 +1023,12 @@ function buildLegacyCohortRecords(dbPositions, livePrices) {
       .filter(row => row.selection_date === activeStart
         && row.entry_price > 0 && row.exit_price != null)
       .map(row => {
-        const result = personalPositionResult(row, row.exit_price);
+        const result = modelPositionResult(row, row.exit_price);
         return {
           ticker: row.ticker,
           entryPrice: result.entryPrice,
           exitPrice: result.exitPrice,
           returnPct: result.returnFraction,
-          entrySource: result.entrySource,
-          exitSource: result.exitSource,
         };
       })
       .filter(row => row.returnPct != null);
@@ -1400,7 +1288,6 @@ function renderStaleFeedBanner() {
 
 // --- PAGE 1: PICKS (Home) ---
 function renderPicksPage() {
-  refreshPersonalProfileUi();
   const home = queryOne('SELECT * FROM home_summary WHERE id = 1');
   const updateDateEl = document.getElementById('app-update-date');
   const priceState = getPriceDataState();
@@ -1430,15 +1317,10 @@ function renderPicksPage() {
     positions.forEach(pos => {
       const live = finiteNumber(window.livePrices[pos.ticker] ?? pos.current_price, 0);
       const rawEntry = finiteNumber(pos.entry_price);
-      const personalResult = personalPositionResult(pos, live);
-      const entry = personalResult.entryPrice > 0
-        ? personalResult.entryPrice
-        : (rawEntry > 0 ? rawEntry : (live > 0 ? live : 1.0));
-      // Public entry_price is the immutable model reference. A local actual
-      // fill overrides only personal P&L and never mutates the public feed.
-      const pnl = personalResult.returnFraction == null
-        ? ((live / entry) - 1) * 100
-        : personalResult.returnFraction * 100;
+      const entry = rawEntry > 0 ? rawEntry : (live > 0 ? live : 1.0);
+      // Home always shows the public model position. Cost assumptions belong
+      // to History, where gross and cost-adjusted model returns can be compared.
+      const pnl = ((live / entry) - 1) * 100;
       const pnlClass = pnl >= 0 ? 'pos-text' : 'neg-text';
       const safeTicker = escapeHtml(pos.ticker);
       const safeName = escapeHtml(pos.fullname || pos.name || '—');
@@ -1464,7 +1346,6 @@ function renderPicksPage() {
       // Glanceable cost basis: entry price + entry date without opening detail.
       let entryLine = '';
       if (rawEntry > 0) {
-        const actualFill = personalFillFor(pos.ticker, pos.selection_date);
         let sinceShort = '';
         let signalShort = '';
         if (pos.selection_date) {
@@ -1479,17 +1360,8 @@ function renderPicksPage() {
             signalShort = ' · veri ' + d.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' });
           }
         }
-        entryLine = actualFill?.actualEntryFill > 0
-          ? `<div class="entry-line tabular-nums">Gerçek ${actualFill.actualEntryFill.toFixed(2)} · Model ref ${rawEntry.toFixed(2)}${signalShort}${sinceShort}</div>`
-          : `<div class="entry-line tabular-nums">Model ref ${rawEntry.toFixed(2)}${signalShort}${sinceShort}</div>`;
+        entryLine = `<div class="entry-line tabular-nums">Model ref ${rawEntry.toFixed(2)}${signalShort}${sinceShort}</div>`;
       }
-      const actualFill = personalFillFor(pos.ticker, pos.selection_date);
-      const fillButton = pos.selection_date
-        ? `<button type="button" class="fill-edit-btn ${actualFill ? 'has-actual' : ''}" data-personal-fill="${escapeHtml(pos.ticker)}">
-             <span class="material-symbols-rounded">edit</span>
-             ${actualFill ? 'Gerçek alış kayıtlı' : 'Gerçek alışını gir'}
-           </button>`
-        : '';
 
       // Stop proximity: warn at a glance when price approaches the stop —
       // and KEEP warning once it breaches (backend exit lands next cron;
@@ -1518,7 +1390,6 @@ function renderPicksPage() {
           </div>
           <div class="company-fullname">${safeName}</div>
           ${entryLine}
-          ${fillButton}
           ${qualityFlagLine}
         </div>
         <div style="text-align: right;">
@@ -1531,10 +1402,6 @@ function renderPicksPage() {
         </div>
       `;
       row.addEventListener('click', () => openStockDetail(pos.ticker));
-      row.querySelector('[data-personal-fill]')?.addEventListener('click', event => {
-        event.stopPropagation();
-        openPersonalFillEditor(pos);
-      });
       portListEl.appendChild(row);
     });
   }
@@ -1657,8 +1524,7 @@ function computeRebalanceDecisions(positions) {
     if (pos.selection_date === result.rotationDate && !exitedTickers.has(pos.ticker)) {
       result.buys.push({
         ticker: pos.ticker, action: 'BUY',
-        reason: `Rotasyon: portföye yeni girdi (model ref ${finiteNumber(pos.entry_price).toFixed(2)} TL — ${formatDateToTurkish(pos.signal_date || pos.selection_date)} tamamlanmış kapanışı). Gerçek alışını kaydet; stop uyarısı gelmedikçe sonraki rotasyona kadar tut.`,
-        fillPosition: pos,
+        reason: `Rotasyon: portföye yeni girdi (model ref ${finiteNumber(pos.entry_price).toFixed(2)} TL — ${formatDateToTurkish(pos.signal_date || pos.selection_date)} tamamlanmış kapanışı). Stop uyarısı gelmedikçe sonraki rotasyona kadar tut.`,
       });
     } else {
       // Continuity: original entry date + real P&L since entry make the
@@ -1680,12 +1546,6 @@ function computeRebalanceDecisions(positions) {
     result.sells.push({
       ticker: row.ticker, action: 'SELL',
       reason: `Rotasyonda çıkarıldı${pnl}.`,
-      fillPosition: {
-        ticker: row.ticker,
-        selection_date: row.selection_date,
-        signal_date: row.selection_date,
-        entry_price: row.entry_price,
-      },
     });
   });
 
@@ -1739,9 +1599,6 @@ function renderTradeDayCard(decisions) {
           <span class="trade-ticker">${escapeHtml(sig.ticker)}</span>
           <span class="trade-action ${cls}">${label}</span>
         </button>
-        <button type="button" class="trade-fill-button" data-trade-fill="${escapeHtml(sig.ticker)}" aria-label="${escapeHtml(sig.ticker)} gerçek işlem fiyatını gir">
-          <span class="material-symbols-rounded">edit</span>
-        </button>
       </div>`;
   }).join('');
 
@@ -1755,7 +1612,7 @@ function renderTradeDayCard(decisions) {
       <span class="material-symbols-rounded">task_alt</span>
       <div>
         <h3>${isTomorrow ? 'Yarın İşlem Günü' : 'Bugün İşlem Günü'}</h3>
-        <p>Portföy açılıştan önce hazır. Önce SAT, sonra AL; emirleri ${isTomorrow ? 'yarın ' : ''}açılışta ver ve gerçek fiyatını kaydet.${nextNote}</p>
+        <p>Portföy açılıştan önce hazır. Önce SAT, sonra AL; emirleri ${isTomorrow ? 'yarın ' : ''}açılışta ver.${nextNote}</p>
       </div>
     </div>
     ${rows}`;
@@ -1768,10 +1625,6 @@ function renderTradeDayCard(decisions) {
       saveTradeDone(decisions.rotationDate, current);
       try { navigator.vibrate?.(12); } catch { /* unsupported */ }
       renderTradeDayCard(decisions);
-    });
-    row.querySelector('[data-trade-fill]')?.addEventListener('click', () => {
-      const signal = actionable.find(item => item.ticker === ticker);
-      if (signal?.fillPosition) openPersonalFillEditor(signal.fillPosition);
     });
   });
 
@@ -1802,9 +1655,6 @@ function renderIntraweekExits(decisions) {
           <span class="risk-exit-reason">${reasonLabel[row.exit_reason] || escapeHtml(row.exit_reason)} • ${escapeHtml(row.exit_date || '')}</span>
         </div>
         <div class="risk-exit-price">${price} ${pnl}</div>
-        <button type="button" class="trade-fill-button" data-risk-fill="${escapeHtml(row.ticker)}" aria-label="${escapeHtml(row.ticker)} gerçek satış fiyatını gir">
-          <span class="material-symbols-rounded">edit</span>
-        </button>
       </div>`;
   }).join('');
 
@@ -1819,19 +1669,6 @@ function renderIntraweekExits(decisions) {
       </div>
       ${rows}
     </div>`;
-  container.querySelectorAll('[data-risk-fill]').forEach(button => {
-    button.addEventListener('click', () => {
-      const ticker = button.getAttribute('data-risk-fill');
-      const row = decisions.riskExits.find(item => item.ticker === ticker);
-      if (!row) return;
-      openPersonalFillEditor({
-        ticker: row.ticker,
-        selection_date: row.selection_date,
-        signal_date: row.selection_date,
-        entry_price: row.entry_price,
-      });
-    });
-  });
 }
 
 // --- PAGE 2: BROWSE ---
@@ -2062,7 +1899,7 @@ function renderMarketPage() {
 
 // --- PAGE 4: HISTORY ---
 function renderHistoryPage() {
-  refreshPersonalProfileUi();
+  refreshReturnCostUi();
   const dbPos = queryAll('SELECT * FROM open_positions');
   const records = buildWeeklyPerformanceRecords(dbPos, window.livePrices);
 
@@ -2163,14 +2000,12 @@ function renderHistoryPage() {
         const entryPrice = finiteNumber(pos.entryPrice);
         const exitPrice = finiteNumber(pos.exitPrice);
         const pClass = stockPct >= 0 ? 'pos-text' : 'neg-text';
-        const sourceLabel = pos.entrySource === 'actual' ? ' · gerçek alış' : ' · model ref';
-
         const row = document.createElement('div');
         row.className = 'stock-performance-item';
         row.innerHTML = `
           <span style="font-size:11px; font-weight:700; color:var(--text);">${escapeHtml(pos.ticker)}</span>
           <div class="tabular-nums" style="font-size:10px; color:var(--text-muted);">
-            ${entryPrice.toFixed(2)} → ${exitPrice.toFixed(2)} TL${sourceLabel}
+            ${entryPrice.toFixed(2)} → ${exitPrice.toFixed(2)} TL · model ref
             <span class="${pClass}" style="font-weight:800; margin-left:8px;">${stockPct >= 0 ? '+' : ''}${stockPct.toFixed(2)}%</span>
           </div>
         `;
@@ -2592,7 +2427,6 @@ function closeOpenSheets() {
   });
   if (closed) {
     activeDetailTicker = null;
-    activePersonalFillContext = null;
   }
   return closed;
 }
@@ -3109,7 +2943,7 @@ async function initApp() {
     progressFill.style.width = '90%';
     
     const SQL = await initSqlJs({
-      locateFile: filename => `./vendor/${filename}?v=23`
+      locateFile: filename => `./vendor/${filename}?v=24`
     });
 
     try {
@@ -3131,8 +2965,8 @@ async function initApp() {
     clearTimeout(slowLoadTimer);
     console.log('[DB] SQL.Database initialization completed successfully!');
 
-    personalPortfolioProfile = await getStoredPersonalPortfolioProfile();
-    refreshPersonalProfileUi();
+    returnCostSettings = loadReturnCostSettings();
+    refreshReturnCostUi();
 
     // Initialize offline-safe snapshot prices, then update from the public
     // near-live feed without blocking application startup.
@@ -3170,7 +3004,6 @@ window.addEventListener('load', () => {
   // Wire up close buttons (history-aware: hardware back also closes)
   document.getElementById('close-detail-btn').addEventListener('click', requestSheetClose);
   document.getElementById('close-backtest-btn').addEventListener('click', requestSheetClose);
-  document.getElementById('close-personal-fill-btn').addEventListener('click', requestSheetClose);
   document.getElementById('close-cost-profile-btn').addEventListener('click', requestSheetClose);
 
   // A reload while a sheet was open leaves its {bpSheet} entry in history;
@@ -3191,7 +3024,6 @@ window.addEventListener('load', () => {
 
   enableSwipeToClose('detail-sheet');
   enableSwipeToClose('backtest-sheet');
-  enableSwipeToClose('personal-fill-sheet');
   enableSwipeToClose('cost-profile-sheet');
 
   document.addEventListener('keydown', (e) => {
@@ -3204,25 +3036,9 @@ window.addEventListener('load', () => {
   document.getElementById('decision-open-backtest')?.addEventListener('click', openBacktestingSheet);
   document.getElementById('open-cost-profile-btn').addEventListener('click', openCostProfileEditor);
   document.querySelectorAll('[data-return-view]').forEach(button => {
-    button.addEventListener('click', () => setPersonalReturnView(button.dataset.returnView));
+    button.addEventListener('click', () => setReturnView(button.dataset.returnView));
   });
-  document.getElementById('personal-fill-form').addEventListener('submit', saveActivePersonalFill);
-  document.getElementById('delete-personal-fill-btn').addEventListener('click', deleteActivePersonalFill);
   document.getElementById('cost-profile-form').addEventListener('submit', saveCostProfile);
-  document.getElementById('export-personal-profile-btn').addEventListener('click', exportPersonalPortfolioProfile);
-  document.getElementById('import-personal-profile-btn').addEventListener('click', () => {
-    document.getElementById('import-personal-profile-file').click();
-  });
-  document.getElementById('import-personal-profile-file').addEventListener('change', async event => {
-    try {
-      await importPersonalPortfolioProfile(event.target.files?.[0]);
-      window.alert('Kişisel profil yedeği yüklendi.');
-    } catch (error) {
-      window.alert(error?.message || 'Kişisel profil yedeği yüklenemedi.');
-    } finally {
-      event.target.value = '';
-    }
-  });
   
   document.getElementById('refresh-db-btn').addEventListener('click', () => {
     window.location.reload();

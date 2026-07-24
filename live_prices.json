@@ -1,436 +1,450 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-24T13:04:24.439957+00:00",
+  "generated_at": "2026-07-24T15:03:09.083284+00:00",
   "source": "Yahoo Finance",
   "delay_notice": "BIST quotes may be delayed by approximately 15 minutes.",
   "requested_count": 620,
   "success_count": 620,
   "failed_tickers": [],
   "prices": {
+    "AGYO": {
+      "price": 7.74,
+      "quote_time": "2026-07-24T14:02:22+00:00",
+      "quote_epoch": 1784901742,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
     "AFYON": {
-      "price": 12.7,
-      "quote_time": "2026-07-24T12:49:17+00:00",
-      "quote_epoch": 1784897357,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "AGROT": {
-      "price": 2.55,
-      "quote_time": "2026-07-24T12:49:05+00:00",
-      "quote_epoch": 1784897345,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "AKENR": {
-      "price": 10.59,
-      "quote_time": "2026-07-24T12:49:11+00:00",
-      "quote_epoch": 1784897351,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "AKCNS": {
-      "price": 238.0,
-      "quote_time": "2026-07-24T12:49:00+00:00",
-      "quote_epoch": 1784897340,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ADESE": {
-      "price": 0.92,
-      "quote_time": "2026-07-24T12:47:41+00:00",
-      "quote_epoch": 1784897261,
+      "price": 12.65,
+      "quote_time": "2026-07-24T14:01:32+00:00",
+      "quote_epoch": 1784901692,
       "currency": "TRY",
       "exchange": "IST"
     },
     "AAGYO": {
-      "price": 14.29,
-      "quote_time": "2026-07-24T12:49:17+00:00",
-      "quote_epoch": 1784897357,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "AEFES": {
-      "price": 21.26,
-      "quote_time": "2026-07-24T12:49:17+00:00",
-      "quote_epoch": 1784897357,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "AGYO": {
-      "price": 7.69,
-      "quote_time": "2026-07-24T12:38:26+00:00",
-      "quote_epoch": 1784896706,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "AGESA": {
-      "price": 238.3,
-      "quote_time": "2026-07-24T12:48:43+00:00",
-      "quote_epoch": 1784897323,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "AKBNK": {
-      "price": 67.15,
-      "quote_time": "2026-07-24T12:49:16+00:00",
-      "quote_epoch": 1784897356,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ADGYO": {
-      "price": 52.1,
-      "quote_time": "2026-07-24T12:47:51+00:00",
-      "quote_epoch": 1784897271,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ADEL": {
-      "price": 30.3,
-      "quote_time": "2026-07-24T12:49:06+00:00",
-      "quote_epoch": 1784897346,
+      "price": 14.25,
+      "quote_time": "2026-07-24T14:04:02+00:00",
+      "quote_epoch": 1784901842,
       "currency": "TRY",
       "exchange": "IST"
     },
     "A1YEN": {
       "price": 2.93,
-      "quote_time": "2026-07-24T12:49:02+00:00",
-      "quote_epoch": 1784897342,
+      "quote_time": "2026-07-24T14:04:24+00:00",
+      "quote_epoch": 1784901864,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "AKENR": {
+      "price": 10.55,
+      "quote_time": "2026-07-24T14:04:24+00:00",
+      "quote_epoch": 1784901864,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ADEL": {
+      "price": 30.24,
+      "quote_time": "2026-07-24T14:04:07+00:00",
+      "quote_epoch": 1784901847,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "AGESA": {
+      "price": 236.3,
+      "quote_time": "2026-07-24T14:03:44+00:00",
+      "quote_epoch": 1784901824,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "AGROT": {
+      "price": 2.55,
+      "quote_time": "2026-07-24T14:04:25+00:00",
+      "quote_epoch": 1784901865,
       "currency": "TRY",
       "exchange": "IST"
     },
     "AKFIS": {
-      "price": 91.95,
-      "quote_time": "2026-07-24T12:49:07+00:00",
-      "quote_epoch": 1784897347,
+      "price": 92.7,
+      "quote_time": "2026-07-24T14:03:55+00:00",
+      "quote_epoch": 1784901835,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "AKFGY": {
-      "price": 2.79,
-      "quote_time": "2026-07-24T12:47:44+00:00",
-      "quote_epoch": 1784897264,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "AGHOL": {
-      "price": 34.28,
-      "quote_time": "2026-07-24T12:48:42+00:00",
-      "quote_epoch": 1784897322,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "AHSGY": {
-      "price": 20.22,
-      "quote_time": "2026-07-24T12:48:12+00:00",
-      "quote_epoch": 1784897292,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ACSEL": {
-      "price": 132.4,
-      "quote_time": "2026-07-24T12:48:04+00:00",
-      "quote_epoch": 1784897284,
+    "AEFES": {
+      "price": 21.08,
+      "quote_time": "2026-07-24T14:04:23+00:00",
+      "quote_epoch": 1784901863,
       "currency": "TRY",
       "exchange": "IST"
     },
     "A1CAP": {
-      "price": 9.55,
-      "quote_time": "2026-07-24T12:49:15+00:00",
-      "quote_epoch": 1784897355,
+      "price": 9.48,
+      "quote_time": "2026-07-24T14:04:18+00:00",
+      "quote_epoch": 1784901858,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "AGHOL": {
+      "price": 33.98,
+      "quote_time": "2026-07-24T14:04:14+00:00",
+      "quote_epoch": 1784901854,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "AHSGY": {
+      "price": 19.99,
+      "quote_time": "2026-07-24T14:04:17+00:00",
+      "quote_epoch": 1784901857,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ACSEL": {
+      "price": 129.3,
+      "quote_time": "2026-07-24T14:04:23+00:00",
+      "quote_epoch": 1784901863,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "AKCNS": {
+      "price": 237.0,
+      "quote_time": "2026-07-24T14:03:27+00:00",
+      "quote_epoch": 1784901807,
       "currency": "TRY",
       "exchange": "IST"
     },
     "AHGAZ": {
-      "price": 35.5,
-      "quote_time": "2026-07-24T12:48:21+00:00",
-      "quote_epoch": 1784897301,
+      "price": 35.48,
+      "quote_time": "2026-07-24T14:03:58+00:00",
+      "quote_epoch": 1784901838,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "ALKA": {
-      "price": 9.12,
-      "quote_time": "2026-07-24T12:49:04+00:00",
-      "quote_epoch": 1784897344,
+    "AKBNK": {
+      "price": 67.35,
+      "quote_time": "2026-07-24T14:04:22+00:00",
+      "quote_epoch": 1784901862,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "ALTNY": {
-      "price": 16.84,
-      "quote_time": "2026-07-24T12:49:05+00:00",
-      "quote_epoch": 1784897345,
+    "ADESE": {
+      "price": 0.92,
+      "quote_time": "2026-07-24T14:04:16+00:00",
+      "quote_epoch": 1784901856,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ADGYO": {
+      "price": 52.4,
+      "quote_time": "2026-07-24T14:03:01+00:00",
+      "quote_epoch": 1784901781,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "AKFGY": {
+      "price": 2.76,
+      "quote_time": "2026-07-24T14:03:54+00:00",
+      "quote_epoch": 1784901834,
       "currency": "TRY",
       "exchange": "IST"
     },
     "ALKIM": {
-      "price": 16.74,
-      "quote_time": "2026-07-24T12:49:21+00:00",
-      "quote_epoch": 1784897361,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "AKHAN": {
-      "price": 40.6,
-      "quote_time": "2026-07-24T12:48:06+00:00",
-      "quote_epoch": 1784897286,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ALVES": {
-      "price": 2.48,
-      "quote_time": "2026-07-24T12:47:50+00:00",
-      "quote_epoch": 1784897270,
+      "price": 16.84,
+      "quote_time": "2026-07-24T14:03:43+00:00",
+      "quote_epoch": 1784901823,
       "currency": "TRY",
       "exchange": "IST"
     },
     "AKSGY": {
-      "price": 9.43,
-      "quote_time": "2026-07-24T12:44:53+00:00",
-      "quote_epoch": 1784897093,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ALKLC": {
-      "price": 401.25,
-      "quote_time": "2026-07-24T12:47:59+00:00",
-      "quote_epoch": 1784897279,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "AKSUE": {
-      "price": 46.28,
-      "quote_time": "2026-07-24T12:49:16+00:00",
-      "quote_epoch": 1784897356,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "AKSA": {
-      "price": 11.89,
-      "quote_time": "2026-07-24T12:49:10+00:00",
-      "quote_epoch": 1784897350,
+      "price": 9.32,
+      "quote_time": "2026-07-24T14:03:48+00:00",
+      "quote_epoch": 1784901828,
       "currency": "TRY",
       "exchange": "IST"
     },
     "ALCTL": {
-      "price": 173.0,
-      "quote_time": "2026-07-24T12:49:15+00:00",
-      "quote_epoch": 1784897355,
+      "price": 173.9,
+      "quote_time": "2026-07-24T14:04:23+00:00",
+      "quote_epoch": 1784901863,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "ALARK": {
-      "price": 105.6,
-      "quote_time": "2026-07-24T12:49:19+00:00",
-      "quote_epoch": 1784897359,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "AKYHO": {
-      "price": 2.45,
-      "quote_time": "2026-07-24T12:48:58+00:00",
-      "quote_epoch": 1784897338,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ALGYO": {
-      "price": 3.52,
-      "quote_time": "2026-07-24T12:49:16+00:00",
-      "quote_epoch": 1784897356,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "AKSEN": {
-      "price": 103.7,
-      "quote_time": "2026-07-24T12:49:18+00:00",
-      "quote_epoch": 1784897358,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ALCAR": {
-      "price": 838.0,
-      "quote_time": "2026-07-24T12:48:37+00:00",
-      "quote_epoch": 1784897317,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "AKGRT": {
-      "price": 7.05,
-      "quote_time": "2026-07-24T12:48:33+00:00",
-      "quote_epoch": 1784897313,
+    "ALKLC": {
+      "price": 401.0,
+      "quote_time": "2026-07-24T14:04:19+00:00",
+      "quote_epoch": 1784901859,
       "currency": "TRY",
       "exchange": "IST"
     },
     "ALBRK": {
       "price": 8.06,
-      "quote_time": "2026-07-24T12:49:14+00:00",
-      "quote_epoch": 1784897354,
+      "quote_time": "2026-07-24T14:04:22+00:00",
+      "quote_epoch": 1784901862,
       "currency": "TRY",
       "exchange": "IST"
     },
     "ALFAS": {
-      "price": 46.32,
-      "quote_time": "2026-07-24T12:49:03+00:00",
-      "quote_epoch": 1784897343,
+      "price": 45.76,
+      "quote_time": "2026-07-24T14:04:18+00:00",
+      "quote_epoch": 1784901858,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "AKFYE": {
-      "price": 26.76,
-      "quote_time": "2026-07-24T12:49:17+00:00",
-      "quote_epoch": 1784897357,
+    "ALKA": {
+      "price": 9.12,
+      "quote_time": "2026-07-24T14:04:18+00:00",
+      "quote_epoch": 1784901858,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ALVES": {
+      "price": 2.47,
+      "quote_time": "2026-07-24T14:04:17+00:00",
+      "quote_epoch": 1784901857,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ALGYO": {
+      "price": 3.51,
+      "quote_time": "2026-07-24T14:01:47+00:00",
+      "quote_epoch": 1784901707,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "AKHAN": {
+      "price": 40.38,
+      "quote_time": "2026-07-24T14:04:25+00:00",
+      "quote_epoch": 1784901865,
       "currency": "TRY",
       "exchange": "IST"
     },
     "AKMGY": {
       "price": 240.6,
-      "quote_time": "2026-07-24T12:46:36+00:00",
-      "quote_epoch": 1784897196,
+      "quote_time": "2026-07-24T14:00:51+00:00",
+      "quote_epoch": 1784901651,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "ARDYZ": {
-      "price": 69.25,
-      "quote_time": "2026-07-24T12:49:10+00:00",
-      "quote_epoch": 1784897350,
+    "ALTNY": {
+      "price": 16.72,
+      "quote_time": "2026-07-24T14:03:55+00:00",
+      "quote_epoch": 1784901835,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "ASUZU": {
-      "price": 53.5,
-      "quote_time": "2026-07-24T12:48:20+00:00",
-      "quote_epoch": 1784897300,
+    "AKYHO": {
+      "price": 2.48,
+      "quote_time": "2026-07-24T14:03:43+00:00",
+      "quote_epoch": 1784901823,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "ARTMS": {
-      "price": 41.14,
-      "quote_time": "2026-07-24T12:49:16+00:00",
-      "quote_epoch": 1784897356,
+    "AKFYE": {
+      "price": 26.58,
+      "quote_time": "2026-07-24T14:04:04+00:00",
+      "quote_epoch": 1784901844,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "ANGEN": {
-      "price": 10.07,
-      "quote_time": "2026-07-24T12:46:19+00:00",
-      "quote_epoch": 1784897179,
+    "ALCAR": {
+      "price": 843.0,
+      "quote_time": "2026-07-24T14:04:18+00:00",
+      "quote_epoch": 1784901858,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "ANHYT": {
-      "price": 103.2,
-      "quote_time": "2026-07-24T12:48:37+00:00",
-      "quote_epoch": 1784897317,
+    "AKSA": {
+      "price": 11.91,
+      "quote_time": "2026-07-24T14:04:23+00:00",
+      "quote_epoch": 1784901863,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "AKSEN": {
+      "price": 103.7,
+      "quote_time": "2026-07-24T14:04:24+00:00",
+      "quote_epoch": 1784901864,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "AKGRT": {
+      "price": 7.05,
+      "quote_time": "2026-07-24T14:03:23+00:00",
+      "quote_epoch": 1784901803,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "AKSUE": {
+      "price": 46.62,
+      "quote_time": "2026-07-24T14:04:01+00:00",
+      "quote_epoch": 1784901841,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ALARK": {
+      "price": 105.5,
+      "quote_time": "2026-07-24T14:03:34+00:00",
+      "quote_epoch": 1784901814,
       "currency": "TRY",
       "exchange": "IST"
     },
     "ARZUM": {
       "price": 1.83,
-      "quote_time": "2026-07-24T12:47:58+00:00",
-      "quote_epoch": 1784897278,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ATAGY": {
-      "price": 10.99,
-      "quote_time": "2026-07-24T12:49:04+00:00",
-      "quote_epoch": 1784897344,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ARASE": {
-      "price": 120.1,
-      "quote_time": "2026-07-24T12:49:14+00:00",
-      "quote_epoch": 1784897354,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ASELS": {
-      "price": 380.0,
-      "quote_time": "2026-07-24T12:49:20+00:00",
-      "quote_epoch": 1784897360,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ANSGR": {
-      "price": 26.8,
-      "quote_time": "2026-07-24T12:49:05+00:00",
-      "quote_epoch": 1784897345,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ARFYE": {
-      "price": 30.8,
-      "quote_time": "2026-07-24T12:49:12+00:00",
-      "quote_epoch": 1784897352,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ARSAN": {
-      "price": 3.54,
-      "quote_time": "2026-07-24T12:49:17+00:00",
-      "quote_epoch": 1784897357,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ATATP": {
-      "price": 271.0,
-      "quote_time": "2026-07-24T12:49:11+00:00",
-      "quote_epoch": 1784897351,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ASTOR": {
-      "price": 297.5,
-      "quote_time": "2026-07-24T12:49:20+00:00",
-      "quote_epoch": 1784897360,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ANELE": {
-      "price": 121.6,
-      "quote_time": "2026-07-24T12:49:12+00:00",
-      "quote_epoch": 1784897352,
+      "quote_time": "2026-07-24T14:02:40+00:00",
+      "quote_epoch": 1784901760,
       "currency": "TRY",
       "exchange": "IST"
     },
     "ASGYO": {
-      "price": 11.62,
-      "quote_time": "2026-07-24T12:49:18+00:00",
-      "quote_epoch": 1784897358,
+      "price": 11.59,
+      "quote_time": "2026-07-24T14:03:59+00:00",
+      "quote_epoch": 1784901839,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "ARENA": {
-      "price": 24.92,
-      "quote_time": "2026-07-24T12:49:03+00:00",
-      "quote_epoch": 1784897343,
+    "ATAGY": {
+      "price": 11.04,
+      "quote_time": "2026-07-24T13:58:33+00:00",
+      "quote_epoch": 1784901513,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "ATAKP": {
-      "price": 52.9,
-      "quote_time": "2026-07-24T12:46:45+00:00",
-      "quote_epoch": 1784897205,
+    "ATATP": {
+      "price": 265.25,
+      "quote_time": "2026-07-24T14:04:21+00:00",
+      "quote_epoch": 1784901861,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ARFYE": {
+      "price": 30.74,
+      "quote_time": "2026-07-24T14:04:16+00:00",
+      "quote_epoch": 1784901856,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ASELS": {
+      "price": 380.25,
+      "quote_time": "2026-07-24T14:04:24+00:00",
+      "quote_epoch": 1784901864,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ASUZU": {
+      "price": 53.2,
+      "quote_time": "2026-07-24T14:02:22+00:00",
+      "quote_epoch": 1784901742,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ASTOR": {
+      "price": 297.25,
+      "quote_time": "2026-07-24T14:04:23+00:00",
+      "quote_epoch": 1784901863,
       "currency": "TRY",
       "exchange": "IST"
     },
     "ARMGD": {
-      "price": 201.5,
-      "quote_time": "2026-07-24T12:48:59+00:00",
-      "quote_epoch": 1784897339,
+      "price": 204.6,
+      "quote_time": "2026-07-24T14:03:57+00:00",
+      "quote_epoch": 1784901837,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ARSAN": {
+      "price": 3.55,
+      "quote_time": "2026-07-24T14:04:01+00:00",
+      "quote_epoch": 1784901841,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ARENA": {
+      "price": 24.96,
+      "quote_time": "2026-07-24T14:04:23+00:00",
+      "quote_epoch": 1784901863,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ANGEN": {
+      "price": 10.09,
+      "quote_time": "2026-07-24T14:03:52+00:00",
+      "quote_epoch": 1784901832,
       "currency": "TRY",
       "exchange": "IST"
     },
     "ARCLK": {
-      "price": 98.65,
-      "quote_time": "2026-07-24T12:48:27+00:00",
-      "quote_epoch": 1784897307,
+      "price": 98.55,
+      "quote_time": "2026-07-24T14:03:34+00:00",
+      "quote_epoch": 1784901814,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ARTMS": {
+      "price": 41.12,
+      "quote_time": "2026-07-24T14:03:35+00:00",
+      "quote_epoch": 1784901815,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ARDYZ": {
+      "price": 68.7,
+      "quote_time": "2026-07-24T14:04:11+00:00",
+      "quote_epoch": 1784901851,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ANHYT": {
+      "price": 103.1,
+      "quote_time": "2026-07-24T14:04:22+00:00",
+      "quote_epoch": 1784901862,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ATAKP": {
+      "price": 53.0,
+      "quote_time": "2026-07-24T14:04:07+00:00",
+      "quote_epoch": 1784901847,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ANELE": {
+      "price": 120.0,
+      "quote_time": "2026-07-24T14:04:25+00:00",
+      "quote_epoch": 1784901865,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ARASE": {
+      "price": 118.9,
+      "quote_time": "2026-07-24T14:04:26+00:00",
+      "quote_epoch": 1784901866,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ANSGR": {
+      "price": 26.6,
+      "quote_time": "2026-07-24T14:04:05+00:00",
+      "quote_epoch": 1784901845,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ATLAS": {
+      "price": 7.75,
+      "quote_time": "2026-07-24T13:56:51+00:00",
+      "quote_epoch": 1784901411,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "AYCES": {
+      "price": 497.75,
+      "quote_time": "2026-07-24T14:03:57+00:00",
+      "quote_epoch": 1784901837,
       "currency": "TRY",
       "exchange": "IST"
     },
     "AVTUR": {
       "price": 15.08,
-      "quote_time": "2026-07-24T12:47:46+00:00",
-      "quote_epoch": 1784897266,
+      "quote_time": "2026-07-24T14:01:05+00:00",
+      "quote_epoch": 1784901665,
       "currency": "TRY",
       "exchange": "IST"
     },
@@ -441,80 +455,31 @@
       "currency": "TRY",
       "exchange": "IST"
     },
+    "AVGYO": {
+      "price": 15.91,
+      "quote_time": "2026-07-24T14:04:12+00:00",
+      "quote_epoch": 1784901852,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
     "BAKAB": {
-      "price": 47.9,
-      "quote_time": "2026-07-24T12:49:17+00:00",
-      "quote_epoch": 1784897357,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "AYCES": {
-      "price": 498.0,
-      "quote_time": "2026-07-24T12:48:15+00:00",
-      "quote_epoch": 1784897295,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "AZTEK": {
-      "price": 4.39,
-      "quote_time": "2026-07-24T12:49:19+00:00",
-      "quote_epoch": 1784897359,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "BALSU": {
-      "price": 16.46,
-      "quote_time": "2026-07-24T12:49:17+00:00",
-      "quote_epoch": 1784897357,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "AVOD": {
-      "price": 3.89,
-      "quote_time": "2026-07-24T12:49:17+00:00",
-      "quote_epoch": 1784897357,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ATLAS": {
-      "price": 7.71,
-      "quote_time": "2026-07-24T12:40:48+00:00",
-      "quote_epoch": 1784896848,
+      "price": 48.04,
+      "quote_time": "2026-07-24T14:07:46+00:00",
+      "quote_epoch": 1784902066,
       "currency": "TRY",
       "exchange": "IST"
     },
     "AVPGY": {
-      "price": 52.85,
-      "quote_time": "2026-07-24T12:49:11+00:00",
-      "quote_epoch": 1784897351,
+      "price": 52.65,
+      "quote_time": "2026-07-24T14:03:16+00:00",
+      "quote_epoch": 1784901796,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "AYGAZ": {
-      "price": 272.75,
-      "quote_time": "2026-07-24T12:49:14+00:00",
-      "quote_epoch": 1784897354,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "BALAT": {
-      "price": 73.0,
-      "quote_time": "2026-07-24T10:55:01+00:00",
-      "quote_epoch": 1784890501,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "AVHOL": {
-      "price": 39.7,
-      "quote_time": "2026-07-24T12:47:55+00:00",
-      "quote_epoch": 1784897275,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "AVGYO": {
-      "price": 15.86,
-      "quote_time": "2026-07-24T12:49:16+00:00",
-      "quote_epoch": 1784897356,
+    "AVOD": {
+      "price": 3.86,
+      "quote_time": "2026-07-24T14:02:27+00:00",
+      "quote_epoch": 1784901747,
       "currency": "TRY",
       "exchange": "IST"
     },
@@ -525,31 +490,24 @@
       "currency": "TRY",
       "exchange": "IST"
     },
+    "AVHOL": {
+      "price": 39.48,
+      "quote_time": "2026-07-24T14:03:16+00:00",
+      "quote_epoch": 1784901796,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
     "AYEN": {
-      "price": 35.36,
-      "quote_time": "2026-07-24T12:49:09+00:00",
-      "quote_epoch": 1784897349,
+      "price": 35.1,
+      "quote_time": "2026-07-24T14:04:01+00:00",
+      "quote_epoch": 1784901841,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "AYDEM": {
-      "price": 25.52,
-      "quote_time": "2026-07-24T12:49:17+00:00",
-      "quote_epoch": 1784897357,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "BAGFS": {
-      "price": 24.7,
-      "quote_time": "2026-07-24T12:48:44+00:00",
-      "quote_epoch": 1784897324,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ATATR": {
-      "price": 15.31,
-      "quote_time": "2026-07-24T12:49:15+00:00",
-      "quote_epoch": 1784897355,
+    "AZTEK": {
+      "price": 4.37,
+      "quote_time": "2026-07-24T14:04:04+00:00",
+      "quote_epoch": 1784901844,
       "currency": "TRY",
       "exchange": "IST"
     },
@@ -560,17 +518,87 @@
       "currency": "TRY",
       "exchange": "IST"
     },
-    "BAHKM": {
-      "price": 118.5,
-      "quote_time": "2026-07-24T12:49:17+00:00",
-      "quote_epoch": 1784897357,
+    "BAGFS": {
+      "price": 24.66,
+      "quote_time": "2026-07-24T14:06:50+00:00",
+      "quote_epoch": 1784902010,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "BIMAS": {
-      "price": 384.25,
-      "quote_time": "2026-07-24T12:49:18+00:00",
-      "quote_epoch": 1784897358,
+    "ATATR": {
+      "price": 16.25,
+      "quote_time": "2026-07-24T14:04:25+00:00",
+      "quote_epoch": 1784901865,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "AYGAZ": {
+      "price": 272.25,
+      "quote_time": "2026-07-24T14:04:23+00:00",
+      "quote_epoch": 1784901863,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "BALSU": {
+      "price": 16.4,
+      "quote_time": "2026-07-24T14:08:23+00:00",
+      "quote_epoch": 1784902103,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "BAHKM": {
+      "price": 119.1,
+      "quote_time": "2026-07-24T14:07:37+00:00",
+      "quote_epoch": 1784902057,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "AYDEM": {
+      "price": 25.62,
+      "quote_time": "2026-07-24T14:04:25+00:00",
+      "quote_epoch": 1784901865,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "BALAT": {
+      "price": 73.0,
+      "quote_time": "2026-07-24T10:55:01+00:00",
+      "quote_epoch": 1784890501,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "BIENY": {
+      "price": 22.4,
+      "quote_time": "2026-07-24T14:08:23+00:00",
+      "quote_epoch": 1784902103,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "BAYRK": {
+      "price": 4.6,
+      "quote_time": "2026-07-24T14:08:00+00:00",
+      "quote_epoch": 1784902080,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "BANVT": {
+      "price": 156.9,
+      "quote_time": "2026-07-24T14:08:15+00:00",
+      "quote_epoch": 1784902095,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "BERA": {
+      "price": 13.58,
+      "quote_time": "2026-07-24T14:08:16+00:00",
+      "quote_epoch": 1784902096,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "BARMA": {
+      "price": 38.16,
+      "quote_time": "2026-07-24T14:07:37+00:00",
+      "quote_epoch": 1784902057,
       "currency": "TRY",
       "exchange": "IST"
     },
@@ -581,178 +609,129 @@
       "currency": "TRY",
       "exchange": "IST"
     },
-    "BEYAZ": {
-      "price": 24.26,
-      "quote_time": "2026-07-24T12:49:21+00:00",
-      "quote_epoch": 1784897361,
+    "BESTE": {
+      "price": 32.54,
+      "quote_time": "2026-07-24T14:08:23+00:00",
+      "quote_epoch": 1784902103,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "BIOEN": {
-      "price": 17.03,
-      "quote_time": "2026-07-24T12:48:46+00:00",
-      "quote_epoch": 1784897326,
+    "BEGYO": {
+      "price": 3.78,
+      "quote_time": "2026-07-24T14:07:13+00:00",
+      "quote_epoch": 1784902033,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "BESLR": {
+      "price": 13.24,
+      "quote_time": "2026-07-24T14:08:04+00:00",
+      "quote_epoch": 1784902084,
       "currency": "TRY",
       "exchange": "IST"
     },
     "BFREN": {
-      "price": 126.8,
-      "quote_time": "2026-07-24T12:46:33+00:00",
-      "quote_epoch": 1784897193,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "BIGTK": {
-      "price": 293.0,
-      "quote_time": "2026-07-24T12:47:48+00:00",
-      "quote_epoch": 1784897268,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "BARMA": {
-      "price": 38.16,
-      "quote_time": "2026-07-24T12:47:35+00:00",
-      "quote_epoch": 1784897255,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "BERA": {
-      "price": 13.64,
-      "quote_time": "2026-07-24T12:48:53+00:00",
-      "quote_epoch": 1784897333,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "BIENY": {
-      "price": 22.42,
-      "quote_time": "2026-07-24T12:49:21+00:00",
-      "quote_epoch": 1784897361,
+      "price": 127.1,
+      "quote_time": "2026-07-24T14:08:09+00:00",
+      "quote_epoch": 1784902089,
       "currency": "TRY",
       "exchange": "IST"
     },
     "BINBN": {
-      "price": 176.4,
-      "quote_time": "2026-07-24T12:49:19+00:00",
-      "quote_epoch": 1784897359,
+      "price": 176.1,
+      "quote_time": "2026-07-24T14:06:27+00:00",
+      "quote_epoch": 1784901987,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "BAYRK": {
-      "price": 4.57,
-      "quote_time": "2026-07-24T12:48:23+00:00",
-      "quote_epoch": 1784897303,
+    "BIMAS": {
+      "price": 383.5,
+      "quote_time": "2026-07-24T14:08:21+00:00",
+      "quote_epoch": 1784902101,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "BEYAZ": {
+      "price": 24.36,
+      "quote_time": "2026-07-24T14:05:33+00:00",
+      "quote_epoch": 1784901933,
       "currency": "TRY",
       "exchange": "IST"
     },
     "BIGEN": {
       "price": 128.7,
-      "quote_time": "2026-07-24T12:48:20+00:00",
-      "quote_epoch": 1784897300,
+      "quote_time": "2026-07-24T14:07:43+00:00",
+      "quote_epoch": 1784902063,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "BINHO": {
-      "price": 10.32,
-      "quote_time": "2026-07-24T12:49:20+00:00",
-      "quote_epoch": 1784897360,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "BASGZ": {
-      "price": 45.9,
-      "quote_time": "2026-07-24T12:44:08+00:00",
-      "quote_epoch": 1784897048,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "BESTE": {
-      "price": 31.76,
-      "quote_time": "2026-07-24T12:49:10+00:00",
-      "quote_epoch": 1784897350,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "BIGCH": {
-      "price": 7.06,
-      "quote_time": "2026-07-24T12:48:57+00:00",
-      "quote_epoch": 1784897337,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "BEGYO": {
-      "price": 3.79,
-      "quote_time": "2026-07-24T12:49:06+00:00",
-      "quote_epoch": 1784897346,
+    "BIOEN": {
+      "price": 16.96,
+      "quote_time": "2026-07-24T14:08:23+00:00",
+      "quote_epoch": 1784902103,
       "currency": "TRY",
       "exchange": "IST"
     },
     "BETAE": {
-      "price": 94.55,
-      "quote_time": "2026-07-24T12:49:19+00:00",
-      "quote_epoch": 1784897359,
+      "price": 95.9,
+      "quote_time": "2026-07-24T14:08:22+00:00",
+      "quote_epoch": 1784902102,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "BESLR": {
-      "price": 13.38,
-      "quote_time": "2026-07-24T12:49:18+00:00",
-      "quote_epoch": 1784897358,
+    "BIGCH": {
+      "price": 7.07,
+      "quote_time": "2026-07-24T14:08:12+00:00",
+      "quote_epoch": 1784902092,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "BANVT": {
-      "price": 157.3,
-      "quote_time": "2026-07-24T12:49:20+00:00",
-      "quote_epoch": 1784897360,
+    "BIGTK": {
+      "price": 293.25,
+      "quote_time": "2026-07-24T14:07:22+00:00",
+      "quote_epoch": 1784902042,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "BASGZ": {
+      "price": 45.8,
+      "quote_time": "2026-07-24T14:07:45+00:00",
+      "quote_epoch": 1784902065,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "BINHO": {
+      "price": 10.09,
+      "quote_time": "2026-07-24T14:08:19+00:00",
+      "quote_epoch": 1784902099,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "BSOKE": {
+      "price": 34.46,
+      "quote_time": "2026-07-24T14:07:51+00:00",
+      "quote_epoch": 1784902071,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "BNTAS": {
+      "price": 6.04,
+      "quote_time": "2026-07-24T14:08:17+00:00",
+      "quote_epoch": 1784902097,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "BRSAN": {
+      "price": 571.0,
+      "quote_time": "2026-07-24T14:08:21+00:00",
+      "quote_epoch": 1784902101,
       "currency": "TRY",
       "exchange": "IST"
     },
     "BRISA": {
       "price": 80.6,
-      "quote_time": "2026-07-24T12:49:21+00:00",
-      "quote_epoch": 1784897361,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "BRKO": {
-      "price": 12.05,
-      "quote_time": "2026-07-24T10:55:01+00:00",
-      "quote_epoch": 1784890501,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "BRSAN": {
-      "price": 566.0,
-      "quote_time": "2026-07-24T12:48:25+00:00",
-      "quote_epoch": 1784897305,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "BRLSM": {
-      "price": 17.09,
-      "quote_time": "2026-07-24T12:49:06+00:00",
-      "quote_epoch": 1784897346,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "BJKAS": {
-      "price": 1.82,
-      "quote_time": "2026-07-24T12:49:20+00:00",
-      "quote_epoch": 1784897360,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "BNTAS": {
-      "price": 6.06,
-      "quote_time": "2026-07-24T12:47:18+00:00",
-      "quote_epoch": 1784897238,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "BLCYT": {
-      "price": 21.06,
-      "quote_time": "2026-07-24T12:48:55+00:00",
-      "quote_epoch": 1784897335,
+      "quote_time": "2026-07-24T14:06:10+00:00",
+      "quote_epoch": 1784901970,
       "currency": "TRY",
       "exchange": "IST"
     },
@@ -763,213 +742,143 @@
       "currency": "TRY",
       "exchange": "IST"
     },
-    "BORLS": {
-      "price": 5.88,
-      "quote_time": "2026-07-24T12:48:39+00:00",
-      "quote_epoch": 1784897319,
+    "BRYAT": {
+      "price": 1811.0,
+      "quote_time": "2026-07-24T14:08:12+00:00",
+      "quote_epoch": 1784902092,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "BSOKE": {
-      "price": 34.46,
-      "quote_time": "2026-07-24T12:49:00+00:00",
-      "quote_epoch": 1784897340,
+    "BMSTL": {
+      "price": 44.08,
+      "quote_time": "2026-07-24T14:07:52+00:00",
+      "quote_epoch": 1784902072,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "BLCYT": {
+      "price": 20.84,
+      "quote_time": "2026-07-24T14:07:02+00:00",
+      "quote_epoch": 1784902022,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "BORLS": {
+      "price": 5.83,
+      "quote_time": "2026-07-24T14:08:20+00:00",
+      "quote_epoch": 1784902100,
       "currency": "TRY",
       "exchange": "IST"
     },
     "BOSSA": {
       "price": 6.87,
-      "quote_time": "2026-07-24T12:48:08+00:00",
-      "quote_epoch": 1784897288,
+      "quote_time": "2026-07-24T14:08:03+00:00",
+      "quote_epoch": 1784902083,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "BOBET": {
-      "price": 18.89,
-      "quote_time": "2026-07-24T12:49:14+00:00",
-      "quote_epoch": 1784897354,
+    "BJKAS": {
+      "price": 1.82,
+      "quote_time": "2026-07-24T14:08:18+00:00",
+      "quote_epoch": 1784902098,
       "currency": "TRY",
       "exchange": "IST"
     },
     "BORSK": {
-      "price": 6.24,
-      "quote_time": "2026-07-24T12:48:49+00:00",
-      "quote_epoch": 1784897329,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "BMSCH": {
-      "price": 13.45,
-      "quote_time": "2026-07-24T12:48:44+00:00",
-      "quote_epoch": 1784897324,
+      "price": 6.27,
+      "quote_time": "2026-07-24T14:08:05+00:00",
+      "quote_epoch": 1784902085,
       "currency": "TRY",
       "exchange": "IST"
     },
     "BRKVY": {
-      "price": 81.65,
-      "quote_time": "2026-07-24T12:47:54+00:00",
-      "quote_epoch": 1784897274,
+      "price": 81.3,
+      "quote_time": "2026-07-24T14:07:18+00:00",
+      "quote_epoch": 1784902038,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "BMSCH": {
+      "price": 13.43,
+      "quote_time": "2026-07-24T14:07:26+00:00",
+      "quote_epoch": 1784902046,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "BOBET": {
+      "price": 18.91,
+      "quote_time": "2026-07-24T14:06:09+00:00",
+      "quote_epoch": 1784901969,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "BRKO": {
+      "price": 12.05,
+      "quote_time": "2026-07-24T10:55:01+00:00",
+      "quote_epoch": 1784890501,
       "currency": "TRY",
       "exchange": "IST"
     },
     "BRKSN": {
-      "price": 7.57,
-      "quote_time": "2026-07-24T12:48:49+00:00",
-      "quote_epoch": 1784897329,
+      "price": 7.6,
+      "quote_time": "2026-07-24T14:08:17+00:00",
+      "quote_epoch": 1784902097,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "BMSTL": {
-      "price": 43.94,
-      "quote_time": "2026-07-24T12:48:53+00:00",
-      "quote_epoch": 1784897333,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "BRYAT": {
-      "price": 1802.0,
-      "quote_time": "2026-07-24T12:49:03+00:00",
-      "quote_epoch": 1784897343,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "BIZIM": {
-      "price": 25.04,
-      "quote_time": "2026-07-24T12:44:01+00:00",
-      "quote_epoch": 1784897041,
+    "BRLSM": {
+      "price": 17.13,
+      "quote_time": "2026-07-24T14:08:15+00:00",
+      "quote_epoch": 1784902095,
       "currency": "TRY",
       "exchange": "IST"
     },
     "BLUME": {
-      "price": 31.24,
-      "quote_time": "2026-07-24T12:49:21+00:00",
-      "quote_epoch": 1784897361,
+      "price": 31.28,
+      "quote_time": "2026-07-24T14:08:21+00:00",
+      "quote_epoch": 1784902101,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "CEMAS": {
-      "price": 4.18,
-      "quote_time": "2026-07-24T12:49:05+00:00",
-      "quote_epoch": 1784897345,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "CMBTN": {
-      "price": 1612.0,
-      "quote_time": "2026-07-24T12:48:52+00:00",
-      "quote_epoch": 1784897332,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "CEMZY": {
-      "price": 14.4,
-      "quote_time": "2026-07-24T12:48:59+00:00",
-      "quote_epoch": 1784897339,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "CGCAM": {
-      "price": 43.12,
-      "quote_time": "2026-07-24T12:48:45+00:00",
-      "quote_epoch": 1784897325,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "CIMSA": {
-      "price": 49.4,
-      "quote_time": "2026-07-24T12:48:55+00:00",
-      "quote_epoch": 1784897335,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "BYDNR": {
-      "price": 39.08,
-      "quote_time": "2026-07-24T12:43:14+00:00",
-      "quote_epoch": 1784896994,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "CELHA": {
-      "price": 23.72,
-      "quote_time": "2026-07-24T12:49:18+00:00",
-      "quote_epoch": 1784897358,
+    "BIZIM": {
+      "price": 24.94,
+      "quote_time": "2026-07-24T14:07:48+00:00",
+      "quote_epoch": 1784902068,
       "currency": "TRY",
       "exchange": "IST"
     },
     "BULGS": {
-      "price": 39.42,
-      "quote_time": "2026-07-24T12:48:56+00:00",
-      "quote_epoch": 1784897336,
+      "price": 39.36,
+      "quote_time": "2026-07-24T14:08:12+00:00",
+      "quote_epoch": 1784902092,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "CEMTS": {
-      "price": 9.08,
-      "quote_time": "2026-07-24T12:49:03+00:00",
-      "quote_epoch": 1784897343,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "BUCIM": {
-      "price": 5.27,
-      "quote_time": "2026-07-24T12:49:03+00:00",
-      "quote_epoch": 1784897343,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "CCOLA": {
-      "price": 90.55,
-      "quote_time": "2026-07-24T12:49:18+00:00",
-      "quote_epoch": 1784897358,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "CEOEM": {
-      "price": 23.98,
-      "quote_time": "2026-07-24T12:49:15+00:00",
-      "quote_epoch": 1784897355,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "CLEBI": {
-      "price": 1494.0,
-      "quote_time": "2026-07-24T12:48:01+00:00",
-      "quote_epoch": 1784897281,
+    "BYDNR": {
+      "price": 38.98,
+      "quote_time": "2026-07-24T14:02:44+00:00",
+      "quote_epoch": 1784901764,
       "currency": "TRY",
       "exchange": "IST"
     },
     "BVSAN": {
-      "price": 117.3,
-      "quote_time": "2026-07-24T12:48:45+00:00",
-      "quote_epoch": 1784897325,
+      "price": 117.1,
+      "quote_time": "2026-07-24T14:07:07+00:00",
+      "quote_epoch": 1784902027,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "BTCIM": {
-      "price": 5.3,
-      "quote_time": "2026-07-24T12:49:21+00:00",
-      "quote_epoch": 1784897361,
+    "CEMAS": {
+      "price": 4.16,
+      "quote_time": "2026-07-24T14:00:02+00:00",
+      "quote_epoch": 1784901602,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "BURVA": {
-      "price": 800.5,
-      "quote_time": "2026-07-24T12:47:39+00:00",
-      "quote_epoch": 1784897259,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "CANTE": {
-      "price": 1.29,
-      "quote_time": "2026-07-24T12:49:09+00:00",
-      "quote_epoch": 1784897349,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "CATES": {
-      "price": 45.28,
-      "quote_time": "2026-07-24T12:49:06+00:00",
-      "quote_epoch": 1784897346,
+    "CEMTS": {
+      "price": 9.09,
+      "quote_time": "2026-07-24T13:59:20+00:00",
+      "quote_epoch": 1784901560,
       "currency": "TRY",
       "exchange": "IST"
     },
@@ -980,115 +889,227 @@
       "currency": "TRY",
       "exchange": "IST"
     },
+    "CCOLA": {
+      "price": 90.4,
+      "quote_time": "2026-07-24T14:00:08+00:00",
+      "quote_epoch": 1784901608,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "CIMSA": {
+      "price": 48.8,
+      "quote_time": "2026-07-24T13:59:42+00:00",
+      "quote_epoch": 1784901582,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "BURVA": {
+      "price": 789.0,
+      "quote_time": "2026-07-24T14:07:49+00:00",
+      "quote_epoch": 1784902069,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "CGCAM": {
+      "price": 42.82,
+      "quote_time": "2026-07-24T14:00:09+00:00",
+      "quote_epoch": 1784901609,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "CATES": {
+      "price": 45.52,
+      "quote_time": "2026-07-24T14:00:12+00:00",
+      "quote_epoch": 1784901612,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "CELHA": {
+      "price": 23.76,
+      "quote_time": "2026-07-24T13:59:55+00:00",
+      "quote_epoch": 1784901595,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "CEOEM": {
+      "price": 23.94,
+      "quote_time": "2026-07-24T13:59:46+00:00",
+      "quote_epoch": 1784901586,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "CMBTN": {
+      "price": 1595.0,
+      "quote_time": "2026-07-24T14:00:17+00:00",
+      "quote_epoch": 1784901617,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "BUCIM": {
+      "price": 5.25,
+      "quote_time": "2026-07-24T14:07:28+00:00",
+      "quote_epoch": 1784902048,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "CANTE": {
+      "price": 1.29,
+      "quote_time": "2026-07-24T14:00:17+00:00",
+      "quote_epoch": 1784901617,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "BTCIM": {
+      "price": 5.3,
+      "quote_time": "2026-07-24T14:07:55+00:00",
+      "quote_epoch": 1784902075,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "CLEBI": {
+      "price": 1489.0,
+      "quote_time": "2026-07-24T13:59:32+00:00",
+      "quote_epoch": 1784901572,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "CEMZY": {
+      "price": 14.2,
+      "quote_time": "2026-07-24T14:00:04+00:00",
+      "quote_epoch": 1784901604,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
     "BURCE": {
-      "price": 40.52,
-      "quote_time": "2026-07-24T12:48:32+00:00",
-      "quote_epoch": 1784897312,
+      "price": 40.54,
+      "quote_time": "2026-07-24T14:08:04+00:00",
+      "quote_epoch": 1784902084,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "DGGYO": {
-      "price": 38.42,
-      "quote_time": "2026-07-24T12:38:42+00:00",
-      "quote_epoch": 1784896722,
+    "DESPC": {
+      "price": 48.68,
+      "quote_time": "2026-07-24T14:02:50+00:00",
+      "quote_epoch": 1784901770,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "DERIM": {
-      "price": 35.54,
-      "quote_time": "2026-07-24T12:46:54+00:00",
-      "quote_epoch": 1784897214,
+    "DCTTR": {
+      "price": 11.49,
+      "quote_time": "2026-07-24T14:02:08+00:00",
+      "quote_epoch": 1784901728,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "CVKMD": {
+      "price": 38.5,
+      "quote_time": "2026-07-24T14:00:10+00:00",
+      "quote_epoch": 1784901610,
       "currency": "TRY",
       "exchange": "IST"
     },
     "DENGE": {
       "price": 2.32,
-      "quote_time": "2026-07-24T12:49:18+00:00",
-      "quote_epoch": 1784897358,
+      "quote_time": "2026-07-24T14:02:18+00:00",
+      "quote_epoch": 1784901738,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "DCTTR": {
-      "price": 11.51,
-      "quote_time": "2026-07-24T12:48:22+00:00",
-      "quote_epoch": 1784897302,
+    "CWENE": {
+      "price": 38.36,
+      "quote_time": "2026-07-24T14:00:12+00:00",
+      "quote_epoch": 1784901612,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "DESA": {
-      "price": 9.64,
-      "quote_time": "2026-07-24T12:48:47+00:00",
-      "quote_epoch": 1784897327,
+    "DAGI": {
+      "price": 9.28,
+      "quote_time": "2026-07-24T14:02:54+00:00",
+      "quote_epoch": 1784901774,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "DERHL": {
-      "price": 11.39,
-      "quote_time": "2026-07-24T12:49:13+00:00",
-      "quote_epoch": 1784897353,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "DESPC": {
-      "price": 49.26,
-      "quote_time": "2026-07-24T12:49:21+00:00",
-      "quote_epoch": 1784897361,
+    "DAPGM": {
+      "price": 9.68,
+      "quote_time": "2026-07-24T14:02:51+00:00",
+      "quote_epoch": 1784901771,
       "currency": "TRY",
       "exchange": "IST"
     },
     "DEVA": {
       "price": 75.45,
-      "quote_time": "2026-07-24T12:46:49+00:00",
-      "quote_epoch": 1784897209,
+      "quote_time": "2026-07-24T14:01:04+00:00",
+      "quote_epoch": 1784901664,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "COSMO": {
-      "price": 126.0,
-      "quote_time": "2026-07-24T12:48:50+00:00",
-      "quote_epoch": 1784897330,
+    "DESA": {
+      "price": 9.67,
+      "quote_time": "2026-07-24T14:02:47+00:00",
+      "quote_epoch": 1784901767,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "CVKMD": {
-      "price": 38.64,
-      "quote_time": "2026-07-24T12:49:20+00:00",
-      "quote_epoch": 1784897360,
+    "CONSE": {
+      "price": 2.7,
+      "quote_time": "2026-07-24T13:59:56+00:00",
+      "quote_epoch": 1784901596,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "CWENE": {
-      "price": 38.5,
-      "quote_time": "2026-07-24T12:49:07+00:00",
-      "quote_epoch": 1784897347,
+    "DERIM": {
+      "price": 35.28,
+      "quote_time": "2026-07-24T14:02:36+00:00",
+      "quote_epoch": 1784901756,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "DGATE": {
-      "price": 106.9,
-      "quote_time": "2026-07-24T12:48:39+00:00",
-      "quote_epoch": 1784897319,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "DAGI": {
-      "price": 9.17,
-      "quote_time": "2026-07-24T12:49:18+00:00",
-      "quote_epoch": 1784897358,
+    "DGGYO": {
+      "price": 38.28,
+      "quote_time": "2026-07-24T14:02:54+00:00",
+      "quote_epoch": 1784901774,
       "currency": "TRY",
       "exchange": "IST"
     },
     "CRFSA": {
-      "price": 157.2,
-      "quote_time": "2026-07-24T12:47:49+00:00",
-      "quote_epoch": 1784897269,
+      "price": 155.3,
+      "quote_time": "2026-07-24T14:00:17+00:00",
+      "quote_epoch": 1784901617,
       "currency": "TRY",
       "exchange": "IST"
     },
     "DARDL": {
-      "price": 1.92,
-      "quote_time": "2026-07-24T12:49:14+00:00",
-      "quote_epoch": 1784897354,
+      "price": 1.91,
+      "quote_time": "2026-07-24T14:02:40+00:00",
+      "quote_epoch": 1784901760,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "CRDFA": {
+      "price": 44.46,
+      "quote_time": "2026-07-24T13:59:51+00:00",
+      "quote_epoch": 1784901591,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "CUSAN": {
+      "price": 26.9,
+      "quote_time": "2026-07-24T14:00:09+00:00",
+      "quote_epoch": 1784901609,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "COSMO": {
+      "price": 125.7,
+      "quote_time": "2026-07-24T13:59:17+00:00",
+      "quote_epoch": 1784901557,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "DERHL": {
+      "price": 11.36,
+      "quote_time": "2026-07-24T14:02:26+00:00",
+      "quote_epoch": 1784901746,
       "currency": "TRY",
       "exchange": "IST"
     },
@@ -1099,143 +1120,136 @@
       "currency": "TRY",
       "exchange": "IST"
     },
-    "CRDFA": {
-      "price": 44.2,
-      "quote_time": "2026-07-24T12:48:19+00:00",
-      "quote_epoch": 1784897299,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "CONSE": {
-      "price": 2.7,
-      "quote_time": "2026-07-24T12:48:28+00:00",
-      "quote_epoch": 1784897308,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "DAPGM": {
-      "price": 9.71,
-      "quote_time": "2026-07-24T12:49:07+00:00",
-      "quote_epoch": 1784897347,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "CUSAN": {
-      "price": 27.26,
-      "quote_time": "2026-07-24T12:48:51+00:00",
-      "quote_epoch": 1784897331,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "DOKTA": {
-      "price": 22.68,
-      "quote_time": "2026-07-24T12:47:53+00:00",
-      "quote_epoch": 1784897273,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "DOFER": {
-      "price": 30.22,
-      "quote_time": "2026-07-24T12:49:15+00:00",
-      "quote_epoch": 1784897355,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "DOGUB": {
-      "price": 86.75,
-      "quote_time": "2026-07-24T12:48:59+00:00",
-      "quote_epoch": 1784897339,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "DNISI": {
-      "price": 20.12,
-      "quote_time": "2026-07-24T12:48:30+00:00",
-      "quote_epoch": 1784897310,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "DITAS": {
-      "price": 24.58,
-      "quote_time": "2026-07-24T12:48:49+00:00",
-      "quote_epoch": 1784897329,
+    "DGATE": {
+      "price": 113.0,
+      "quote_time": "2026-07-24T14:02:53+00:00",
+      "quote_epoch": 1784901773,
       "currency": "TRY",
       "exchange": "IST"
     },
     "DOAS": {
-      "price": 186.1,
-      "quote_time": "2026-07-24T12:49:17+00:00",
-      "quote_epoch": 1784897357,
+      "price": 185.7,
+      "quote_time": "2026-07-24T14:02:46+00:00",
+      "quote_epoch": 1784901766,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "DYOBY": {
-      "price": 13.68,
-      "quote_time": "2026-07-24T12:48:53+00:00",
-      "quote_epoch": 1784897333,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "DOCO": {
-      "price": 10805.0,
-      "quote_time": "2026-07-24T12:48:01+00:00",
-      "quote_epoch": 1784897281,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "DOFRB": {
-      "price": 153.3,
-      "quote_time": "2026-07-24T12:49:16+00:00",
-      "quote_epoch": 1784897356,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "DOHOL": {
-      "price": 21.28,
-      "quote_time": "2026-07-24T12:49:21+00:00",
-      "quote_epoch": 1784897361,
+    "DOGUB": {
+      "price": 82.0,
+      "quote_time": "2026-07-24T13:57:10+00:00",
+      "quote_epoch": 1784901430,
       "currency": "TRY",
       "exchange": "IST"
     },
     "DSTKF": {
-      "price": 2046.0,
-      "quote_time": "2026-07-24T12:49:21+00:00",
-      "quote_epoch": 1784897361,
+      "price": 2063.0,
+      "quote_time": "2026-07-24T14:02:52+00:00",
+      "quote_epoch": 1784901772,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "DGNMO": {
-      "price": 7.55,
-      "quote_time": "2026-07-24T12:48:31+00:00",
-      "quote_epoch": 1784897311,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "DURKN": {
-      "price": 20.12,
-      "quote_time": "2026-07-24T12:48:21+00:00",
-      "quote_epoch": 1784897301,
+    "DUNYH": {
+      "price": 143.1,
+      "quote_time": "2026-07-24T14:02:32+00:00",
+      "quote_epoch": 1784901752,
       "currency": "TRY",
       "exchange": "IST"
     },
     "EBEBK": {
-      "price": 86.1,
-      "quote_time": "2026-07-24T12:48:50+00:00",
-      "quote_epoch": 1784897330,
+      "price": 85.5,
+      "quote_time": "2026-07-24T14:13:08+00:00",
+      "quote_epoch": 1784902388,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "DMSAS": {
-      "price": 8.97,
-      "quote_time": "2026-07-24T12:48:39+00:00",
-      "quote_epoch": 1784897319,
+    "DOKTA": {
+      "price": 22.62,
+      "quote_time": "2026-07-24T14:01:47+00:00",
+      "quote_epoch": 1784901707,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "DOHOL": {
+      "price": 20.82,
+      "quote_time": "2026-07-24T14:02:45+00:00",
+      "quote_epoch": 1784901765,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "DITAS": {
+      "price": 24.42,
+      "quote_time": "2026-07-24T14:02:55+00:00",
+      "quote_epoch": 1784901775,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "DURDO": {
+      "price": 5.06,
+      "quote_time": "2026-07-24T14:01:36+00:00",
+      "quote_epoch": 1784901696,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "DGNMO": {
+      "price": 7.38,
+      "quote_time": "2026-07-24T14:01:54+00:00",
+      "quote_epoch": 1784901714,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "DYOBY": {
+      "price": 13.6,
+      "quote_time": "2026-07-24T14:02:48+00:00",
+      "quote_epoch": 1784901768,
       "currency": "TRY",
       "exchange": "IST"
     },
     "DZGYO": {
-      "price": 7.71,
-      "quote_time": "2026-07-24T12:48:44+00:00",
-      "quote_epoch": 1784897324,
+      "price": 7.68,
+      "quote_time": "2026-07-24T14:02:18+00:00",
+      "quote_epoch": 1784901738,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "DOFER": {
+      "price": 30.06,
+      "quote_time": "2026-07-24T14:02:25+00:00",
+      "quote_epoch": 1784901745,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "DURKN": {
+      "price": 20.14,
+      "quote_time": "2026-07-24T14:02:01+00:00",
+      "quote_epoch": 1784901721,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "DNISI": {
+      "price": 20.02,
+      "quote_time": "2026-07-24T14:01:26+00:00",
+      "quote_epoch": 1784901686,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "DOCO": {
+      "price": 10767.5,
+      "quote_time": "2026-07-24T13:59:45+00:00",
+      "quote_epoch": 1784901585,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "DOFRB": {
+      "price": 153.2,
+      "quote_time": "2026-07-24T14:02:40+00:00",
+      "quote_epoch": 1784901760,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "DMRGD": {
+      "price": 12.62,
+      "quote_time": "2026-07-24T14:02:56+00:00",
+      "quote_epoch": 1784901776,
       "currency": "TRY",
       "exchange": "IST"
     },
@@ -1246,129 +1260,45 @@
       "currency": "TRY",
       "exchange": "IST"
     },
-    "DMRGD": {
-      "price": 12.64,
-      "quote_time": "2026-07-24T12:49:09+00:00",
-      "quote_epoch": 1784897349,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "DURDO": {
-      "price": 5.09,
-      "quote_time": "2026-07-24T12:49:04+00:00",
-      "quote_epoch": 1784897344,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "DUNYH": {
-      "price": 144.3,
-      "quote_time": "2026-07-24T12:48:36+00:00",
-      "quote_epoch": 1784897316,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ECZYT": {
-      "price": 334.0,
-      "quote_time": "2026-07-24T12:49:16+00:00",
-      "quote_epoch": 1784897356,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "EKSUN": {
-      "price": 6.85,
-      "quote_time": "2026-07-24T12:49:11+00:00",
-      "quote_epoch": 1784897351,
+    "DMSAS": {
+      "price": 9.02,
+      "quote_time": "2026-07-24T14:01:51+00:00",
+      "quote_epoch": 1784901711,
       "currency": "TRY",
       "exchange": "IST"
     },
     "EGEEN": {
-      "price": 5460.0,
-      "quote_time": "2026-07-24T12:48:40+00:00",
-      "quote_epoch": 1784897320,
+      "price": 5442.5,
+      "quote_time": "2026-07-24T14:12:57+00:00",
+      "quote_epoch": 1784902377,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "EGPRO": {
-      "price": 35.6,
-      "quote_time": "2026-07-24T12:49:10+00:00",
-      "quote_epoch": 1784897350,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "EGSER": {
-      "price": 3.01,
-      "quote_time": "2026-07-24T12:48:37+00:00",
-      "quote_epoch": 1784897317,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "EKGYO": {
-      "price": 18.67,
-      "quote_time": "2026-07-24T12:49:20+00:00",
-      "quote_epoch": 1784897360,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "EKIM": {
-      "price": 22.84,
-      "quote_time": "2026-07-24T12:49:22+00:00",
-      "quote_epoch": 1784897362,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "EGEPO": {
-      "price": 19.13,
-      "quote_time": "2026-07-24T12:44:48+00:00",
-      "quote_epoch": 1784897088,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "EFOR": {
-      "price": 18.18,
-      "quote_time": "2026-07-24T12:49:16+00:00",
-      "quote_epoch": 1784897356,
+    "EKOS": {
+      "price": 6.06,
+      "quote_time": "2026-07-24T14:12:57+00:00",
+      "quote_epoch": 1784902377,
       "currency": "TRY",
       "exchange": "IST"
     },
     "EKDMR": {
-      "price": 52.0,
-      "quote_time": "2026-07-24T12:49:21+00:00",
-      "quote_epoch": 1784897361,
+      "price": 51.95,
+      "quote_time": "2026-07-24T14:13:18+00:00",
+      "quote_epoch": 1784902398,
       "currency": "TRY",
       "exchange": "IST"
     },
     "ECILC": {
-      "price": 71.8,
-      "quote_time": "2026-07-24T12:48:52+00:00",
-      "quote_epoch": 1784897332,
+      "price": 71.65,
+      "quote_time": "2026-07-24T14:12:59+00:00",
+      "quote_epoch": 1784902379,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "ECOGR": {
-      "price": 44.24,
-      "quote_time": "2026-07-24T12:49:00+00:00",
-      "quote_epoch": 1784897340,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "EDATA": {
-      "price": 18.74,
-      "quote_time": "2026-07-24T12:49:00+00:00",
-      "quote_epoch": 1784897340,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "EDIP": {
-      "price": 36.1,
-      "quote_time": "2026-07-24T12:49:14+00:00",
-      "quote_epoch": 1784897354,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "EMKEL": {
-      "price": 20.4,
-      "quote_time": "2026-07-24T12:48:00+00:00",
-      "quote_epoch": 1784897280,
+    "ECZYT": {
+      "price": 335.0,
+      "quote_time": "2026-07-24T14:13:17+00:00",
+      "quote_epoch": 1784902397,
       "currency": "TRY",
       "exchange": "IST"
     },
@@ -1379,73 +1309,122 @@
       "currency": "TRY",
       "exchange": "IST"
     },
-    "EKOS": {
-      "price": 6.05,
-      "quote_time": "2026-07-24T12:49:18+00:00",
-      "quote_epoch": 1784897358,
+    "EGSER": {
+      "price": 3.0,
+      "quote_time": "2026-07-24T14:11:40+00:00",
+      "quote_epoch": 1784902300,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "EGGUB": {
-      "price": 99.0,
-      "quote_time": "2026-07-24T12:49:20+00:00",
-      "quote_epoch": 1784897360,
+    "ECOGR": {
+      "price": 44.04,
+      "quote_time": "2026-07-24T14:13:07+00:00",
+      "quote_epoch": 1784902387,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "EGEGY": {
-      "price": 32.32,
-      "quote_time": "2026-07-24T12:48:57+00:00",
-      "quote_epoch": 1784897337,
+    "EMKEL": {
+      "price": 20.32,
+      "quote_time": "2026-07-24T14:13:02+00:00",
+      "quote_epoch": 1784902382,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "EKGYO": {
+      "price": 18.6,
+      "quote_time": "2026-07-24T14:13:17+00:00",
+      "quote_epoch": 1784902397,
       "currency": "TRY",
       "exchange": "IST"
     },
     "ELITE": {
-      "price": 31.36,
-      "quote_time": "2026-07-24T12:48:04+00:00",
-      "quote_epoch": 1784897284,
+      "price": 31.4,
+      "quote_time": "2026-07-24T14:11:50+00:00",
+      "quote_epoch": 1784902310,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "EMNIS": {
-      "price": 169.8,
-      "quote_time": "2026-07-24T10:55:01+00:00",
-      "quote_epoch": 1784890501,
+    "EGEPO": {
+      "price": 18.98,
+      "quote_time": "2026-07-24T14:13:17+00:00",
+      "quote_epoch": 1784902397,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "EGEGY": {
+      "price": 32.42,
+      "quote_time": "2026-07-24T14:12:55+00:00",
+      "quote_epoch": 1784902375,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "EKSUN": {
+      "price": 6.7,
+      "quote_time": "2026-07-24T14:13:04+00:00",
+      "quote_epoch": 1784902384,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "EDIP": {
+      "price": 36.02,
+      "quote_time": "2026-07-24T14:12:51+00:00",
+      "quote_epoch": 1784902371,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "EKIM": {
+      "price": 22.44,
+      "quote_time": "2026-07-24T14:13:18+00:00",
+      "quote_epoch": 1784902398,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "EDATA": {
+      "price": 18.43,
+      "quote_time": "2026-07-24T14:12:54+00:00",
+      "quote_epoch": 1784902374,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "EFOR": {
+      "price": 18.17,
+      "quote_time": "2026-07-24T14:13:14+00:00",
+      "quote_epoch": 1784902394,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "EGPRO": {
+      "price": 35.42,
+      "quote_time": "2026-07-24T14:13:00+00:00",
+      "quote_epoch": 1784902380,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "EGGUB": {
+      "price": 99.35,
+      "quote_time": "2026-07-24T14:12:41+00:00",
+      "quote_epoch": 1784902361,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ESCAR": {
+      "price": 47.1,
+      "quote_time": "2026-07-24T14:11:32+00:00",
+      "quote_epoch": 1784902292,
       "currency": "TRY",
       "exchange": "IST"
     },
     "EREGL": {
-      "price": 43.42,
-      "quote_time": "2026-07-24T12:49:14+00:00",
-      "quote_epoch": 1784897354,
+      "price": 42.9,
+      "quote_time": "2026-07-24T14:13:20+00:00",
+      "quote_epoch": 1784902400,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "EMPAE": {
-      "price": 58.9,
-      "quote_time": "2026-07-24T12:49:18+00:00",
-      "quote_epoch": 1784897358,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ERCB": {
-      "price": 53.5,
-      "quote_time": "2026-07-24T12:49:08+00:00",
-      "quote_epoch": 1784897348,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ENTRA": {
-      "price": 4.48,
-      "quote_time": "2026-07-24T12:49:19+00:00",
-      "quote_epoch": 1784897359,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ENDAE": {
-      "price": 16.79,
-      "quote_time": "2026-07-24T12:49:14+00:00",
-      "quote_epoch": 1784897354,
+    "ESEN": {
+      "price": 3.53,
+      "quote_time": "2026-07-24T14:13:03+00:00",
+      "quote_epoch": 1784902383,
       "currency": "TRY",
       "exchange": "IST"
     },
@@ -1456,73 +1435,31 @@
       "currency": "TRY",
       "exchange": "IST"
     },
-    "ENKAI": {
-      "price": 88.85,
-      "quote_time": "2026-07-24T12:49:19+00:00",
-      "quote_epoch": 1784897359,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ESCAR": {
-      "price": 47.44,
-      "quote_time": "2026-07-24T12:49:22+00:00",
-      "quote_epoch": 1784897362,
+    "ERBOS": {
+      "price": 164.6,
+      "quote_time": "2026-07-24T14:12:31+00:00",
+      "quote_epoch": 1784902351,
       "currency": "TRY",
       "exchange": "IST"
     },
     "ETILR": {
-      "price": 6.27,
-      "quote_time": "2026-07-24T12:49:16+00:00",
-      "quote_epoch": 1784897356,
+      "price": 6.3,
+      "quote_time": "2026-07-24T14:13:19+00:00",
+      "quote_epoch": 1784902399,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "ESEN": {
-      "price": 3.54,
-      "quote_time": "2026-07-24T12:49:07+00:00",
-      "quote_epoch": 1784897347,
+    "EMPAE": {
+      "price": 62.35,
+      "quote_time": "2026-07-24T14:13:10+00:00",
+      "quote_epoch": 1784902390,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "ENJSA": {
-      "price": 107.1,
-      "quote_time": "2026-07-24T12:49:22+00:00",
-      "quote_epoch": 1784897362,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ERSU": {
-      "price": 23.72,
-      "quote_time": "2026-07-24T12:47:25+00:00",
-      "quote_epoch": 1784897245,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ENSRI": {
-      "price": 6.13,
-      "quote_time": "2026-07-24T12:49:11+00:00",
-      "quote_epoch": 1784897351,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "EPLAS": {
-      "price": 5.48,
-      "quote_time": "2026-07-24T12:48:55+00:00",
-      "quote_epoch": 1784897335,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ESCOM": {
-      "price": 5.31,
-      "quote_time": "2026-07-24T12:49:17+00:00",
-      "quote_epoch": 1784897357,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ENERY": {
-      "price": 9.5,
-      "quote_time": "2026-07-24T12:49:22+00:00",
-      "quote_epoch": 1784897362,
+    "ENDAE": {
+      "price": 16.68,
+      "quote_time": "2026-07-24T14:13:13+00:00",
+      "quote_epoch": 1784902393,
       "currency": "TRY",
       "exchange": "IST"
     },
@@ -1533,101 +1470,143 @@
       "currency": "TRY",
       "exchange": "IST"
     },
-    "ETYAT": {
-      "price": 13.25,
-      "quote_time": "2026-07-24T12:49:16+00:00",
-      "quote_epoch": 1784897356,
+    "ERCB": {
+      "price": 53.35,
+      "quote_time": "2026-07-24T14:12:52+00:00",
+      "quote_epoch": 1784902372,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "ERBOS": {
-      "price": 165.1,
-      "quote_time": "2026-07-24T12:46:52+00:00",
-      "quote_epoch": 1784897212,
+    "ERSU": {
+      "price": 23.5,
+      "quote_time": "2026-07-24T14:13:03+00:00",
+      "quote_epoch": 1784902383,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ENTRA": {
+      "price": 4.45,
+      "quote_time": "2026-07-24T14:13:16+00:00",
+      "quote_epoch": 1784902396,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ETYAT": {
+      "price": 12.99,
+      "quote_time": "2026-07-24T14:13:04+00:00",
+      "quote_epoch": 1784902384,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ENKAI": {
+      "price": 88.65,
+      "quote_time": "2026-07-24T14:13:13+00:00",
+      "quote_epoch": 1784902393,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ESCOM": {
+      "price": 5.3,
+      "quote_time": "2026-07-24T14:13:15+00:00",
+      "quote_epoch": 1784902395,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "EMNIS": {
+      "price": 169.8,
+      "quote_time": "2026-07-24T10:55:01+00:00",
+      "quote_epoch": 1784890501,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ENSRI": {
+      "price": 6.08,
+      "quote_time": "2026-07-24T14:13:06+00:00",
+      "quote_epoch": 1784902386,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ENERY": {
+      "price": 9.54,
+      "quote_time": "2026-07-24T14:13:11+00:00",
+      "quote_epoch": 1784902391,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "EPLAS": {
+      "price": 5.48,
+      "quote_time": "2026-07-24T14:12:07+00:00",
+      "quote_epoch": 1784902327,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ENJSA": {
+      "price": 105.1,
+      "quote_time": "2026-07-24T14:13:18+00:00",
+      "quote_epoch": 1784902398,
       "currency": "TRY",
       "exchange": "IST"
     },
     "FENER": {
-      "price": 3.05,
-      "quote_time": "2026-07-24T12:49:06+00:00",
-      "quote_epoch": 1784897346,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "EUKYO": {
-      "price": 13.17,
-      "quote_time": "2026-07-24T12:46:53+00:00",
-      "quote_epoch": 1784897213,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "GARFA": {
-      "price": 27.98,
-      "quote_time": "2026-07-24T12:46:57+00:00",
-      "quote_epoch": 1784897217,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "EUPWR": {
-      "price": 98.15,
-      "quote_time": "2026-07-24T12:49:19+00:00",
-      "quote_epoch": 1784897359,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "FRIGO": {
-      "price": 2.22,
-      "quote_time": "2026-07-24T12:48:22+00:00",
-      "quote_epoch": 1784897302,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "GEDIK": {
-      "price": 6.82,
-      "quote_time": "2026-07-24T12:48:53+00:00",
-      "quote_epoch": 1784897333,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "FZLGY": {
-      "price": 12.92,
-      "quote_time": "2026-07-24T12:49:13+00:00",
-      "quote_epoch": 1784897353,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "EUREN": {
-      "price": 4.09,
-      "quote_time": "2026-07-24T12:49:11+00:00",
-      "quote_epoch": 1784897351,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "GARAN": {
-      "price": 125.3,
-      "quote_time": "2026-07-24T12:49:20+00:00",
-      "quote_epoch": 1784897360,
+      "price": 3.04,
+      "quote_time": "2026-07-24T14:08:08+00:00",
+      "quote_epoch": 1784902088,
       "currency": "TRY",
       "exchange": "IST"
     },
     "FORTE": {
-      "price": 103.6,
-      "quote_time": "2026-07-24T12:47:42+00:00",
-      "quote_epoch": 1784897262,
+      "price": 106.9,
+      "quote_time": "2026-07-24T14:08:34+00:00",
+      "quote_epoch": 1784902114,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "GARFA": {
+      "price": 27.84,
+      "quote_time": "2026-07-24T14:08:54+00:00",
+      "quote_epoch": 1784902134,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "EUREN": {
+      "price": 4.1,
+      "quote_time": "2026-07-24T14:12:51+00:00",
+      "quote_epoch": 1784902371,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "FORMT": {
+      "price": 1.93,
+      "quote_time": "2026-07-24T14:08:15+00:00",
+      "quote_epoch": 1784902095,
       "currency": "TRY",
       "exchange": "IST"
     },
     "FADE": {
-      "price": 15.55,
-      "quote_time": "2026-07-24T12:47:04+00:00",
-      "quote_epoch": 1784897224,
+      "price": 15.52,
+      "quote_time": "2026-07-24T14:08:06+00:00",
+      "quote_epoch": 1784902086,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "FROTO": {
-      "price": 79.05,
-      "quote_time": "2026-07-24T12:49:16+00:00",
-      "quote_epoch": 1784897356,
+    "GEDIK": {
+      "price": 6.71,
+      "quote_time": "2026-07-24T14:09:18+00:00",
+      "quote_epoch": 1784902158,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "FRIGO": {
+      "price": 2.28,
+      "quote_time": "2026-07-24T14:08:34+00:00",
+      "quote_epoch": 1784902114,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "FRMPL": {
+      "price": 33.56,
+      "quote_time": "2026-07-24T14:08:30+00:00",
+      "quote_epoch": 1784902110,
       "currency": "TRY",
       "exchange": "IST"
     },
@@ -1638,332 +1617,367 @@
       "currency": "TRY",
       "exchange": "IST"
     },
-    "FORMT": {
-      "price": 1.94,
-      "quote_time": "2026-07-24T12:49:16+00:00",
-      "quote_epoch": 1784897356,
+    "EYGYO": {
+      "price": 2.41,
+      "quote_time": "2026-07-24T14:13:13+00:00",
+      "quote_epoch": 1784902393,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "FLAP": {
-      "price": 10.31,
-      "quote_time": "2026-07-24T12:48:40+00:00",
-      "quote_epoch": 1784897320,
+    "FROTO": {
+      "price": 78.8,
+      "quote_time": "2026-07-24T14:08:34+00:00",
+      "quote_epoch": 1784902114,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "FZLGY": {
+      "price": 12.77,
+      "quote_time": "2026-07-24T14:08:33+00:00",
+      "quote_epoch": 1784902113,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "GARAN": {
+      "price": 126.0,
+      "quote_time": "2026-07-24T14:10:06+00:00",
+      "quote_epoch": 1784902206,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "EUPWR": {
+      "price": 97.65,
+      "quote_time": "2026-07-24T14:13:17+00:00",
+      "quote_epoch": 1784902397,
       "currency": "TRY",
       "exchange": "IST"
     },
     "FMIZP": {
-      "price": 286.0,
-      "quote_time": "2026-07-24T12:48:20+00:00",
-      "quote_epoch": 1784897300,
+      "price": 285.5,
+      "quote_time": "2026-07-24T14:08:17+00:00",
+      "quote_epoch": 1784902097,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "EYGYO": {
-      "price": 2.43,
-      "quote_time": "2026-07-24T12:48:26+00:00",
-      "quote_epoch": 1784897306,
+    "FLAP": {
+      "price": 10.29,
+      "quote_time": "2026-07-24T14:06:37+00:00",
+      "quote_epoch": 1784901997,
       "currency": "TRY",
       "exchange": "IST"
     },
     "EUYO": {
-      "price": 4.95,
-      "quote_time": "2026-07-24T12:48:28+00:00",
-      "quote_epoch": 1784897308,
+      "price": 4.93,
+      "quote_time": "2026-07-24T14:13:16+00:00",
+      "quote_epoch": 1784902396,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "EUKYO": {
+      "price": 13.0,
+      "quote_time": "2026-07-24T14:13:16+00:00",
+      "quote_epoch": 1784902396,
       "currency": "TRY",
       "exchange": "IST"
     },
     "FONET": {
       "price": 5.28,
-      "quote_time": "2026-07-24T12:48:48+00:00",
-      "quote_epoch": 1784897328,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "FRMPL": {
-      "price": 32.94,
-      "quote_time": "2026-07-24T12:49:15+00:00",
-      "quote_epoch": 1784897355,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "GIPTA": {
-      "price": 63.85,
-      "quote_time": "2026-07-24T12:49:22+00:00",
-      "quote_epoch": 1784897362,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "GLRYH": {
-      "price": 3.04,
-      "quote_time": "2026-07-24T12:49:03+00:00",
-      "quote_epoch": 1784897343,
+      "quote_time": "2026-07-24T14:08:23+00:00",
+      "quote_epoch": 1784902103,
       "currency": "TRY",
       "exchange": "IST"
     },
     "GMTAS": {
-      "price": 46.0,
-      "quote_time": "2026-07-24T12:47:44+00:00",
-      "quote_epoch": 1784897264,
+      "price": 45.4,
+      "quote_time": "2026-07-24T14:09:50+00:00",
+      "quote_epoch": 1784902190,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "GENKM": {
-      "price": 12.23,
-      "quote_time": "2026-07-24T12:49:02+00:00",
-      "quote_epoch": 1784897342,
+    "GOLDA": {
+      "price": 18.22,
+      "quote_time": "2026-07-24T14:10:08+00:00",
+      "quote_epoch": 1784902208,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "GOKNR": {
+      "price": 23.76,
+      "quote_time": "2026-07-24T14:10:03+00:00",
+      "quote_epoch": 1784902203,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "GOZDE": {
+      "price": 22.94,
+      "quote_time": "2026-07-24T14:09:42+00:00",
+      "quote_epoch": 1784902182,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "GRNYO": {
+      "price": 15.03,
+      "quote_time": "2026-07-24T14:09:53+00:00",
+      "quote_epoch": 1784902193,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "GRSEL": {
+      "price": 346.0,
+      "quote_time": "2026-07-24T14:10:01+00:00",
+      "quote_epoch": 1784902201,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "GIPTA": {
+      "price": 62.85,
+      "quote_time": "2026-07-24T14:10:04+00:00",
+      "quote_epoch": 1784902204,
       "currency": "TRY",
       "exchange": "IST"
     },
     "GLYHO": {
-      "price": 16.92,
-      "quote_time": "2026-07-24T12:49:19+00:00",
-      "quote_epoch": 1784897359,
+      "price": 16.91,
+      "quote_time": "2026-07-24T14:10:04+00:00",
+      "quote_epoch": 1784902204,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "GOLTS": {
+      "price": 309.5,
+      "quote_time": "2026-07-24T14:08:34+00:00",
+      "quote_epoch": 1784902114,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "GENKM": {
+      "price": 12.27,
+      "quote_time": "2026-07-24T14:09:56+00:00",
+      "quote_epoch": 1784902196,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "GLRYH": {
+      "price": 3.03,
+      "quote_time": "2026-07-24T14:09:55+00:00",
+      "quote_epoch": 1784902195,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "GENIL": {
+      "price": 9.21,
+      "quote_time": "2026-07-24T14:09:37+00:00",
+      "quote_epoch": 1784902177,
       "currency": "TRY",
       "exchange": "IST"
     },
     "GOODY": {
       "price": 2.62,
-      "quote_time": "2026-07-24T12:49:10+00:00",
-      "quote_epoch": 1784897350,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "GLCVY": {
-      "price": 53.75,
-      "quote_time": "2026-07-24T12:48:27+00:00",
-      "quote_epoch": 1784897307,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "GRSEL": {
-      "price": 345.75,
-      "quote_time": "2026-07-24T12:48:56+00:00",
-      "quote_epoch": 1784897336,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "GOZDE": {
-      "price": 22.74,
-      "quote_time": "2026-07-24T12:47:16+00:00",
-      "quote_epoch": 1784897236,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "GRNYO": {
-      "price": 14.98,
-      "quote_time": "2026-07-24T12:48:42+00:00",
-      "quote_epoch": 1784897322,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "GESAN": {
-      "price": 82.0,
-      "quote_time": "2026-07-24T12:48:58+00:00",
-      "quote_epoch": 1784897338,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "GLBMD": {
-      "price": 12.95,
-      "quote_time": "2026-07-24T12:42:29+00:00",
-      "quote_epoch": 1784896949,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "GOLDA": {
-      "price": 18.27,
-      "quote_time": "2026-07-24T12:49:19+00:00",
-      "quote_epoch": 1784897359,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "GLRMK": {
-      "price": 162.6,
-      "quote_time": "2026-07-24T12:49:19+00:00",
-      "quote_epoch": 1784897359,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "GOLTS": {
-      "price": 310.5,
-      "quote_time": "2026-07-24T12:48:50+00:00",
-      "quote_epoch": 1784897330,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "GEREL": {
-      "price": 36.28,
-      "quote_time": "2026-07-24T12:48:46+00:00",
-      "quote_epoch": 1784897326,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "GENIL": {
-      "price": 9.24,
-      "quote_time": "2026-07-24T12:48:58+00:00",
-      "quote_epoch": 1784897338,
+      "quote_time": "2026-07-24T14:10:04+00:00",
+      "quote_epoch": 1784902204,
       "currency": "TRY",
       "exchange": "IST"
     },
     "GEDZA": {
-      "price": 29.14,
-      "quote_time": "2026-07-24T12:48:22+00:00",
-      "quote_epoch": 1784897302,
+      "price": 29.1,
+      "quote_time": "2026-07-24T14:08:27+00:00",
+      "quote_epoch": 1784902107,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "GESAN": {
+      "price": 81.85,
+      "quote_time": "2026-07-24T14:10:07+00:00",
+      "quote_epoch": 1784902207,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "GEREL": {
+      "price": 35.9,
+      "quote_time": "2026-07-24T14:09:41+00:00",
+      "quote_epoch": 1784902181,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "GLCVY": {
+      "price": 53.45,
+      "quote_time": "2026-07-24T14:09:55+00:00",
+      "quote_epoch": 1784902195,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "GLRMK": {
+      "price": 163.4,
+      "quote_time": "2026-07-24T14:10:08+00:00",
+      "quote_epoch": 1784902208,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "GLBMD": {
+      "price": 12.75,
+      "quote_time": "2026-07-24T14:05:50+00:00",
+      "quote_epoch": 1784901950,
       "currency": "TRY",
       "exchange": "IST"
     },
     "GENTS": {
-      "price": 6.09,
-      "quote_time": "2026-07-24T12:49:05+00:00",
-      "quote_epoch": 1784897345,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "GOKNR": {
-      "price": 23.72,
-      "quote_time": "2026-07-24T12:47:19+00:00",
-      "quote_epoch": 1784897239,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "HKTM": {
-      "price": 10.61,
-      "quote_time": "2026-07-24T12:47:41+00:00",
-      "quote_epoch": 1784897261,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "GSDHO": {
-      "price": 5.33,
-      "quote_time": "2026-07-24T12:48:50+00:00",
-      "quote_epoch": 1784897330,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "HEDEF": {
-      "price": 235.2,
-      "quote_time": "2026-07-24T12:49:22+00:00",
-      "quote_epoch": 1784897362,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "HOROZ": {
-      "price": 59.8,
-      "quote_time": "2026-07-24T12:49:15+00:00",
-      "quote_epoch": 1784897355,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "HDFGS": {
-      "price": 2.78,
-      "quote_time": "2026-07-24T12:49:07+00:00",
-      "quote_epoch": 1784897347,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "GWIND": {
-      "price": 25.0,
-      "quote_time": "2026-07-24T12:49:19+00:00",
-      "quote_epoch": 1784897359,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "HALKB": {
-      "price": 35.92,
-      "quote_time": "2026-07-24T12:48:58+00:00",
-      "quote_epoch": 1784897338,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "GUNDG": {
-      "price": 2391.0,
-      "quote_time": "2026-07-24T12:48:59+00:00",
-      "quote_epoch": 1784897339,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "GSDDE": {
-      "price": 13.57,
-      "quote_time": "2026-07-24T12:49:11+00:00",
-      "quote_epoch": 1784897351,
+      "price": 6.08,
+      "quote_time": "2026-07-24T14:09:57+00:00",
+      "quote_epoch": 1784902197,
       "currency": "TRY",
       "exchange": "IST"
     },
     "HRKET": {
-      "price": 96.8,
-      "quote_time": "2026-07-24T12:48:58+00:00",
-      "quote_epoch": 1784897338,
+      "price": 96.65,
+      "quote_time": "2026-07-24T14:19:28+00:00",
+      "quote_epoch": 1784902768,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "HDFGS": {
+      "price": 2.75,
+      "quote_time": "2026-07-24T14:19:48+00:00",
+      "quote_epoch": 1784902788,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "HEDEF": {
+      "price": 235.4,
+      "quote_time": "2026-07-24T14:19:42+00:00",
+      "quote_epoch": 1784902782,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "GSDHO": {
+      "price": 5.31,
+      "quote_time": "2026-07-24T14:10:01+00:00",
+      "quote_epoch": 1784902201,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "GZNMI": {
+      "price": 67.65,
+      "quote_time": "2026-07-24T14:10:01+00:00",
+      "quote_epoch": 1784902201,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "GUNDG": {
+      "price": 2396.0,
+      "quote_time": "2026-07-24T14:10:07+00:00",
+      "quote_epoch": 1784902207,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "GWIND": {
+      "price": 25.08,
+      "quote_time": "2026-07-24T14:10:08+00:00",
+      "quote_epoch": 1784902208,
       "currency": "TRY",
       "exchange": "IST"
     },
     "HATSN": {
-      "price": 60.75,
-      "quote_time": "2026-07-24T12:49:21+00:00",
-      "quote_epoch": 1784897361,
+      "price": 63.05,
+      "quote_time": "2026-07-24T14:19:49+00:00",
+      "quote_epoch": 1784902789,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "GRTHO": {
-      "price": 249.7,
-      "quote_time": "2026-07-24T12:49:21+00:00",
-      "quote_epoch": 1784897361,
+    "GSDDE": {
+      "price": 13.46,
+      "quote_time": "2026-07-24T14:08:30+00:00",
+      "quote_epoch": 1784902110,
       "currency": "TRY",
       "exchange": "IST"
     },
     "GUBRF": {
-      "price": 421.25,
-      "quote_time": "2026-07-24T12:49:14+00:00",
-      "quote_epoch": 1784897354,
+      "price": 418.25,
+      "quote_time": "2026-07-24T14:10:04+00:00",
+      "quote_epoch": 1784902204,
       "currency": "TRY",
       "exchange": "IST"
     },
     "GSRAY": {
       "price": 1.01,
-      "quote_time": "2026-07-24T12:49:08+00:00",
-      "quote_epoch": 1784897348,
+      "quote_time": "2026-07-24T14:08:46+00:00",
+      "quote_epoch": 1784902126,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "HLGYO": {
-      "price": 4.91,
-      "quote_time": "2026-07-24T12:49:08+00:00",
-      "quote_epoch": 1784897348,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "HATEK": {
-      "price": 15.33,
-      "quote_time": "2026-07-24T12:48:12+00:00",
-      "quote_epoch": 1784897292,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "HTTBT": {
-      "price": 37.24,
-      "quote_time": "2026-07-24T12:49:18+00:00",
-      "quote_epoch": 1784897358,
+    "GRTHO": {
+      "price": 247.4,
+      "quote_time": "2026-07-24T14:10:04+00:00",
+      "quote_epoch": 1784902204,
       "currency": "TRY",
       "exchange": "IST"
     },
     "HUBVC": {
-      "price": 3.05,
-      "quote_time": "2026-07-24T12:49:15+00:00",
-      "quote_epoch": 1784897355,
+      "price": 2.99,
+      "quote_time": "2026-07-24T14:19:31+00:00",
+      "quote_epoch": 1784902771,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "GZNMI": {
-      "price": 66.45,
-      "quote_time": "2026-07-24T12:49:19+00:00",
-      "quote_epoch": 1784897359,
+    "HATEK": {
+      "price": 15.34,
+      "quote_time": "2026-07-24T14:19:41+00:00",
+      "quote_epoch": 1784902781,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "HOROZ": {
+      "price": 60.25,
+      "quote_time": "2026-07-24T14:18:47+00:00",
+      "quote_epoch": 1784902727,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "HALKB": {
+      "price": 36.06,
+      "quote_time": "2026-07-24T14:19:54+00:00",
+      "quote_epoch": 1784902794,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "HLGYO": {
+      "price": 4.89,
+      "quote_time": "2026-07-24T14:19:54+00:00",
+      "quote_epoch": 1784902794,
       "currency": "TRY",
       "exchange": "IST"
     },
     "HEKTS": {
-      "price": 3.02,
-      "quote_time": "2026-07-24T12:49:22+00:00",
-      "quote_epoch": 1784897362,
+      "price": 3.0,
+      "quote_time": "2026-07-24T14:19:53+00:00",
+      "quote_epoch": 1784902793,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "HTTBT": {
+      "price": 37.14,
+      "quote_time": "2026-07-24T14:19:13+00:00",
+      "quote_epoch": 1784902753,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "HKTM": {
+      "price": 10.6,
+      "quote_time": "2026-07-24T14:19:43+00:00",
+      "quote_epoch": 1784902783,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "IHYAY": {
+      "price": 1.33,
+      "quote_time": "2026-07-24T14:15:29+00:00",
+      "quote_epoch": 1784902529,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "IHLGM": {
+      "price": 1.69,
+      "quote_time": "2026-07-24T14:17:07+00:00",
+      "quote_epoch": 1784902627,
       "currency": "TRY",
       "exchange": "IST"
     },
@@ -1974,171 +1988,157 @@
       "currency": "TRY",
       "exchange": "IST"
     },
-    "ICBCT": {
-      "price": 23.94,
-      "quote_time": "2026-07-24T12:48:59+00:00",
-      "quote_epoch": 1784897339,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "INFO": {
-      "price": 6.53,
-      "quote_time": "2026-07-24T12:48:59+00:00",
-      "quote_epoch": 1784897339,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "IHAAS": {
-      "price": 56.45,
-      "quote_time": "2026-07-24T12:48:24+00:00",
-      "quote_epoch": 1784897304,
+    "INGRM": {
+      "price": 390.5,
+      "quote_time": "2026-07-24T14:15:49+00:00",
+      "quote_epoch": 1784902549,
       "currency": "TRY",
       "exchange": "IST"
     },
     "INDES": {
-      "price": 11.09,
-      "quote_time": "2026-07-24T12:47:04+00:00",
-      "quote_epoch": 1784897224,
+      "price": 11.06,
+      "quote_time": "2026-07-24T14:17:27+00:00",
+      "quote_epoch": 1784902647,
       "currency": "TRY",
       "exchange": "IST"
     },
     "INTEM": {
-      "price": 256.0,
-      "quote_time": "2026-07-24T12:48:06+00:00",
-      "quote_epoch": 1784897286,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "INVEO": {
-      "price": 7.79,
-      "quote_time": "2026-07-24T12:49:12+00:00",
-      "quote_epoch": 1784897352,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "IHYAY": {
-      "price": 1.32,
-      "quote_time": "2026-07-24T12:45:19+00:00",
-      "quote_epoch": 1784897119,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "INVES": {
-      "price": 660.5,
-      "quote_time": "2026-07-24T12:44:59+00:00",
-      "quote_epoch": 1784897099,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "IMASM": {
-      "price": 2.86,
-      "quote_time": "2026-07-24T12:49:00+00:00",
-      "quote_epoch": 1784897340,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "HUNER": {
-      "price": 3.69,
-      "quote_time": "2026-07-24T12:49:15+00:00",
-      "quote_epoch": 1784897355,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ICUGS": {
-      "price": 6.06,
-      "quote_time": "2026-07-24T12:48:51+00:00",
-      "quote_epoch": 1784897331,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "IHGZT": {
-      "price": 1.28,
-      "quote_time": "2026-07-24T12:47:13+00:00",
-      "quote_epoch": 1784897233,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "INGRM": {
-      "price": 390.5,
-      "quote_time": "2026-07-24T12:48:04+00:00",
-      "quote_epoch": 1784897284,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "IEYHO": {
-      "price": 164.3,
-      "quote_time": "2026-07-24T12:49:07+00:00",
-      "quote_epoch": 1784897347,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "IHEVA": {
-      "price": 2.02,
-      "quote_time": "2026-07-24T12:46:04+00:00",
-      "quote_epoch": 1784897164,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "IDGYO": {
-      "price": 4.49,
-      "quote_time": "2026-07-24T12:47:04+00:00",
-      "quote_epoch": 1784897224,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "IHLGM": {
-      "price": 1.7,
-      "quote_time": "2026-07-24T12:47:22+00:00",
-      "quote_epoch": 1784897242,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "HURGZ": {
-      "price": 6.69,
-      "quote_time": "2026-07-24T12:48:49+00:00",
-      "quote_epoch": 1784897329,
+      "price": 256.25,
+      "quote_time": "2026-07-24T14:15:56+00:00",
+      "quote_epoch": 1784902556,
       "currency": "TRY",
       "exchange": "IST"
     },
     "IHLAS": {
       "price": 1.07,
-      "quote_time": "2026-07-24T12:49:07+00:00",
-      "quote_epoch": 1784897347,
+      "quote_time": "2026-07-24T14:17:39+00:00",
+      "quote_epoch": 1784902659,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "IMASM": {
+      "price": 2.87,
+      "quote_time": "2026-07-24T14:17:06+00:00",
+      "quote_epoch": 1784902626,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "IDGYO": {
+      "price": 4.51,
+      "quote_time": "2026-07-24T14:16:10+00:00",
+      "quote_epoch": 1784902570,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "INFO": {
+      "price": 6.53,
+      "quote_time": "2026-07-24T14:17:40+00:00",
+      "quote_epoch": 1784902660,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "INVES": {
+      "price": 659.5,
+      "quote_time": "2026-07-24T14:17:28+00:00",
+      "quote_epoch": 1784902648,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "IHEVA": {
+      "price": 2.01,
+      "quote_time": "2026-07-24T14:08:43+00:00",
+      "quote_epoch": 1784902123,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "IEYHO": {
+      "price": 164.5,
+      "quote_time": "2026-07-24T14:17:24+00:00",
+      "quote_epoch": 1784902644,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ICBCT": {
+      "price": 24.58,
+      "quote_time": "2026-07-24T14:17:39+00:00",
+      "quote_epoch": 1784902659,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "HUNER": {
+      "price": 3.67,
+      "quote_time": "2026-07-24T14:19:17+00:00",
+      "quote_epoch": 1784902757,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "INVEO": {
+      "price": 7.75,
+      "quote_time": "2026-07-24T14:17:40+00:00",
+      "quote_epoch": 1784902660,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "HURGZ": {
+      "price": 6.72,
+      "quote_time": "2026-07-24T14:19:29+00:00",
+      "quote_epoch": 1784902769,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ICUGS": {
+      "price": 6.03,
+      "quote_time": "2026-07-24T14:17:39+00:00",
+      "quote_epoch": 1784902659,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "IHGZT": {
+      "price": 1.27,
+      "quote_time": "2026-07-24T14:17:08+00:00",
+      "quote_epoch": 1784902628,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "IHAAS": {
+      "price": 56.6,
+      "quote_time": "2026-07-24T14:17:36+00:00",
+      "quote_epoch": 1784902656,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ISVEA": {
+      "price": 44.28,
+      "quote_time": "2026-07-24T14:17:34+00:00",
+      "quote_epoch": 1784902654,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ISSEN": {
+      "price": 7.2,
+      "quote_time": "2026-07-24T14:16:08+00:00",
+      "quote_epoch": 1784902568,
       "currency": "TRY",
       "exchange": "IST"
     },
     "ISGSY": {
       "price": 17.55,
-      "quote_time": "2026-07-24T12:49:11+00:00",
-      "quote_epoch": 1784897351,
+      "quote_time": "2026-07-24T14:17:37+00:00",
+      "quote_epoch": 1784902657,
       "currency": "TRY",
       "exchange": "IST"
     },
     "IZMDC": {
-      "price": 12.56,
-      "quote_time": "2026-07-24T12:49:08+00:00",
-      "quote_epoch": 1784897348,
+      "price": 12.18,
+      "quote_time": "2026-07-24T14:17:40+00:00",
+      "quote_epoch": 1784902660,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "ISFIN": {
-      "price": 19.26,
-      "quote_time": "2026-07-24T12:49:21+00:00",
-      "quote_epoch": 1784897361,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ISKPL": {
-      "price": 9.82,
-      "quote_time": "2026-07-24T12:49:17+00:00",
-      "quote_epoch": 1784897357,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "KAPLM": {
-      "price": 435.5,
-      "quote_time": "2026-07-24T12:49:17+00:00",
-      "quote_epoch": 1784897357,
+    "ISMEN": {
+      "price": 36.0,
+      "quote_time": "2026-07-24T14:17:31+00:00",
+      "quote_epoch": 1784902651,
       "currency": "TRY",
       "exchange": "IST"
     },
@@ -2149,38 +2149,17 @@
       "currency": "TRY",
       "exchange": "IST"
     },
-    "ISVEA": {
-      "price": 44.28,
-      "quote_time": "2026-07-24T12:49:20+00:00",
-      "quote_epoch": 1784897360,
+    "ISFIN": {
+      "price": 19.26,
+      "quote_time": "2026-07-24T14:17:00+00:00",
+      "quote_epoch": 1784902620,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "IZFAS": {
-      "price": 64.35,
-      "quote_time": "2026-07-24T12:49:18+00:00",
-      "quote_epoch": 1784897358,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ISSEN": {
-      "price": 7.21,
-      "quote_time": "2026-07-24T12:46:44+00:00",
-      "quote_epoch": 1784897204,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "IZINV": {
-      "price": 60.1,
-      "quote_time": "2026-07-24T12:47:26+00:00",
-      "quote_epoch": 1784897246,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ISMEN": {
-      "price": 36.12,
-      "quote_time": "2026-07-24T12:49:22+00:00",
-      "quote_epoch": 1784897362,
+    "ISYAT": {
+      "price": 7.76,
+      "quote_time": "2026-07-24T14:11:21+00:00",
+      "quote_epoch": 1784902281,
       "currency": "TRY",
       "exchange": "IST"
     },
@@ -2191,38 +2170,17 @@
       "currency": "TRY",
       "exchange": "IST"
     },
-    "ISGYO": {
-      "price": 24.98,
-      "quote_time": "2026-07-24T12:46:59+00:00",
-      "quote_epoch": 1784897219,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "IZENR": {
-      "price": 9.96,
-      "quote_time": "2026-07-24T12:49:19+00:00",
-      "quote_epoch": 1784897359,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ISKUR": {
-      "price": 4125000.0,
-      "quote_time": "2026-07-03T15:05:15+00:00",
-      "quote_epoch": 1783091115,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "JANTS": {
-      "price": 15.6,
-      "quote_time": "2026-07-24T12:49:21+00:00",
-      "quote_epoch": 1784897361,
+    "IZINV": {
+      "price": 60.0,
+      "quote_time": "2026-07-24T14:17:40+00:00",
+      "quote_epoch": 1784902660,
       "currency": "TRY",
       "exchange": "IST"
     },
     "ISDMR": {
-      "price": 55.1,
-      "quote_time": "2026-07-24T12:49:14+00:00",
-      "quote_epoch": 1784897354,
+      "price": 54.9,
+      "quote_time": "2026-07-24T14:16:59+00:00",
+      "quote_epoch": 1784902619,
       "currency": "TRY",
       "exchange": "IST"
     },
@@ -2233,87 +2191,66 @@
       "currency": "TRY",
       "exchange": "IST"
     },
+    "ISGYO": {
+      "price": 25.12,
+      "quote_time": "2026-07-24T14:16:38+00:00",
+      "quote_epoch": 1784902598,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "KAPLM": {
+      "price": 435.0,
+      "quote_time": "2026-07-24T14:19:50+00:00",
+      "quote_epoch": 1784902790,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ISKPL": {
+      "price": 9.48,
+      "quote_time": "2026-07-24T14:17:34+00:00",
+      "quote_epoch": 1784902654,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "JANTS": {
+      "price": 15.55,
+      "quote_time": "2026-07-24T14:17:20+00:00",
+      "quote_epoch": 1784902640,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ISKUR": {
+      "price": 4125000.0,
+      "quote_time": "2026-07-03T15:05:15+00:00",
+      "quote_epoch": 1783091115,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "IZFAS": {
+      "price": 64.15,
+      "quote_time": "2026-07-24T14:13:51+00:00",
+      "quote_epoch": 1784902431,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
     "ISCTR": {
-      "price": 12.93,
-      "quote_time": "2026-07-24T12:49:21+00:00",
-      "quote_epoch": 1784897361,
+      "price": 12.95,
+      "quote_time": "2026-07-24T14:17:38+00:00",
+      "quote_epoch": 1784902658,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "ISYAT": {
-      "price": 7.77,
-      "quote_time": "2026-07-24T12:49:15+00:00",
-      "quote_epoch": 1784897355,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "KLSYN": {
-      "price": 13.43,
-      "quote_time": "2026-07-24T12:49:05+00:00",
-      "quote_epoch": 1784897345,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "KIMMR": {
-      "price": 14.75,
-      "quote_time": "2026-07-24T12:48:38+00:00",
-      "quote_epoch": 1784897318,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "KGYO": {
-      "price": 9.93,
-      "quote_time": "2026-07-24T12:48:34+00:00",
-      "quote_epoch": 1784897314,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "KLSER": {
-      "price": 25.66,
-      "quote_time": "2026-07-24T12:49:08+00:00",
-      "quote_epoch": 1784897348,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "KLRHO": {
-      "price": 81.25,
-      "quote_time": "2026-07-24T12:49:19+00:00",
-      "quote_epoch": 1784897359,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "KFEIN": {
-      "price": 9.15,
-      "quote_time": "2026-07-24T12:49:15+00:00",
-      "quote_epoch": 1784897355,
+    "IZENR": {
+      "price": 9.98,
+      "quote_time": "2026-07-24T14:17:32+00:00",
+      "quote_epoch": 1784902652,
       "currency": "TRY",
       "exchange": "IST"
     },
     "KARTN": {
-      "price": 213.5,
-      "quote_time": "2026-07-24T12:48:57+00:00",
-      "quote_epoch": 1784897337,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "KLMSN": {
-      "price": 29.2,
-      "quote_time": "2026-07-24T12:49:12+00:00",
-      "quote_epoch": 1784897352,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "KCAER": {
-      "price": 14.99,
-      "quote_time": "2026-07-24T12:49:18+00:00",
-      "quote_epoch": 1784897358,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "KLNMA": {
-      "price": 9.89,
-      "quote_time": "2026-07-24T10:55:01+00:00",
-      "quote_epoch": 1784890501,
+      "price": 214.4,
+      "quote_time": "2026-07-24T14:19:47+00:00",
+      "quote_epoch": 1784902787,
       "currency": "TRY",
       "exchange": "IST"
     },
@@ -2324,10 +2261,38 @@
       "currency": "TRY",
       "exchange": "IST"
     },
+    "KIMMR": {
+      "price": 14.79,
+      "quote_time": "2026-07-24T14:14:56+00:00",
+      "quote_epoch": 1784902496,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "KLKIM": {
+      "price": 26.8,
+      "quote_time": "2026-07-24T14:19:43+00:00",
+      "quote_epoch": 1784902783,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "KLRHO": {
+      "price": 81.65,
+      "quote_time": "2026-07-24T14:19:38+00:00",
+      "quote_epoch": 1784902778,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "KCAER": {
+      "price": 14.93,
+      "quote_time": "2026-07-24T14:19:29+00:00",
+      "quote_epoch": 1784902769,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
     "KBORU": {
-      "price": 26.38,
-      "quote_time": "2026-07-24T12:48:44+00:00",
-      "quote_epoch": 1784897324,
+      "price": 26.42,
+      "quote_time": "2026-07-24T14:19:11+00:00",
+      "quote_epoch": 1784902751,
       "currency": "TRY",
       "exchange": "IST"
     },
@@ -2338,150 +2303,143 @@
       "currency": "TRY",
       "exchange": "IST"
     },
-    "KAYSE": {
-      "price": 4.07,
-      "quote_time": "2026-07-24T12:48:44+00:00",
-      "quote_epoch": 1784897324,
+    "KLSYN": {
+      "price": 13.42,
+      "quote_time": "2026-07-24T14:19:07+00:00",
+      "quote_epoch": 1784902747,
       "currency": "TRY",
       "exchange": "IST"
     },
     "KCHOL": {
-      "price": 196.9,
-      "quote_time": "2026-07-24T12:49:18+00:00",
-      "quote_epoch": 1784897358,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "KLKIM": {
-      "price": 26.86,
-      "quote_time": "2026-07-24T12:49:22+00:00",
-      "quote_epoch": 1784897362,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "KATMR": {
-      "price": 2.42,
-      "quote_time": "2026-07-24T12:49:21+00:00",
-      "quote_epoch": 1784897361,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "KARSN": {
-      "price": 10.87,
-      "quote_time": "2026-07-24T12:49:20+00:00",
-      "quote_epoch": 1784897360,
+      "price": 197.3,
+      "quote_time": "2026-07-24T14:19:54+00:00",
+      "quote_epoch": 1784902794,
       "currency": "TRY",
       "exchange": "IST"
     },
     "KLGYO": {
-      "price": 4.65,
-      "quote_time": "2026-07-24T12:49:02+00:00",
-      "quote_epoch": 1784897342,
+      "price": 4.66,
+      "quote_time": "2026-07-24T14:19:53+00:00",
+      "quote_epoch": 1784902793,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "KAREL": {
-      "price": 9.99,
-      "quote_time": "2026-07-24T12:48:29+00:00",
-      "quote_epoch": 1784897309,
+    "KFEIN": {
+      "price": 9.01,
+      "quote_time": "2026-07-24T14:16:52+00:00",
+      "quote_epoch": 1784902612,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "KSTUR": {
-      "price": 2697.5,
+    "KLNMA": {
+      "price": 9.89,
       "quote_time": "2026-07-24T10:55:01+00:00",
       "quote_epoch": 1784890501,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "KRTEK": {
-      "price": 21.38,
-      "quote_time": "2026-07-24T12:44:33+00:00",
-      "quote_epoch": 1784897073,
+    "KAYSE": {
+      "price": 4.08,
+      "quote_time": "2026-07-24T14:19:52+00:00",
+      "quote_epoch": 1784902792,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "KRDMD": {
-      "price": 42.14,
-      "quote_time": "2026-07-24T12:49:18+00:00",
-      "quote_epoch": 1784897358,
+    "KATMR": {
+      "price": 2.41,
+      "quote_time": "2026-07-24T14:19:51+00:00",
+      "quote_epoch": 1784902791,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "KRGYO": {
-      "price": 2.52,
-      "quote_time": "2026-07-24T12:47:19+00:00",
-      "quote_epoch": 1784897239,
+    "KARSN": {
+      "price": 10.85,
+      "quote_time": "2026-07-24T14:19:54+00:00",
+      "quote_epoch": 1784902794,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "KRONT": {
-      "price": 22.96,
-      "quote_time": "2026-07-24T12:49:09+00:00",
-      "quote_epoch": 1784897349,
+    "KLSER": {
+      "price": 25.64,
+      "quote_time": "2026-07-24T14:19:41+00:00",
+      "quote_epoch": 1784902781,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "KONYA": {
-      "price": 3765.0,
-      "quote_time": "2026-07-24T12:46:30+00:00",
-      "quote_epoch": 1784897190,
+    "KLMSN": {
+      "price": 29.26,
+      "quote_time": "2026-07-24T14:17:08+00:00",
+      "quote_epoch": 1784902628,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "KRPLS": {
-      "price": 9.27,
-      "quote_time": "2026-07-24T12:48:27+00:00",
-      "quote_epoch": 1784897307,
+    "KAREL": {
+      "price": 10.02,
+      "quote_time": "2026-07-24T14:19:53+00:00",
+      "quote_epoch": 1784902793,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "KRDMB": {
-      "price": 134.9,
-      "quote_time": "2026-07-24T12:48:52+00:00",
-      "quote_epoch": 1784897332,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "KRDMA": {
-      "price": 42.9,
-      "quote_time": "2026-07-24T12:49:11+00:00",
-      "quote_epoch": 1784897351,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "KNFRT": {
-      "price": 11.79,
-      "quote_time": "2026-07-24T12:49:16+00:00",
-      "quote_epoch": 1784897356,
+    "KGYO": {
+      "price": 9.99,
+      "quote_time": "2026-07-24T14:19:42+00:00",
+      "quote_epoch": 1784902782,
       "currency": "TRY",
       "exchange": "IST"
     },
     "KONKA": {
-      "price": 12.94,
-      "quote_time": "2026-07-24T12:49:04+00:00",
-      "quote_epoch": 1784897344,
+      "price": 12.93,
+      "quote_time": "2026-07-24T14:17:00+00:00",
+      "quote_epoch": 1784902620,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "KLYPV": {
+      "price": 60.75,
+      "quote_time": "2026-07-24T14:19:47+00:00",
+      "quote_epoch": 1784902787,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "KONYA": {
+      "price": 3742.5,
+      "quote_time": "2026-07-24T14:19:48+00:00",
+      "quote_epoch": 1784902788,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "KNFRT": {
+      "price": 11.76,
+      "quote_time": "2026-07-24T14:18:23+00:00",
+      "quote_epoch": 1784902703,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "KOCMT": {
+      "price": 4.86,
+      "quote_time": "2026-07-24T14:19:46+00:00",
+      "quote_epoch": 1784902786,
       "currency": "TRY",
       "exchange": "IST"
     },
     "KMPUR": {
-      "price": 21.36,
-      "quote_time": "2026-07-24T12:49:10+00:00",
-      "quote_epoch": 1784897350,
+      "price": 22.12,
+      "quote_time": "2026-07-24T14:19:45+00:00",
+      "quote_epoch": 1784902785,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "KRVGD": {
-      "price": 2.65,
-      "quote_time": "2026-07-24T12:48:16+00:00",
-      "quote_epoch": 1784897296,
+    "KRDMD": {
+      "price": 42.2,
+      "quote_time": "2026-07-24T14:19:53+00:00",
+      "quote_epoch": 1784902793,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "KOPOL": {
-      "price": 6.27,
-      "quote_time": "2026-07-24T12:49:20+00:00",
-      "quote_epoch": 1784897360,
+    "KRDMB": {
+      "price": 135.5,
+      "quote_time": "2026-07-24T14:19:40+00:00",
+      "quote_epoch": 1784902780,
       "currency": "TRY",
       "exchange": "IST"
     },
@@ -2492,206 +2450,248 @@
       "currency": "TRY",
       "exchange": "IST"
     },
-    "KOTON": {
-      "price": 13.69,
-      "quote_time": "2026-07-24T12:49:08+00:00",
-      "quote_epoch": 1784897348,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "KORDS": {
-      "price": 70.2,
-      "quote_time": "2026-07-24T12:48:59+00:00",
-      "quote_epoch": 1784897339,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "KLYPV": {
-      "price": 60.8,
-      "quote_time": "2026-07-24T12:49:13+00:00",
-      "quote_epoch": 1784897353,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "KOCMT": {
-      "price": 4.85,
-      "quote_time": "2026-07-24T12:49:21+00:00",
-      "quote_epoch": 1784897361,
+    "KOPOL": {
+      "price": 6.26,
+      "quote_time": "2026-07-24T14:19:43+00:00",
+      "quote_epoch": 1784902783,
       "currency": "TRY",
       "exchange": "IST"
     },
     "KRSTL": {
-      "price": 10.51,
-      "quote_time": "2026-07-24T12:42:06+00:00",
-      "quote_epoch": 1784896926,
+      "price": 10.5,
+      "quote_time": "2026-07-24T14:19:02+00:00",
+      "quote_epoch": 1784902742,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "KRONT": {
+      "price": 23.38,
+      "quote_time": "2026-07-24T14:19:44+00:00",
+      "quote_epoch": 1784902784,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "KSTUR": {
+      "price": 2697.5,
+      "quote_time": "2026-07-24T10:55:01+00:00",
+      "quote_epoch": 1784890501,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "KOTON": {
+      "price": 13.67,
+      "quote_time": "2026-07-24T14:19:43+00:00",
+      "quote_epoch": 1784902783,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "KRDMA": {
+      "price": 42.58,
+      "quote_time": "2026-07-24T14:19:43+00:00",
+      "quote_epoch": 1784902783,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "KRVGD": {
+      "price": 2.63,
+      "quote_time": "2026-07-24T14:19:36+00:00",
+      "quote_epoch": 1784902776,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "KRPLS": {
+      "price": 9.28,
+      "quote_time": "2026-07-24T14:19:24+00:00",
+      "quote_epoch": 1784902764,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "KORDS": {
+      "price": 70.5,
+      "quote_time": "2026-07-24T14:19:29+00:00",
+      "quote_epoch": 1784902769,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "KRGYO": {
+      "price": 2.51,
+      "quote_time": "2026-07-24T14:19:09+00:00",
+      "quote_epoch": 1784902749,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "KRTEK": {
+      "price": 21.48,
+      "quote_time": "2026-07-24T14:18:36+00:00",
+      "quote_epoch": 1784902716,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "LUKSK": {
+      "price": 95.4,
+      "quote_time": "2026-07-24T14:15:42+00:00",
+      "quote_epoch": 1784902542,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "LMKDC": {
+      "price": 23.64,
+      "quote_time": "2026-07-24T14:19:32+00:00",
+      "quote_epoch": 1784902772,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "LYDHO": {
+      "price": 182.5,
+      "quote_time": "2026-07-24T14:15:18+00:00",
+      "quote_epoch": 1784902518,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "LXGYO": {
+      "price": 13.15,
+      "quote_time": "2026-07-24T14:19:54+00:00",
+      "quote_epoch": 1784902794,
       "currency": "TRY",
       "exchange": "IST"
     },
     "LRSHO": {
       "price": 2.93,
-      "quote_time": "2026-07-24T12:49:15+00:00",
-      "quote_epoch": 1784897355,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "KZGYO": {
-      "price": 21.36,
-      "quote_time": "2026-07-24T12:48:56+00:00",
-      "quote_epoch": 1784897336,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "LMKDC": {
-      "price": 23.6,
-      "quote_time": "2026-07-24T12:49:19+00:00",
-      "quote_epoch": 1784897359,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "LOGO": {
-      "price": 133.4,
-      "quote_time": "2026-07-24T12:49:19+00:00",
-      "quote_epoch": 1784897359,
+      "quote_time": "2026-07-24T14:19:45+00:00",
+      "quote_epoch": 1784902785,
       "currency": "TRY",
       "exchange": "IST"
     },
     "KUTPO": {
-      "price": 84.55,
-      "quote_time": "2026-07-24T12:45:59+00:00",
-      "quote_epoch": 1784897159,
+      "price": 84.5,
+      "quote_time": "2026-07-24T14:18:44+00:00",
+      "quote_epoch": 1784902724,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "KTSKR": {
-      "price": 100.0,
-      "quote_time": "2026-07-24T12:47:49+00:00",
-      "quote_epoch": 1784897269,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "KUYAS": {
-      "price": 70.9,
-      "quote_time": "2026-07-24T12:49:13+00:00",
-      "quote_epoch": 1784897353,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "LINK": {
-      "price": 6.27,
-      "quote_time": "2026-07-24T12:49:17+00:00",
-      "quote_epoch": 1784897357,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "LYDHO": {
-      "price": 183.8,
-      "quote_time": "2026-07-24T12:48:55+00:00",
-      "quote_epoch": 1784897335,
+    "MAALT": {
+      "price": 1073.0,
+      "quote_time": "2026-07-24T14:18:40+00:00",
+      "quote_epoch": 1784902720,
       "currency": "TRY",
       "exchange": "IST"
     },
     "LKMNH": {
       "price": 14.42,
-      "quote_time": "2026-07-24T12:46:51+00:00",
-      "quote_epoch": 1784897211,
+      "quote_time": "2026-07-24T14:18:05+00:00",
+      "quote_epoch": 1784902685,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "KUVVA": {
-      "price": 154.3,
-      "quote_time": "2026-07-24T12:47:36+00:00",
-      "quote_epoch": 1784897256,
+    "KZGYO": {
+      "price": 21.48,
+      "quote_time": "2026-07-24T14:17:58+00:00",
+      "quote_epoch": 1784902678,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "KTLEV": {
+      "price": 157.9,
+      "quote_time": "2026-07-24T14:19:54+00:00",
+      "quote_epoch": 1784902794,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "LINK": {
+      "price": 6.26,
+      "quote_time": "2026-07-24T14:19:47+00:00",
+      "quote_epoch": 1784902787,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "KTSKR": {
+      "price": 99.3,
+      "quote_time": "2026-07-24T14:19:47+00:00",
+      "quote_epoch": 1784902787,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "LOGO": {
+      "price": 133.1,
+      "quote_time": "2026-07-24T14:19:19+00:00",
+      "quote_epoch": 1784902759,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "KUYAS": {
+      "price": 70.1,
+      "quote_time": "2026-07-24T14:19:50+00:00",
+      "quote_epoch": 1784902790,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "LYDYE": {
+      "price": 13535.0,
+      "quote_time": "2026-07-24T14:19:35+00:00",
+      "quote_epoch": 1784902775,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "LIDFA": {
+      "price": 2.99,
+      "quote_time": "2026-07-24T14:19:44+00:00",
+      "quote_epoch": 1784902784,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "LILAK": {
+      "price": 30.22,
+      "quote_time": "2026-07-24T14:19:47+00:00",
+      "quote_epoch": 1784902787,
       "currency": "TRY",
       "exchange": "IST"
     },
     "KZBGY": {
       "price": 2.21,
-      "quote_time": "2026-07-24T12:49:00+00:00",
-      "quote_epoch": 1784897340,
+      "quote_time": "2026-07-24T14:19:43+00:00",
+      "quote_epoch": 1784902783,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "LIDFA": {
-      "price": 3.0,
-      "quote_time": "2026-07-24T12:49:01+00:00",
-      "quote_epoch": 1784897341,
+    "KUVVA": {
+      "price": 154.3,
+      "quote_time": "2026-07-24T14:08:31+00:00",
+      "quote_epoch": 1784902111,
       "currency": "TRY",
       "exchange": "IST"
     },
     "LIDER": {
-      "price": 103.5,
-      "quote_time": "2026-07-24T12:48:49+00:00",
-      "quote_epoch": 1784897329,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "LILAK": {
-      "price": 30.24,
-      "quote_time": "2026-07-24T12:49:18+00:00",
-      "quote_epoch": 1784897358,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "LXGYO": {
-      "price": 13.16,
-      "quote_time": "2026-07-24T12:49:22+00:00",
-      "quote_epoch": 1784897362,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "MAALT": {
-      "price": 1067.0,
-      "quote_time": "2026-07-24T12:48:42+00:00",
-      "quote_epoch": 1784897322,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "KTLEV": {
-      "price": 161.5,
-      "quote_time": "2026-07-24T12:49:21+00:00",
-      "quote_epoch": 1784897361,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "LUKSK": {
-      "price": 95.5,
-      "quote_time": "2026-07-24T12:49:17+00:00",
-      "quote_epoch": 1784897357,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "LYDYE": {
-      "price": 13500.0,
-      "quote_time": "2026-07-24T12:48:31+00:00",
-      "quote_epoch": 1784897311,
+      "price": 103.3,
+      "quote_time": "2026-07-24T14:19:27+00:00",
+      "quote_epoch": 1784902767,
       "currency": "TRY",
       "exchange": "IST"
     },
     "MEKAG": {
-      "price": 3.27,
-      "quote_time": "2026-07-24T12:48:25+00:00",
-      "quote_epoch": 1784897305,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "MEDTR": {
-      "price": 26.62,
-      "quote_time": "2026-07-24T12:48:27+00:00",
-      "quote_epoch": 1784897307,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "MERIT": {
-      "price": 16.47,
-      "quote_time": "2026-07-24T12:49:12+00:00",
-      "quote_epoch": 1784897352,
+      "price": 3.25,
+      "quote_time": "2026-07-24T14:18:57+00:00",
+      "quote_epoch": 1784902737,
       "currency": "TRY",
       "exchange": "IST"
     },
     "MAKIM": {
-      "price": 17.07,
-      "quote_time": "2026-07-24T12:48:21+00:00",
-      "quote_epoch": 1784897301,
+      "price": 17.04,
+      "quote_time": "2026-07-24T14:17:24+00:00",
+      "quote_epoch": 1784902644,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "MEDTR": {
+      "price": 26.54,
+      "quote_time": "2026-07-24T14:17:46+00:00",
+      "quote_epoch": 1784902666,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "MEPET": {
+      "price": 20.24,
+      "quote_time": "2026-07-24T14:18:50+00:00",
+      "quote_epoch": 1784902730,
       "currency": "TRY",
       "exchange": "IST"
     },
@@ -2702,122 +2702,220 @@
       "currency": "TRY",
       "exchange": "IST"
     },
-    "METRO": {
-      "price": 8.7,
-      "quote_time": "2026-07-24T12:48:49+00:00",
-      "quote_epoch": 1784897329,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "MERKO": {
-      "price": 1.49,
-      "quote_time": "2026-07-24T12:49:21+00:00",
-      "quote_epoch": 1784897361,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "MARKA": {
-      "price": 78.2,
-      "quote_time": "2026-07-24T12:48:03+00:00",
-      "quote_epoch": 1784897283,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "MERCN": {
-      "price": 24.1,
-      "quote_time": "2026-07-24T12:49:18+00:00",
-      "quote_epoch": 1784897358,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "MEPET": {
-      "price": 20.38,
-      "quote_time": "2026-07-24T12:49:22+00:00",
-      "quote_epoch": 1784897362,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
     "MCARD": {
-      "price": 139.2,
-      "quote_time": "2026-07-24T12:49:20+00:00",
-      "quote_epoch": 1784897360,
+      "price": 138.6,
+      "quote_time": "2026-07-24T14:18:54+00:00",
+      "quote_epoch": 1784902734,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "MERIT": {
+      "price": 16.28,
+      "quote_time": "2026-07-24T14:17:23+00:00",
+      "quote_epoch": 1784902643,
       "currency": "TRY",
       "exchange": "IST"
     },
     "MEGMT": {
-      "price": 79.1,
-      "quote_time": "2026-07-24T12:48:26+00:00",
-      "quote_epoch": 1784897306,
+      "price": 78.6,
+      "quote_time": "2026-07-24T14:18:46+00:00",
+      "quote_epoch": 1784902726,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "MARKA": {
+      "price": 78.45,
+      "quote_time": "2026-07-24T14:18:38+00:00",
+      "quote_epoch": 1784902718,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "MERCN": {
+      "price": 23.92,
+      "quote_time": "2026-07-24T14:18:54+00:00",
+      "quote_epoch": 1784902734,
       "currency": "TRY",
       "exchange": "IST"
     },
     "MAGEN": {
-      "price": 40.82,
-      "quote_time": "2026-07-24T12:49:18+00:00",
-      "quote_epoch": 1784897358,
+      "price": 40.78,
+      "quote_time": "2026-07-24T14:18:53+00:00",
+      "quote_epoch": 1784902733,
       "currency": "TRY",
       "exchange": "IST"
     },
     "MACKO": {
-      "price": 32.62,
-      "quote_time": "2026-07-24T12:47:59+00:00",
-      "quote_epoch": 1784897279,
+      "price": 32.64,
+      "quote_time": "2026-07-24T14:18:28+00:00",
+      "quote_epoch": 1784902708,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "MANAS": {
-      "price": 31.22,
-      "quote_time": "2026-07-24T12:49:07+00:00",
-      "quote_epoch": 1784897347,
+    "METRO": {
+      "price": 8.8,
+      "quote_time": "2026-07-24T14:18:48+00:00",
+      "quote_epoch": 1784902728,
       "currency": "TRY",
       "exchange": "IST"
     },
     "MAVI": {
-      "price": 38.74,
-      "quote_time": "2026-07-24T12:49:17+00:00",
-      "quote_epoch": 1784897357,
+      "price": 38.6,
+      "quote_time": "2026-07-24T14:18:55+00:00",
+      "quote_epoch": 1784902735,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "MAKTK": {
-      "price": 11.13,
-      "quote_time": "2026-07-24T12:49:00+00:00",
-      "quote_epoch": 1784897340,
+    "MARMR": {
+      "price": 2.25,
+      "quote_time": "2026-07-24T14:18:51+00:00",
+      "quote_epoch": 1784902731,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "MARBL": {
-      "price": 12.56,
-      "quote_time": "2026-07-24T12:49:10+00:00",
-      "quote_epoch": 1784897350,
+    "MANAS": {
+      "price": 31.02,
+      "quote_time": "2026-07-24T14:18:36+00:00",
+      "quote_epoch": 1784902716,
       "currency": "TRY",
       "exchange": "IST"
     },
     "MARTI": {
       "price": 1.75,
-      "quote_time": "2026-07-24T12:49:21+00:00",
-      "quote_epoch": 1784897361,
+      "quote_time": "2026-07-24T14:18:31+00:00",
+      "quote_epoch": 1784902711,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "MARMR": {
-      "price": 2.23,
-      "quote_time": "2026-07-24T12:49:13+00:00",
-      "quote_epoch": 1784897353,
+    "MAKTK": {
+      "price": 11.11,
+      "quote_time": "2026-07-24T14:18:42+00:00",
+      "quote_epoch": 1784902722,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "MERKO": {
+      "price": 1.46,
+      "quote_time": "2026-07-24T14:18:34+00:00",
+      "quote_epoch": 1784902714,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "MARBL": {
+      "price": 12.54,
+      "quote_time": "2026-07-24T14:17:58+00:00",
+      "quote_epoch": 1784902678,
       "currency": "TRY",
       "exchange": "IST"
     },
     "MNDRS": {
-      "price": 10.96,
-      "quote_time": "2026-07-24T12:48:24+00:00",
-      "quote_epoch": 1784897304,
+      "price": 10.93,
+      "quote_time": "2026-07-24T14:18:15+00:00",
+      "quote_epoch": 1784902695,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "NATEN": {
+      "price": 6.31,
+      "quote_time": "2026-07-24T14:06:08+00:00",
+      "quote_epoch": 1784901968,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "MTRKS": {
+      "price": 28.92,
+      "quote_time": "2026-07-24T14:17:45+00:00",
+      "quote_epoch": 1784902665,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "MRGYO": {
+      "price": 1.45,
+      "quote_time": "2026-07-24T14:17:56+00:00",
+      "quote_epoch": 1784902676,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "MHRGY": {
+      "price": 3.63,
+      "quote_time": "2026-07-24T14:17:30+00:00",
+      "quote_epoch": 1784902650,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "MNDTR": {
+      "price": 5.47,
+      "quote_time": "2026-07-24T14:17:15+00:00",
+      "quote_epoch": 1784902635,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "MOBTL": {
+      "price": 14.54,
+      "quote_time": "2026-07-24T14:16:37+00:00",
+      "quote_epoch": 1784902597,
       "currency": "TRY",
       "exchange": "IST"
     },
     "MRSHL": {
-      "price": 1720.0,
-      "quote_time": "2026-07-24T12:45:35+00:00",
-      "quote_epoch": 1784897135,
+      "price": 1689.0,
+      "quote_time": "2026-07-24T14:18:32+00:00",
+      "quote_epoch": 1784902712,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "MTRYO": {
+      "price": 9.9,
+      "quote_time": "2026-07-24T14:18:24+00:00",
+      "quote_epoch": 1784902704,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "NETCD": {
+      "price": 139.8,
+      "quote_time": "2026-07-24T14:06:03+00:00",
+      "quote_epoch": 1784901963,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "MPARK": {
+      "price": 402.5,
+      "quote_time": "2026-07-24T14:18:30+00:00",
+      "quote_epoch": 1784902710,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "MOPAS": {
+      "price": 32.24,
+      "quote_time": "2026-07-24T14:18:51+00:00",
+      "quote_epoch": 1784902731,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "MOGAN": {
+      "price": 17.67,
+      "quote_time": "2026-07-24T14:18:56+00:00",
+      "quote_epoch": 1784902736,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "MZHLD": {
+      "price": 5.52,
+      "quote_time": "2026-07-24T14:14:49+00:00",
+      "quote_epoch": 1784902489,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "MIATK": {
+      "price": 33.48,
+      "quote_time": "2026-07-24T14:18:36+00:00",
+      "quote_epoch": 1784902716,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "NETAS": {
+      "price": 64.7,
+      "quote_time": "2026-07-24T14:05:42+00:00",
+      "quote_epoch": 1784901942,
       "currency": "TRY",
       "exchange": "IST"
     },
@@ -2828,143 +2926,143 @@
       "currency": "TRY",
       "exchange": "IST"
     },
-    "MOGAN": {
-      "price": 17.44,
-      "quote_time": "2026-07-24T12:47:49+00:00",
-      "quote_epoch": 1784897269,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "NATEN": {
-      "price": 6.34,
-      "quote_time": "2026-07-24T12:48:24+00:00",
-      "quote_epoch": 1784897304,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "MRGYO": {
-      "price": 1.45,
-      "quote_time": "2026-07-24T12:49:10+00:00",
-      "quote_epoch": 1784897350,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "MPARK": {
-      "price": 405.0,
-      "quote_time": "2026-07-24T12:48:40+00:00",
-      "quote_epoch": 1784897320,
+    "MEYSU": {
+      "price": 14.37,
+      "quote_time": "2026-07-24T14:18:57+00:00",
+      "quote_epoch": 1784902737,
       "currency": "TRY",
       "exchange": "IST"
     },
     "MGROS": {
-      "price": 625.0,
-      "quote_time": "2026-07-24T12:48:57+00:00",
-      "quote_epoch": 1784897337,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "MNDTR": {
-      "price": 5.44,
-      "quote_time": "2026-07-24T12:47:56+00:00",
-      "quote_epoch": 1784897276,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "MHRGY": {
-      "price": 3.7,
-      "quote_time": "2026-07-24T12:48:15+00:00",
-      "quote_epoch": 1784897295,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "MTRKS": {
-      "price": 28.62,
-      "quote_time": "2026-07-24T12:48:56+00:00",
-      "quote_epoch": 1784897336,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "MZHLD": {
-      "price": 5.47,
-      "quote_time": "2026-07-24T12:45:00+00:00",
-      "quote_epoch": 1784897100,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "MOPAS": {
-      "price": 32.14,
-      "quote_time": "2026-07-24T12:48:48+00:00",
-      "quote_epoch": 1784897328,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "MTRYO": {
-      "price": 9.95,
-      "quote_time": "2026-07-24T12:47:17+00:00",
-      "quote_epoch": 1784897237,
+      "price": 621.5,
+      "quote_time": "2026-07-24T14:18:31+00:00",
+      "quote_epoch": 1784902711,
       "currency": "TRY",
       "exchange": "IST"
     },
     "MSGYO": {
-      "price": 5.97,
-      "quote_time": "2026-07-24T12:46:43+00:00",
-      "quote_epoch": 1784897203,
+      "price": 6.03,
+      "quote_time": "2026-07-24T14:17:38+00:00",
+      "quote_epoch": 1784902658,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "MIATK": {
-      "price": 33.98,
-      "quote_time": "2026-07-24T12:49:22+00:00",
-      "quote_epoch": 1784897362,
+    "OBAMS": {
+      "price": 5.24,
+      "quote_time": "2026-07-24T14:19:41+00:00",
+      "quote_epoch": 1784902781,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "MEYSU": {
-      "price": 14.21,
-      "quote_time": "2026-07-24T12:49:22+00:00",
-      "quote_epoch": 1784897362,
+    "OSTIM": {
+      "price": 1.72,
+      "quote_time": "2026-07-24T14:19:54+00:00",
+      "quote_epoch": 1784902794,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "NETCD": {
-      "price": 140.4,
-      "quote_time": "2026-07-24T12:49:21+00:00",
-      "quote_epoch": 1784897361,
+    "NTHOL": {
+      "price": 42.58,
+      "quote_time": "2026-07-24T14:06:07+00:00",
+      "quote_epoch": 1784901967,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "MOBTL": {
-      "price": 14.57,
-      "quote_time": "2026-07-24T12:46:11+00:00",
-      "quote_epoch": 1784897171,
+    "ORCAY": {
+      "price": 4.05,
+      "quote_time": "2026-07-24T14:18:31+00:00",
+      "quote_epoch": 1784902711,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "NETAS": {
-      "price": 64.9,
-      "quote_time": "2026-07-24T12:45:45+00:00",
-      "quote_epoch": 1784897145,
+    "OBASE": {
+      "price": 44.0,
+      "quote_time": "2026-07-24T14:19:07+00:00",
+      "quote_epoch": 1784902747,
       "currency": "TRY",
       "exchange": "IST"
     },
     "ONRYT": {
       "price": 60.55,
-      "quote_time": "2026-07-24T12:49:18+00:00",
-      "quote_epoch": 1784897358,
+      "quote_time": "2026-07-24T14:19:51+00:00",
+      "quote_epoch": 1784902791,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "ORCAY": {
-      "price": 4.01,
-      "quote_time": "2026-07-24T12:43:21+00:00",
-      "quote_epoch": 1784897001,
+    "NUGYO": {
+      "price": 9.58,
+      "quote_time": "2026-07-24T14:06:13+00:00",
+      "quote_epoch": 1784901973,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "OBASE": {
-      "price": 44.26,
-      "quote_time": "2026-07-24T12:49:22+00:00",
-      "quote_epoch": 1784897362,
+    "ODAS": {
+      "price": 8.69,
+      "quote_time": "2026-07-24T14:19:53+00:00",
+      "quote_epoch": 1784902793,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "OFSYM": {
+      "price": 50.35,
+      "quote_time": "2026-07-24T14:19:41+00:00",
+      "quote_epoch": 1784902781,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "NUHCM": {
+      "price": 217.4,
+      "quote_time": "2026-07-24T14:05:23+00:00",
+      "quote_epoch": 1784901923,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "OTTO": {
+      "price": 184.3,
+      "quote_time": "2026-07-24T14:19:48+00:00",
+      "quote_epoch": 1784902788,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "NTGAZ": {
+      "price": 11.31,
+      "quote_time": "2026-07-24T14:05:46+00:00",
+      "quote_epoch": 1784901946,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ODINE": {
+      "price": 2349.0,
+      "quote_time": "2026-07-24T14:19:50+00:00",
+      "quote_epoch": 1784902790,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "OTKAR": {
+      "price": 326.0,
+      "quote_time": "2026-07-24T14:19:52+00:00",
+      "quote_epoch": 1784902792,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ORZAX": {
+      "price": 105.5,
+      "quote_time": "2026-07-24T14:19:53+00:00",
+      "quote_epoch": 1784902793,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "NIBAS": {
+      "price": 4.07,
+      "quote_time": "2026-07-24T14:05:13+00:00",
+      "quote_epoch": 1784901913,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ORGE": {
+      "price": 107.1,
+      "quote_time": "2026-07-24T14:19:50+00:00",
+      "quote_epoch": 1784902790,
       "currency": "TRY",
       "exchange": "IST"
     },
@@ -2975,311 +3073,283 @@
       "currency": "TRY",
       "exchange": "IST"
     },
-    "OSMEN": {
-      "price": 9.12,
-      "quote_time": "2026-07-24T12:49:08+00:00",
-      "quote_epoch": 1784897348,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ORZAX": {
-      "price": 102.6,
-      "quote_time": "2026-07-24T12:49:21+00:00",
-      "quote_epoch": 1784897361,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
     "ONCSM": {
-      "price": 252.0,
-      "quote_time": "2026-07-24T12:46:45+00:00",
-      "quote_epoch": 1784897205,
+      "price": 256.5,
+      "quote_time": "2026-07-24T14:19:52+00:00",
+      "quote_epoch": 1784902792,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "OSTIM": {
-      "price": 1.74,
-      "quote_time": "2026-07-24T12:49:04+00:00",
-      "quote_epoch": 1784897344,
+    "OSMEN": {
+      "price": 9.15,
+      "quote_time": "2026-07-24T14:19:53+00:00",
+      "quote_epoch": 1784902793,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "NTHOL": {
-      "price": 42.8,
-      "quote_time": "2026-07-24T12:49:07+00:00",
-      "quote_epoch": 1784897347,
+    "PEKGY": {
+      "price": 14.94,
+      "quote_time": "2026-07-24T14:09:33+00:00",
+      "quote_epoch": 1784902173,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "OTTO": {
-      "price": 184.0,
-      "quote_time": "2026-07-24T12:45:56+00:00",
-      "quote_epoch": 1784897156,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ODINE": {
-      "price": 2332.0,
-      "quote_time": "2026-07-24T12:49:14+00:00",
-      "quote_epoch": 1784897354,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "OBAMS": {
-      "price": 5.27,
-      "quote_time": "2026-07-24T12:49:05+00:00",
-      "quote_epoch": 1784897345,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "OFSYM": {
-      "price": 50.6,
-      "quote_time": "2026-07-24T12:47:51+00:00",
-      "quote_epoch": 1784897271,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ODAS": {
-      "price": 8.85,
-      "quote_time": "2026-07-24T12:49:22+00:00",
-      "quote_epoch": 1784897362,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ORGE": {
-      "price": 107.1,
-      "quote_time": "2026-07-24T12:48:00+00:00",
-      "quote_epoch": 1784897280,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "NTGAZ": {
-      "price": 11.34,
-      "quote_time": "2026-07-24T12:49:11+00:00",
-      "quote_epoch": 1784897351,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "OTKAR": {
-      "price": 327.0,
-      "quote_time": "2026-07-24T12:48:58+00:00",
-      "quote_epoch": 1784897338,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "NUHCM": {
-      "price": 218.0,
-      "quote_time": "2026-07-24T12:46:25+00:00",
-      "quote_epoch": 1784897185,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "NIBAS": {
-      "price": 4.07,
-      "quote_time": "2026-07-24T12:49:22+00:00",
-      "quote_epoch": 1784897362,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "NUGYO": {
-      "price": 9.04,
-      "quote_time": "2026-07-24T12:49:20+00:00",
-      "quote_epoch": 1784897360,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "OZKGY": {
-      "price": 12.81,
-      "quote_time": "2026-07-24T12:49:17+00:00",
-      "quote_epoch": 1784897357,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "OZGYO": {
-      "price": 2.17,
-      "quote_time": "2026-07-24T12:49:13+00:00",
-      "quote_epoch": 1784897353,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "PARSN": {
-      "price": 79.7,
-      "quote_time": "2026-07-24T12:49:11+00:00",
-      "quote_epoch": 1784897351,
+    "PENGD": {
+      "price": 10.34,
+      "quote_time": "2026-07-24T14:09:26+00:00",
+      "quote_epoch": 1784902166,
       "currency": "TRY",
       "exchange": "IST"
     },
     "PAMEL": {
-      "price": 82.1,
-      "quote_time": "2026-07-24T12:46:36+00:00",
-      "quote_epoch": 1784897196,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "OYLUM": {
-      "price": 7.95,
-      "quote_time": "2026-07-24T12:48:45+00:00",
-      "quote_epoch": 1784897325,
+      "price": 81.7,
+      "quote_time": "2026-07-24T14:09:28+00:00",
+      "quote_epoch": 1784902168,
       "currency": "TRY",
       "exchange": "IST"
     },
     "PASEU": {
-      "price": 111.1,
-      "quote_time": "2026-07-24T12:49:04+00:00",
-      "quote_epoch": 1784897344,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "PCILT": {
-      "price": 33.14,
-      "quote_time": "2026-07-24T12:49:04+00:00",
-      "quote_epoch": 1784897344,
+      "price": 113.3,
+      "quote_time": "2026-07-24T14:09:33+00:00",
+      "quote_epoch": 1784902173,
       "currency": "TRY",
       "exchange": "IST"
     },
     "PATEK": {
       "price": 20.32,
-      "quote_time": "2026-07-24T12:49:15+00:00",
-      "quote_epoch": 1784897355,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "PAHOL": {
-      "price": 1.43,
-      "quote_time": "2026-07-24T12:49:19+00:00",
-      "quote_epoch": 1784897359,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "OZSUB": {
-      "price": 33.2,
-      "quote_time": "2026-07-24T12:49:17+00:00",
-      "quote_epoch": 1784897357,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "OYAYO": {
-      "price": 47.0,
-      "quote_time": "2026-07-24T12:48:49+00:00",
-      "quote_epoch": 1784897329,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "OZATD": {
-      "price": 2940.0,
-      "quote_time": "2026-07-24T12:49:22+00:00",
-      "quote_epoch": 1784897362,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "PAPIL": {
-      "price": 13.56,
-      "quote_time": "2026-07-24T12:49:13+00:00",
-      "quote_epoch": 1784897353,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "OZRDN": {
-      "price": 31.24,
-      "quote_time": "2026-07-24T12:47:04+00:00",
-      "quote_epoch": 1784897224,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "OYYAT": {
-      "price": 36.88,
-      "quote_time": "2026-07-24T12:49:04+00:00",
-      "quote_epoch": 1784897344,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "OYAKC": {
-      "price": 20.64,
-      "quote_time": "2026-07-24T12:49:21+00:00",
-      "quote_epoch": 1784897361,
+      "quote_time": "2026-07-24T14:09:39+00:00",
+      "quote_epoch": 1784902179,
       "currency": "TRY",
       "exchange": "IST"
     },
     "PAGYO": {
-      "price": 172.0,
-      "quote_time": "2026-07-24T12:49:13+00:00",
-      "quote_epoch": 1784897353,
+      "price": 171.2,
+      "quote_time": "2026-07-24T14:09:38+00:00",
+      "quote_epoch": 1784902178,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "PEKGY": {
-      "price": 14.98,
-      "quote_time": "2026-07-24T12:49:22+00:00",
-      "quote_epoch": 1784897362,
+    "PAHOL": {
+      "price": 1.42,
+      "quote_time": "2026-07-24T14:09:36+00:00",
+      "quote_epoch": 1784902176,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "PENGD": {
-      "price": 10.35,
-      "quote_time": "2026-07-24T12:49:08+00:00",
-      "quote_epoch": 1784897348,
+    "PARSN": {
+      "price": 79.95,
+      "quote_time": "2026-07-24T14:09:24+00:00",
+      "quote_epoch": 1784902164,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "PCILT": {
+      "price": 33.1,
+      "quote_time": "2026-07-24T14:08:59+00:00",
+      "quote_epoch": 1784902139,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "OYAYO": {
+      "price": 46.76,
+      "quote_time": "2026-07-24T14:18:38+00:00",
+      "quote_epoch": 1784902718,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "OZKGY": {
+      "price": 12.84,
+      "quote_time": "2026-07-24T14:19:38+00:00",
+      "quote_epoch": 1784902778,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "OYLUM": {
+      "price": 7.98,
+      "quote_time": "2026-07-24T14:19:37+00:00",
+      "quote_epoch": 1784902777,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "PAPIL": {
+      "price": 13.41,
+      "quote_time": "2026-07-24T14:09:29+00:00",
+      "quote_epoch": 1784902169,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "OZGYO": {
+      "price": 2.16,
+      "quote_time": "2026-07-24T14:19:39+00:00",
+      "quote_epoch": 1784902779,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "OZATD": {
+      "price": 2915.0,
+      "quote_time": "2026-07-24T14:19:54+00:00",
+      "quote_epoch": 1784902794,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "OYYAT": {
+      "price": 37.12,
+      "quote_time": "2026-07-24T14:19:30+00:00",
+      "quote_epoch": 1784902770,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "OZRDN": {
+      "price": 30.86,
+      "quote_time": "2026-07-24T14:18:07+00:00",
+      "quote_epoch": 1784902687,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "OYAKC": {
+      "price": 21.54,
+      "quote_time": "2026-07-24T14:19:54+00:00",
+      "quote_epoch": 1784902794,
       "currency": "TRY",
       "exchange": "IST"
     },
     "OZYSR": {
-      "price": 13.07,
-      "quote_time": "2026-07-24T12:49:22+00:00",
-      "quote_epoch": 1784897362,
+      "price": 13.18,
+      "quote_time": "2026-07-24T14:19:42+00:00",
+      "quote_epoch": 1784902782,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "PETKM": {
-      "price": 22.14,
-      "quote_time": "2026-07-24T12:49:19+00:00",
-      "quote_epoch": 1784897359,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "PKENT": {
-      "price": 134.4,
-      "quote_time": "2026-07-24T12:49:01+00:00",
-      "quote_epoch": 1784897341,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "PRZMA": {
-      "price": 73.7,
-      "quote_time": "2026-07-24T12:49:15+00:00",
-      "quote_epoch": 1784897355,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "PETUN": {
-      "price": 11.52,
-      "quote_time": "2026-07-24T12:47:30+00:00",
-      "quote_epoch": 1784897250,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "PSDTC": {
-      "price": 122.5,
-      "quote_time": "2026-07-24T12:49:17+00:00",
-      "quote_epoch": 1784897357,
+    "OZSUB": {
+      "price": 33.5,
+      "quote_time": "2026-07-24T14:19:54+00:00",
+      "quote_epoch": 1784902794,
       "currency": "TRY",
       "exchange": "IST"
     },
     "PSGYO": {
-      "price": 3.82,
-      "quote_time": "2026-07-24T12:49:21+00:00",
-      "quote_epoch": 1784897361,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "PINSU": {
-      "price": 11.09,
-      "quote_time": "2026-07-24T12:49:05+00:00",
-      "quote_epoch": 1784897345,
+      "price": 3.81,
+      "quote_time": "2026-07-24T14:09:28+00:00",
+      "quote_epoch": 1784902168,
       "currency": "TRY",
       "exchange": "IST"
     },
     "PRDGS": {
-      "price": 7.48,
-      "quote_time": "2026-07-24T12:47:09+00:00",
-      "quote_epoch": 1784897229,
+      "price": 7.77,
+      "quote_time": "2026-07-24T14:09:38+00:00",
+      "quote_epoch": 1784902178,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "PKENT": {
+      "price": 134.3,
+      "quote_time": "2026-07-24T14:06:50+00:00",
+      "quote_epoch": 1784902010,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "POLTK": {
+      "price": 4817.5,
+      "quote_time": "2026-07-24T14:09:16+00:00",
+      "quote_epoch": 1784902156,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "PSDTC": {
+      "price": 122.2,
+      "quote_time": "2026-07-24T14:09:36+00:00",
+      "quote_epoch": 1784902176,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "PRZMA": {
+      "price": 74.5,
+      "quote_time": "2026-07-24T14:08:41+00:00",
+      "quote_epoch": 1784902121,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "PKART": {
+      "price": 129.8,
+      "quote_time": "2026-07-24T14:09:39+00:00",
+      "quote_epoch": 1784902179,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "PETUN": {
+      "price": 11.48,
+      "quote_time": "2026-07-24T14:07:09+00:00",
+      "quote_epoch": 1784902029,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "PRKME": {
+      "price": 17.78,
+      "quote_time": "2026-07-24T14:09:14+00:00",
+      "quote_epoch": 1784902154,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "PETKM": {
+      "price": 22.06,
+      "quote_time": "2026-07-24T14:09:31+00:00",
+      "quote_epoch": 1784902171,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "PRKAB": {
+      "price": 35.28,
+      "quote_time": "2026-07-24T14:08:43+00:00",
+      "quote_epoch": 1784902123,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "POLHO": {
+      "price": 21.54,
+      "quote_time": "2026-07-24T14:09:27+00:00",
+      "quote_epoch": 1784902167,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "QNBFK": {
+      "price": 48.48,
+      "quote_time": "2026-07-24T10:55:01+00:00",
+      "quote_epoch": 1784890501,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "PLTUR": {
+      "price": 22.4,
+      "quote_time": "2026-07-24T14:08:56+00:00",
+      "quote_epoch": 1784902136,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "PGSUS": {
+      "price": 161.6,
+      "quote_time": "2026-07-24T14:09:31+00:00",
+      "quote_epoch": 1784902171,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "PINSU": {
+      "price": 11.05,
+      "quote_time": "2026-07-24T14:08:53+00:00",
+      "quote_epoch": 1784902133,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "PNSUT": {
+      "price": 11.44,
+      "quote_time": "2026-07-24T14:09:06+00:00",
+      "quote_epoch": 1784902146,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "PENTA": {
+      "price": 13.54,
+      "quote_time": "2026-07-24T14:07:29+00:00",
+      "quote_epoch": 1784902049,
       "currency": "TRY",
       "exchange": "IST"
     },
@@ -3291,100 +3361,135 @@
       "exchange": "IST"
     },
     "PNLSN": {
-      "price": 48.34,
-      "quote_time": "2026-07-24T12:48:52+00:00",
-      "quote_epoch": 1784897332,
+      "price": 46.86,
+      "quote_time": "2026-07-24T14:09:36+00:00",
+      "quote_epoch": 1784902176,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "PENTA": {
-      "price": 13.53,
-      "quote_time": "2026-07-24T12:48:39+00:00",
-      "quote_epoch": 1784897319,
+    "RUBNS": {
+      "price": 22.96,
+      "quote_time": "2026-07-24T14:08:09+00:00",
+      "quote_epoch": 1784902089,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "POLTK": {
-      "price": 4835.0,
-      "quote_time": "2026-07-24T12:49:13+00:00",
-      "quote_epoch": 1784897353,
+    "RALYH": {
+      "price": 256.5,
+      "quote_time": "2026-07-24T14:08:18+00:00",
+      "quote_epoch": 1784902098,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "POLHO": {
-      "price": 21.7,
-      "quote_time": "2026-07-24T12:48:03+00:00",
-      "quote_epoch": 1784897283,
+    "RTALB": {
+      "price": 3.33,
+      "quote_time": "2026-07-24T14:08:19+00:00",
+      "quote_epoch": 1784902099,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "PLTUR": {
-      "price": 22.42,
-      "quote_time": "2026-07-24T12:49:20+00:00",
-      "quote_epoch": 1784897360,
+    "SANKO": {
+      "price": 19.89,
+      "quote_time": "2026-07-24T13:59:14+00:00",
+      "quote_epoch": 1784901554,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "QNBFK": {
-      "price": 48.48,
-      "quote_time": "2026-07-24T10:55:01+00:00",
-      "quote_epoch": 1784890501,
+    "RUZYE": {
+      "price": 9.79,
+      "quote_time": "2026-07-24T14:08:17+00:00",
+      "quote_epoch": 1784902097,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "PGSUS": {
-      "price": 161.4,
-      "quote_time": "2026-07-24T12:49:18+00:00",
-      "quote_epoch": 1784897358,
+    "RNPOL": {
+      "price": 2.35,
+      "quote_time": "2026-07-24T14:07:55+00:00",
+      "quote_epoch": 1784902075,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "PRKME": {
-      "price": 17.65,
-      "quote_time": "2026-07-24T12:49:15+00:00",
-      "quote_epoch": 1784897355,
+    "QUAGR": {
+      "price": 3.91,
+      "quote_time": "2026-07-24T14:03:55+00:00",
+      "quote_epoch": 1784901835,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "PNSUT": {
-      "price": 11.54,
-      "quote_time": "2026-07-24T12:49:14+00:00",
-      "quote_epoch": 1784897354,
+    "RODRG": {
+      "price": 25.1,
+      "quote_time": "2026-07-24T14:01:04+00:00",
+      "quote_epoch": 1784901664,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "PRKAB": {
-      "price": 35.4,
-      "quote_time": "2026-07-24T12:48:54+00:00",
-      "quote_epoch": 1784897334,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "PKART": {
-      "price": 130.2,
-      "quote_time": "2026-07-24T12:49:06+00:00",
-      "quote_epoch": 1784897346,
+    "RYSAS": {
+      "price": 19.84,
+      "quote_time": "2026-07-24T14:07:57+00:00",
+      "quote_epoch": 1784902077,
       "currency": "TRY",
       "exchange": "IST"
     },
     "RAYSG": {
       "price": 172.2,
-      "quote_time": "2026-07-24T12:48:19+00:00",
-      "quote_epoch": 1784897299,
+      "quote_time": "2026-07-24T14:07:14+00:00",
+      "quote_epoch": 1784902034,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "REEDR": {
+      "price": 6.73,
+      "quote_time": "2026-07-24T14:08:04+00:00",
+      "quote_epoch": 1784902084,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "SARAE": {
+      "price": 123.8,
+      "quote_time": "2026-07-24T14:00:17+00:00",
+      "quote_epoch": 1784901617,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "SARKY": {
+      "price": 25.46,
+      "quote_time": "2026-07-24T14:00:16+00:00",
+      "quote_epoch": 1784901616,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "SAHOL": {
+      "price": 86.8,
+      "quote_time": "2026-07-24T14:00:15+00:00",
+      "quote_epoch": 1784901615,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "SAMAT": {
+      "price": 5.67,
+      "quote_time": "2026-07-24T13:58:30+00:00",
+      "quote_epoch": 1784901510,
       "currency": "TRY",
       "exchange": "IST"
     },
     "RGYAS": {
-      "price": 203.0,
-      "quote_time": "2026-07-24T12:49:12+00:00",
-      "quote_epoch": 1784897352,
+      "price": 201.9,
+      "quote_time": "2026-07-24T14:08:23+00:00",
+      "quote_epoch": 1784902103,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "RALYH": {
-      "price": 254.25,
-      "quote_time": "2026-07-24T12:49:16+00:00",
-      "quote_epoch": 1784897356,
+    "SANFM": {
+      "price": 9.56,
+      "quote_time": "2026-07-24T13:59:08+00:00",
+      "quote_epoch": 1784901548,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "SAFKR": {
+      "price": 19.25,
+      "quote_time": "2026-07-24T14:00:15+00:00",
+      "quote_epoch": 1784901615,
       "currency": "TRY",
       "exchange": "IST"
     },
@@ -3395,129 +3500,38 @@
       "currency": "TRY",
       "exchange": "IST"
     },
-    "RUBNS": {
-      "price": 23.24,
-      "quote_time": "2026-07-24T12:49:17+00:00",
-      "quote_epoch": 1784897357,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "RODRG": {
-      "price": 25.0,
-      "quote_time": "2026-07-24T12:48:35+00:00",
-      "quote_epoch": 1784897315,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "SANKO": {
-      "price": 19.96,
-      "quote_time": "2026-07-24T12:48:33+00:00",
-      "quote_epoch": 1784897313,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "SAFKR": {
-      "price": 19.34,
-      "quote_time": "2026-07-24T12:48:04+00:00",
-      "quote_epoch": 1784897284,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "SANFM": {
-      "price": 9.57,
-      "quote_time": "2026-07-24T12:46:46+00:00",
-      "quote_epoch": 1784897206,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "RNPOL": {
-      "price": 2.35,
-      "quote_time": "2026-07-24T12:48:22+00:00",
-      "quote_epoch": 1784897302,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "RUZYE": {
-      "price": 9.6,
-      "quote_time": "2026-07-24T12:49:19+00:00",
-      "quote_epoch": 1784897359,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "REEDR": {
-      "price": 6.76,
-      "quote_time": "2026-07-24T12:49:03+00:00",
-      "quote_epoch": 1784897343,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "RYSAS": {
-      "price": 20.16,
-      "quote_time": "2026-07-24T12:49:04+00:00",
-      "quote_epoch": 1784897344,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "SARKY": {
-      "price": 25.64,
-      "quote_time": "2026-07-24T12:49:15+00:00",
-      "quote_epoch": 1784897355,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
     "RYGYO": {
-      "price": 31.9,
-      "quote_time": "2026-07-24T12:49:09+00:00",
-      "quote_epoch": 1784897349,
+      "price": 31.84,
+      "quote_time": "2026-07-24T14:07:33+00:00",
+      "quote_epoch": 1784902053,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "RTALB": {
-      "price": 3.34,
-      "quote_time": "2026-07-24T12:49:23+00:00",
-      "quote_epoch": 1784897363,
+    "SILVR": {
+      "price": 2.38,
+      "quote_time": "2026-07-24T13:59:43+00:00",
+      "quote_epoch": 1784901583,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "SAMAT": {
-      "price": 5.67,
-      "quote_time": "2026-07-24T12:49:02+00:00",
-      "quote_epoch": 1784897342,
+    "SEYKM": {
+      "price": 4.99,
+      "quote_time": "2026-07-24T13:59:41+00:00",
+      "quote_epoch": 1784901581,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "SAHOL": {
-      "price": 86.85,
-      "quote_time": "2026-07-24T12:49:22+00:00",
-      "quote_epoch": 1784897362,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "SARAE": {
-      "price": 123.8,
-      "quote_time": "2026-07-24T12:49:22+00:00",
-      "quote_epoch": 1784897362,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "QUAGR": {
-      "price": 3.86,
-      "quote_time": "2026-07-24T12:49:19+00:00",
-      "quote_epoch": 1784897359,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "SISE": {
-      "price": 43.24,
-      "quote_time": "2026-07-24T12:49:20+00:00",
-      "quote_epoch": 1784897360,
+    "SMRVA": {
+      "price": 12.37,
+      "quote_time": "2026-07-24T14:00:09+00:00",
+      "quote_epoch": 1784901609,
       "currency": "TRY",
       "exchange": "IST"
     },
     "SDTTR": {
-      "price": 241.5,
-      "quote_time": "2026-07-24T12:49:12+00:00",
-      "quote_epoch": 1784897352,
+      "price": 241.2,
+      "quote_time": "2026-07-24T14:00:16+00:00",
+      "quote_epoch": 1784901616,
       "currency": "TRY",
       "exchange": "IST"
     },
@@ -3528,164 +3542,108 @@
       "currency": "TRY",
       "exchange": "IST"
     },
-    "SMART": {
-      "price": 27.24,
-      "quote_time": "2026-07-24T12:49:17+00:00",
-      "quote_epoch": 1784897357,
+    "SISE": {
+      "price": 43.18,
+      "quote_time": "2026-07-24T14:00:18+00:00",
+      "quote_epoch": 1784901618,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "SAYAS": {
-      "price": 46.86,
-      "quote_time": "2026-07-24T12:48:17+00:00",
-      "quote_epoch": 1784897297,
+    "SMRTG": {
+      "price": 12.03,
+      "quote_time": "2026-07-24T14:00:15+00:00",
+      "quote_epoch": 1784901615,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "SMART": {
+      "price": 26.96,
+      "quote_time": "2026-07-24T14:00:10+00:00",
+      "quote_epoch": 1784901610,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "SKYLP": {
+      "price": 279.75,
+      "quote_time": "2026-07-24T13:58:42+00:00",
+      "quote_epoch": 1784901522,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "SKTAS": {
+      "price": 3.34,
+      "quote_time": "2026-07-24T14:00:03+00:00",
+      "quote_epoch": 1784901603,
       "currency": "TRY",
       "exchange": "IST"
     },
     "SEKFK": {
-      "price": 5.1,
-      "quote_time": "2026-07-24T12:49:12+00:00",
-      "quote_epoch": 1784897352,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "SELEC": {
-      "price": 248.6,
-      "quote_time": "2026-07-24T12:49:19+00:00",
-      "quote_epoch": 1784897359,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "SELVA": {
-      "price": 1.98,
-      "quote_time": "2026-07-24T12:49:16+00:00",
-      "quote_epoch": 1784897356,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "SILVR": {
-      "price": 2.4,
-      "quote_time": "2026-07-24T12:48:41+00:00",
-      "quote_epoch": 1784897321,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "SASA": {
-      "price": 2.62,
-      "quote_time": "2026-07-24T12:49:22+00:00",
-      "quote_epoch": 1784897362,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "SKYMD": {
-      "price": 14.57,
-      "quote_time": "2026-07-24T12:48:31+00:00",
-      "quote_epoch": 1784897311,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "SEGYO": {
-      "price": 4.34,
-      "quote_time": "2026-07-24T12:45:39+00:00",
-      "quote_epoch": 1784897139,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "SMRVA": {
-      "price": 12.38,
-      "quote_time": "2026-07-24T12:48:09+00:00",
-      "quote_epoch": 1784897289,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "SEGMN": {
-      "price": 50.2,
-      "quote_time": "2026-07-24T12:49:09+00:00",
-      "quote_epoch": 1784897349,
+      "price": 5.12,
+      "quote_time": "2026-07-24T14:00:15+00:00",
+      "quote_epoch": 1784901615,
       "currency": "TRY",
       "exchange": "IST"
     },
     "SKBNK": {
       "price": 11.76,
-      "quote_time": "2026-07-24T12:48:21+00:00",
-      "quote_epoch": 1784897301,
+      "quote_time": "2026-07-24T14:00:17+00:00",
+      "quote_epoch": 1784901617,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "SKYLP": {
-      "price": 272.5,
-      "quote_time": "2026-07-24T12:46:52+00:00",
-      "quote_epoch": 1784897212,
+    "SELEC": {
+      "price": 241.8,
+      "quote_time": "2026-07-24T14:00:01+00:00",
+      "quote_epoch": 1784901601,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "SEYKM": {
-      "price": 4.99,
-      "quote_time": "2026-07-24T12:48:54+00:00",
-      "quote_epoch": 1784897334,
+    "SELVA": {
+      "price": 2.0,
+      "quote_time": "2026-07-24T14:00:12+00:00",
+      "quote_epoch": 1784901612,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "SEGYO": {
+      "price": 4.32,
+      "quote_time": "2026-07-24T13:59:30+00:00",
+      "quote_epoch": 1784901570,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "SKYMD": {
+      "price": 14.63,
+      "quote_time": "2026-07-24T13:59:39+00:00",
+      "quote_epoch": 1784901579,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "SEGMN": {
+      "price": 49.88,
+      "quote_time": "2026-07-24T14:00:01+00:00",
+      "quote_epoch": 1784901601,
       "currency": "TRY",
       "exchange": "IST"
     },
     "SERNT": {
-      "price": 9.02,
-      "quote_time": "2026-07-24T12:49:14+00:00",
-      "quote_epoch": 1784897354,
+      "price": 8.95,
+      "quote_time": "2026-07-24T13:59:32+00:00",
+      "quote_epoch": 1784901572,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "SMRTG": {
-      "price": 12.02,
-      "quote_time": "2026-07-24T12:48:52+00:00",
-      "quote_epoch": 1784897332,
+    "SAYAS": {
+      "price": 47.7,
+      "quote_time": "2026-07-24T14:00:08+00:00",
+      "quote_epoch": 1784901608,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "SKTAS": {
-      "price": 3.35,
-      "quote_time": "2026-07-24T12:48:15+00:00",
-      "quote_epoch": 1784897295,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "SUNTK": {
-      "price": 42.14,
-      "quote_time": "2026-07-24T12:48:57+00:00",
-      "quote_epoch": 1784897337,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "TATEN": {
-      "price": 13.76,
-      "quote_time": "2026-07-24T12:48:30+00:00",
-      "quote_epoch": 1784897310,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "SURGY": {
-      "price": 68.8,
-      "quote_time": "2026-07-24T12:49:09+00:00",
-      "quote_epoch": 1784897349,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "TABGD": {
-      "price": 229.9,
-      "quote_time": "2026-07-24T12:49:10+00:00",
-      "quote_epoch": 1784897350,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "SVGYO": {
-      "price": 13.61,
-      "quote_time": "2026-07-24T12:49:13+00:00",
-      "quote_epoch": 1784897353,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "SOKM": {
-      "price": 53.2,
-      "quote_time": "2026-07-24T12:48:41+00:00",
-      "quote_epoch": 1784897321,
+    "SASA": {
+      "price": 2.64,
+      "quote_time": "2026-07-24T14:00:13+00:00",
+      "quote_epoch": 1784901613,
       "currency": "TRY",
       "exchange": "IST"
     },
@@ -3696,59 +3654,52 @@
       "currency": "TRY",
       "exchange": "IST"
     },
-    "SUWEN": {
-      "price": 7.14,
-      "quote_time": "2026-07-24T12:49:12+00:00",
-      "quote_epoch": 1784897352,
+    "TATEN": {
+      "price": 13.78,
+      "quote_time": "2026-07-24T14:02:40+00:00",
+      "quote_epoch": 1784901760,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "TAVHL": {
-      "price": 258.25,
-      "quote_time": "2026-07-24T12:49:19+00:00",
-      "quote_epoch": 1784897359,
+    "SURGY": {
+      "price": 68.75,
+      "quote_time": "2026-07-24T13:59:48+00:00",
+      "quote_epoch": 1784901588,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "TARKM": {
-      "price": 504.5,
-      "quote_time": "2026-07-24T12:48:46+00:00",
-      "quote_epoch": 1784897326,
+    "SUNTK": {
+      "price": 42.0,
+      "quote_time": "2026-07-24T14:00:17+00:00",
+      "quote_epoch": 1784901617,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "SRVGY": {
-      "price": 2.61,
-      "quote_time": "2026-07-24T12:48:41+00:00",
-      "quote_epoch": 1784897321,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "SNICA": {
-      "price": 3.82,
-      "quote_time": "2026-07-24T12:48:47+00:00",
-      "quote_epoch": 1784897327,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "SONME": {
-      "price": 128.9,
-      "quote_time": "2026-07-24T12:46:54+00:00",
-      "quote_epoch": 1784897214,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "SNGYO": {
-      "price": 3.37,
-      "quote_time": "2026-07-24T12:49:21+00:00",
-      "quote_epoch": 1784897361,
+    "SOKM": {
+      "price": 53.05,
+      "quote_time": "2026-07-24T14:00:10+00:00",
+      "quote_epoch": 1784901610,
       "currency": "TRY",
       "exchange": "IST"
     },
     "SOHOE": {
-      "price": 12.69,
-      "quote_time": "2026-07-24T12:49:22+00:00",
-      "quote_epoch": 1784897362,
+      "price": 12.66,
+      "quote_time": "2026-07-24T14:00:17+00:00",
+      "quote_epoch": 1784901617,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "SRVGY": {
+      "price": 2.6,
+      "quote_time": "2026-07-24T14:00:11+00:00",
+      "quote_epoch": 1784901611,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "TABGD": {
+      "price": 230.8,
+      "quote_time": "2026-07-24T14:02:56+00:00",
+      "quote_epoch": 1784901776,
       "currency": "TRY",
       "exchange": "IST"
     },
@@ -3760,9 +3711,37 @@
       "exchange": "IST"
     },
     "TATGD": {
-      "price": 19.25,
-      "quote_time": "2026-07-24T12:46:09+00:00",
-      "quote_epoch": 1784897169,
+      "price": 19.4,
+      "quote_time": "2026-07-24T14:02:31+00:00",
+      "quote_epoch": 1784901751,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "SUWEN": {
+      "price": 7.08,
+      "quote_time": "2026-07-24T13:58:41+00:00",
+      "quote_epoch": 1784901521,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "SVGYO": {
+      "price": 13.42,
+      "quote_time": "2026-07-24T14:00:15+00:00",
+      "quote_epoch": 1784901615,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "SSAAT": {
+      "price": 46.16,
+      "quote_time": "2026-07-24T13:59:38+00:00",
+      "quote_epoch": 1784901578,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "SNGYO": {
+      "price": 3.32,
+      "quote_time": "2026-07-24T14:00:10+00:00",
+      "quote_epoch": 1784901610,
       "currency": "TRY",
       "exchange": "IST"
     },
@@ -3773,171 +3752,199 @@
       "currency": "TRY",
       "exchange": "IST"
     },
+    "SONME": {
+      "price": 128.4,
+      "quote_time": "2026-07-24T13:55:01+00:00",
+      "quote_epoch": 1784901301,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "SNICA": {
+      "price": 3.82,
+      "quote_time": "2026-07-24T14:00:17+00:00",
+      "quote_epoch": 1784901617,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
     "SOKE": {
       "price": 17.18,
-      "quote_time": "2026-07-24T12:47:59+00:00",
-      "quote_epoch": 1784897279,
+      "quote_time": "2026-07-24T13:59:42+00:00",
+      "quote_epoch": 1784901582,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "SSAAT": {
-      "price": 46.16,
-      "quote_time": "2026-07-24T12:49:21+00:00",
-      "quote_epoch": 1784897361,
+    "TARKM": {
+      "price": 503.5,
+      "quote_time": "2026-07-24T14:02:34+00:00",
+      "quote_epoch": 1784901754,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "TCKRC": {
-      "price": 138.5,
-      "quote_time": "2026-07-24T12:49:20+00:00",
-      "quote_epoch": 1784897360,
+    "TAVHL": {
+      "price": 258.25,
+      "quote_time": "2026-07-24T14:02:40+00:00",
+      "quote_epoch": 1784901760,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "TEHOL": {
+      "price": 43.08,
+      "quote_time": "2026-07-24T14:02:56+00:00",
+      "quote_epoch": 1784901776,
       "currency": "TRY",
       "exchange": "IST"
     },
     "TRALT": {
-      "price": 49.18,
-      "quote_time": "2026-07-24T12:49:21+00:00",
-      "quote_epoch": 1784897361,
+      "price": 48.58,
+      "quote_time": "2026-07-24T14:02:56+00:00",
+      "quote_epoch": 1784901776,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "TCKRC": {
+      "price": 138.0,
+      "quote_time": "2026-07-24T14:02:27+00:00",
+      "quote_epoch": 1784901747,
       "currency": "TRY",
       "exchange": "IST"
     },
     "TERA": {
-      "price": 163.0,
-      "quote_time": "2026-07-24T12:49:23+00:00",
-      "quote_epoch": 1784897363,
+      "price": 163.7,
+      "quote_time": "2026-07-24T14:02:56+00:00",
+      "quote_epoch": 1784901776,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "TKNSA": {
-      "price": 17.47,
-      "quote_time": "2026-07-24T12:48:21+00:00",
-      "quote_epoch": 1784897301,
+    "THYAO": {
+      "price": 312.75,
+      "quote_time": "2026-07-24T14:02:55+00:00",
+      "quote_epoch": 1784901775,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "TEZOL": {
-      "price": 14.01,
-      "quote_time": "2026-07-24T12:47:19+00:00",
-      "quote_epoch": 1784897239,
+    "TGSAS": {
+      "price": 181.3,
+      "quote_time": "2026-07-24T14:01:43+00:00",
+      "quote_epoch": 1784901703,
       "currency": "TRY",
       "exchange": "IST"
     },
     "TLMAN": {
-      "price": 84.75,
-      "quote_time": "2026-07-24T12:45:29+00:00",
-      "quote_epoch": 1784897129,
+      "price": 84.4,
+      "quote_time": "2026-07-24T14:00:40+00:00",
+      "quote_epoch": 1784901640,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "TCELL": {
+      "price": 102.8,
+      "quote_time": "2026-07-24T14:02:55+00:00",
+      "quote_epoch": 1784901775,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "TEKTU": {
+      "price": 8.21,
+      "quote_time": "2026-07-24T14:02:06+00:00",
+      "quote_epoch": 1784901726,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "TRENJ": {
+      "price": 99.3,
+      "quote_time": "2026-07-24T14:02:47+00:00",
+      "quote_epoch": 1784901767,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "TEZOL": {
+      "price": 14.0,
+      "quote_time": "2026-07-24T14:02:50+00:00",
+      "quote_epoch": 1784901770,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "TNZTP": {
+      "price": 24.98,
+      "quote_time": "2026-07-24T13:59:44+00:00",
+      "quote_epoch": 1784901584,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "TRCAS": {
+      "price": 45.64,
+      "quote_time": "2026-07-24T14:02:40+00:00",
+      "quote_epoch": 1784901760,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "TKNSA": {
+      "price": 17.44,
+      "quote_time": "2026-07-24T14:02:42+00:00",
+      "quote_epoch": 1784901762,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "TBORG": {
+      "price": 128.4,
+      "quote_time": "2026-07-24T14:02:27+00:00",
+      "quote_epoch": 1784901747,
       "currency": "TRY",
       "exchange": "IST"
     },
     "TMPOL": {
       "price": 425.75,
-      "quote_time": "2026-07-24T12:49:20+00:00",
-      "quote_epoch": 1784897360,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "TGSAS": {
-      "price": 181.6,
-      "quote_time": "2026-07-24T12:48:52+00:00",
-      "quote_epoch": 1784897332,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "TRENJ": {
-      "price": 101.0,
-      "quote_time": "2026-07-24T12:49:21+00:00",
-      "quote_epoch": 1784897361,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "TOASO": {
-      "price": 281.25,
-      "quote_time": "2026-07-24T12:48:53+00:00",
-      "quote_epoch": 1784897333,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "THYAO": {
-      "price": 312.25,
-      "quote_time": "2026-07-24T12:49:22+00:00",
-      "quote_epoch": 1784897362,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "TEKTU": {
-      "price": 8.23,
-      "quote_time": "2026-07-24T12:48:39+00:00",
-      "quote_epoch": 1784897319,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "TBORG": {
-      "price": 129.4,
-      "quote_time": "2026-07-24T12:48:48+00:00",
-      "quote_epoch": 1784897328,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "TCELL": {
-      "price": 102.7,
-      "quote_time": "2026-07-24T12:49:19+00:00",
-      "quote_epoch": 1784897359,
+      "quote_time": "2026-07-24T14:01:58+00:00",
+      "quote_epoch": 1784901718,
       "currency": "TRY",
       "exchange": "IST"
     },
     "TKFEN": {
-      "price": 147.7,
-      "quote_time": "2026-07-24T12:47:52+00:00",
-      "quote_epoch": 1784897272,
+      "price": 148.9,
+      "quote_time": "2026-07-24T14:02:34+00:00",
+      "quote_epoch": 1784901754,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "TMSN": {
-      "price": 86.15,
-      "quote_time": "2026-07-24T12:49:18+00:00",
-      "quote_epoch": 1784897358,
+    "TOASO": {
+      "price": 279.75,
+      "quote_time": "2026-07-24T14:02:27+00:00",
+      "quote_epoch": 1784901747,
       "currency": "TRY",
       "exchange": "IST"
     },
     "TDGYO": {
-      "price": 16.26,
-      "quote_time": "2026-07-24T12:46:33+00:00",
-      "quote_epoch": 1784897193,
+      "price": 16.19,
+      "quote_time": "2026-07-24T14:02:32+00:00",
+      "quote_epoch": 1784901752,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "TRCAS": {
-      "price": 45.82,
-      "quote_time": "2026-07-24T12:49:13+00:00",
-      "quote_epoch": 1784897353,
+    "TMSN": {
+      "price": 85.7,
+      "quote_time": "2026-07-24T14:02:50+00:00",
+      "quote_epoch": 1784901770,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "TNZTP": {
-      "price": 24.92,
-      "quote_time": "2026-07-24T12:49:15+00:00",
-      "quote_epoch": 1784897355,
+    "TUCLK": {
+      "price": 3.85,
+      "quote_time": "2026-07-24T14:02:51+00:00",
+      "quote_epoch": 1784901771,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "TEHOL": {
-      "price": 43.0,
-      "quote_time": "2026-07-24T12:49:18+00:00",
-      "quote_epoch": 1784897358,
+    "UFUK": {
+      "price": 1619.0,
+      "quote_time": "2026-07-24T14:11:33+00:00",
+      "quote_epoch": 1784902293,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "ULAS": {
-      "price": 23.96,
-      "quote_time": "2026-07-24T12:48:15+00:00",
-      "quote_epoch": 1784897295,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "TURGG": {
-      "price": 27.5,
-      "quote_time": "2026-07-24T12:47:43+00:00",
-      "quote_epoch": 1784897263,
+    "TRHOL": {
+      "price": 1741.0,
+      "quote_time": "2026-07-24T14:02:37+00:00",
+      "quote_epoch": 1784901757,
       "currency": "TRY",
       "exchange": "IST"
     },
@@ -3948,171 +3955,248 @@
       "currency": "TRY",
       "exchange": "IST"
     },
-    "TUREX": {
-      "price": 7.71,
-      "quote_time": "2026-07-24T12:49:22+00:00",
-      "quote_epoch": 1784897362,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "TTRAK": {
-      "price": 408.0,
-      "quote_time": "2026-07-24T12:49:15+00:00",
-      "quote_epoch": 1784897355,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "UFUK": {
-      "price": 1631.0,
-      "quote_time": "2026-07-24T12:49:17+00:00",
-      "quote_epoch": 1784897357,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "TUPRS": {
-      "price": 305.5,
-      "quote_time": "2026-07-24T12:49:19+00:00",
-      "quote_epoch": 1784897359,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "TUKAS": {
-      "price": 2.1,
-      "quote_time": "2026-07-24T12:49:16+00:00",
-      "quote_epoch": 1784897356,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "TURSG": {
-      "price": 6.64,
-      "quote_time": "2026-07-24T12:49:22+00:00",
-      "quote_epoch": 1784897362,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "TSGYO": {
-      "price": 6.17,
-      "quote_time": "2026-07-24T12:46:54+00:00",
-      "quote_epoch": 1784897214,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "TSKB": {
-      "price": 11.31,
-      "quote_time": "2026-07-24T12:48:40+00:00",
-      "quote_epoch": 1784897320,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "UCAYM": {
-      "price": 28.94,
-      "quote_time": "2026-07-24T12:49:15+00:00",
-      "quote_epoch": 1784897355,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "TRMET": {
-      "price": 135.1,
-      "quote_time": "2026-07-24T12:49:10+00:00",
-      "quote_epoch": 1784897350,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "TUCLK": {
-      "price": 3.87,
-      "quote_time": "2026-07-24T12:48:20+00:00",
-      "quote_epoch": 1784897300,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "TTKOM": {
-      "price": 53.75,
-      "quote_time": "2026-07-24T12:49:23+00:00",
-      "quote_epoch": 1784897363,
+    "ULAS": {
+      "price": 23.92,
+      "quote_time": "2026-07-24T14:06:13+00:00",
+      "quote_epoch": 1784901973,
       "currency": "TRY",
       "exchange": "IST"
     },
     "TSPOR": {
       "price": 0.96,
-      "quote_time": "2026-07-24T12:49:22+00:00",
-      "quote_epoch": 1784897362,
+      "quote_time": "2026-07-24T14:02:45+00:00",
+      "quote_epoch": 1784901765,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "TTKOM": {
+      "price": 53.9,
+      "quote_time": "2026-07-24T14:02:55+00:00",
+      "quote_epoch": 1784901775,
       "currency": "TRY",
       "exchange": "IST"
     },
     "ULUFA": {
       "price": 1.72,
-      "quote_time": "2026-07-24T12:48:28+00:00",
-      "quote_epoch": 1784897308,
+      "quote_time": "2026-07-24T14:11:38+00:00",
+      "quote_epoch": 1784902298,
       "currency": "TRY",
       "exchange": "IST"
     },
     "ULKER": {
-      "price": 92.55,
-      "quote_time": "2026-07-24T12:48:52+00:00",
-      "quote_epoch": 1784897332,
+      "price": 92.2,
+      "quote_time": "2026-07-24T14:13:10+00:00",
+      "quote_epoch": 1784902390,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "TRHOL": {
-      "price": 1730.0,
-      "quote_time": "2026-07-24T12:49:16+00:00",
-      "quote_epoch": 1784897356,
+    "TUKAS": {
+      "price": 2.1,
+      "quote_time": "2026-07-24T14:02:24+00:00",
+      "quote_epoch": 1784901744,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "TUPRS": {
+      "price": 305.25,
+      "quote_time": "2026-07-24T14:02:58+00:00",
+      "quote_epoch": 1784901778,
       "currency": "TRY",
       "exchange": "IST"
     },
     "TRGYO": {
-      "price": 96.6,
-      "quote_time": "2026-07-24T12:49:15+00:00",
-      "quote_epoch": 1784897355,
+      "price": 96.55,
+      "quote_time": "2026-07-24T14:02:55+00:00",
+      "quote_epoch": 1784901775,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "VERTU": {
-      "price": 37.38,
-      "quote_time": "2026-07-24T12:47:06+00:00",
-      "quote_epoch": 1784897226,
+    "TSGYO": {
+      "price": 6.16,
+      "quote_time": "2026-07-24T13:57:49+00:00",
+      "quote_epoch": 1784901469,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "VBTYZ": {
-      "price": 34.3,
-      "quote_time": "2026-07-24T12:49:21+00:00",
-      "quote_epoch": 1784897361,
+    "TURSG": {
+      "price": 6.62,
+      "quote_time": "2026-07-24T14:02:51+00:00",
+      "quote_epoch": 1784901771,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "VAKFA": {
-      "price": 11.53,
-      "quote_time": "2026-07-24T12:48:05+00:00",
-      "quote_epoch": 1784897285,
+    "TRMET": {
+      "price": 133.0,
+      "quote_time": "2026-07-24T14:02:57+00:00",
+      "quote_epoch": 1784901777,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "VESTL": {
-      "price": 24.72,
-      "quote_time": "2026-07-24T12:49:15+00:00",
-      "quote_epoch": 1784897355,
+    "UCAYM": {
+      "price": 28.42,
+      "quote_time": "2026-07-24T14:13:11+00:00",
+      "quote_epoch": 1784902391,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "VKING": {
-      "price": 24.02,
-      "quote_time": "2026-07-24T12:49:04+00:00",
-      "quote_epoch": 1784897344,
+    "TURGG": {
+      "price": 27.3,
+      "quote_time": "2026-07-24T13:58:10+00:00",
+      "quote_epoch": 1784901490,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "TSKB": {
+      "price": 11.33,
+      "quote_time": "2026-07-24T14:01:42+00:00",
+      "quote_epoch": 1784901702,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "TTRAK": {
+      "price": 409.25,
+      "quote_time": "2026-07-24T14:01:39+00:00",
+      "quote_epoch": 1784901699,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "TUREX": {
+      "price": 7.95,
+      "quote_time": "2026-07-24T14:02:56+00:00",
+      "quote_epoch": 1784901776,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "VKGYO": {
+      "price": 2.63,
+      "quote_time": "2026-07-24T14:08:26+00:00",
+      "quote_epoch": 1784902106,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "VAKKO": {
+      "price": 69.95,
+      "quote_time": "2026-07-24T14:06:56+00:00",
+      "quote_epoch": 1784902016,
       "currency": "TRY",
       "exchange": "IST"
     },
     "VERUS": {
       "price": 480.0,
-      "quote_time": "2026-07-24T12:46:46+00:00",
-      "quote_epoch": 1784897206,
+      "quote_time": "2026-07-24T14:08:05+00:00",
+      "quote_epoch": 1784902085,
       "currency": "TRY",
       "exchange": "IST"
     },
     "ULUUN": {
-      "price": 9.69,
-      "quote_time": "2026-07-24T12:48:58+00:00",
-      "quote_epoch": 1784897338,
+      "price": 9.55,
+      "quote_time": "2026-07-24T14:12:54+00:00",
+      "quote_epoch": 1784902374,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "VAKFA": {
+      "price": 11.5,
+      "quote_time": "2026-07-24T14:08:16+00:00",
+      "quote_epoch": 1784902096,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "UNLU": {
+      "price": 11.83,
+      "quote_time": "2026-07-24T14:09:58+00:00",
+      "quote_epoch": 1784902198,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "VAKBN": {
+      "price": 30.2,
+      "quote_time": "2026-07-24T14:08:24+00:00",
+      "quote_epoch": 1784902104,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "VKING": {
+      "price": 24.02,
+      "quote_time": "2026-07-24T14:06:06+00:00",
+      "quote_epoch": 1784901966,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ULUSE": {
+      "price": 292.75,
+      "quote_time": "2026-07-24T14:12:18+00:00",
+      "quote_epoch": 1784902338,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "VESTL": {
+      "price": 24.32,
+      "quote_time": "2026-07-24T14:08:24+00:00",
+      "quote_epoch": 1784902104,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "VANGD": {
+      "price": 93.5,
+      "quote_time": "2026-07-24T14:08:26+00:00",
+      "quote_epoch": 1784902106,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "VAKFN": {
+      "price": 1.3,
+      "quote_time": "2026-07-24T14:08:23+00:00",
+      "quote_epoch": 1784902103,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "VRGYO": {
+      "price": 1.92,
+      "quote_time": "2026-07-24T14:08:21+00:00",
+      "quote_epoch": 1784902101,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "VSNMD": {
+      "price": 81.2,
+      "quote_time": "2026-07-24T14:07:50+00:00",
+      "quote_epoch": 1784902070,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "VBTYZ": {
+      "price": 33.96,
+      "quote_time": "2026-07-24T14:07:44+00:00",
+      "quote_epoch": 1784902064,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "VESBE": {
+      "price": 6.1,
+      "quote_time": "2026-07-24T14:08:36+00:00",
+      "quote_epoch": 1784902116,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "USAK": {
+      "price": 1.43,
+      "quote_time": "2026-07-24T14:12:46+00:00",
+      "quote_epoch": 1784902366,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "VERTU": {
+      "price": 37.28,
+      "quote_time": "2026-07-24T14:04:37+00:00",
+      "quote_epoch": 1784901877,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "VKFYO": {
+      "price": 25.8,
+      "quote_time": "2026-07-24T14:07:50+00:00",
+      "quote_epoch": 1784902070,
       "currency": "TRY",
       "exchange": "IST"
     },
@@ -4123,101 +4207,17 @@
       "currency": "TRY",
       "exchange": "IST"
     },
-    "VAKKO": {
-      "price": 70.05,
-      "quote_time": "2026-07-24T12:48:15+00:00",
-      "quote_epoch": 1784897295,
+    "YGGYO": {
+      "price": 218.0,
+      "quote_time": "2026-07-24T14:16:59+00:00",
+      "quote_epoch": 1784902619,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "VESBE": {
-      "price": 6.14,
-      "quote_time": "2026-07-24T12:49:21+00:00",
-      "quote_epoch": 1784897361,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "VRGYO": {
-      "price": 1.93,
-      "quote_time": "2026-07-24T12:48:41+00:00",
-      "quote_epoch": 1784897321,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "VAKBN": {
-      "price": 30.18,
-      "quote_time": "2026-07-24T12:49:06+00:00",
-      "quote_epoch": 1784897346,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "VAKFN": {
-      "price": 1.3,
-      "quote_time": "2026-07-24T12:47:50+00:00",
-      "quote_epoch": 1784897270,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "USAK": {
-      "price": 1.43,
-      "quote_time": "2026-07-24T12:49:23+00:00",
-      "quote_epoch": 1784897363,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "VSNMD": {
-      "price": 81.15,
-      "quote_time": "2026-07-24T12:49:17+00:00",
-      "quote_epoch": 1784897357,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "VKFYO": {
-      "price": 25.7,
-      "quote_time": "2026-07-24T12:49:18+00:00",
-      "quote_epoch": 1784897358,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "VKGYO": {
-      "price": 2.63,
-      "quote_time": "2026-07-24T12:47:35+00:00",
-      "quote_epoch": 1784897255,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "VANGD": {
-      "price": 93.35,
-      "quote_time": "2026-07-24T12:41:49+00:00",
-      "quote_epoch": 1784896909,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "UNLU": {
-      "price": 11.82,
-      "quote_time": "2026-07-24T12:48:51+00:00",
-      "quote_epoch": 1784897331,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ULUSE": {
-      "price": 294.0,
-      "quote_time": "2026-07-24T12:49:05+00:00",
-      "quote_epoch": 1784897345,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "YEOTK": {
-      "price": 97.75,
-      "quote_time": "2026-07-24T12:49:22+00:00",
-      "quote_epoch": 1784897362,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "YIGIT": {
-      "price": 21.72,
-      "quote_time": "2026-07-24T12:49:11+00:00",
-      "quote_epoch": 1784897351,
+    "ZOREN": {
+      "price": 2.54,
+      "quote_time": "2026-07-24T14:19:31+00:00",
+      "quote_epoch": 1784902771,
       "currency": "TRY",
       "exchange": "IST"
     },
@@ -4228,52 +4228,87 @@
       "currency": "TRY",
       "exchange": "IST"
     },
-    "YGGYO": {
-      "price": 217.8,
-      "quote_time": "2026-07-24T12:45:16+00:00",
-      "quote_epoch": 1784897116,
+    "YAYLA": {
+      "price": 23.06,
+      "quote_time": "2026-07-24T14:15:55+00:00",
+      "quote_epoch": 1784902555,
       "currency": "TRY",
       "exchange": "IST"
     },
     "ZGYO": {
-      "price": 38.08,
-      "quote_time": "2026-07-24T12:47:42+00:00",
-      "quote_epoch": 1784897262,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "YAYLA": {
-      "price": 23.32,
-      "quote_time": "2026-07-24T12:49:00+00:00",
-      "quote_epoch": 1784897340,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "YKBNK": {
-      "price": 33.22,
-      "quote_time": "2026-07-24T12:49:21+00:00",
-      "quote_epoch": 1784897361,
+      "price": 37.78,
+      "quote_time": "2026-07-24T14:19:27+00:00",
+      "quote_epoch": 1784902767,
       "currency": "TRY",
       "exchange": "IST"
     },
     "XU100": {
-      "price": 13928.79,
-      "quote_time": "2026-07-24T12:49:23+00:00",
-      "quote_epoch": 1784897363,
+      "price": 13941.16,
+      "quote_time": "2026-07-24T14:19:54+00:00",
+      "quote_epoch": 1784902794,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "ZOREN": {
-      "price": 2.56,
-      "quote_time": "2026-07-24T12:49:04+00:00",
-      "quote_epoch": 1784897344,
+    "YEOTK": {
+      "price": 95.85,
+      "quote_time": "2026-07-24T14:17:33+00:00",
+      "quote_epoch": 1784902653,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "YYLGD": {
+      "price": 10.49,
+      "quote_time": "2026-07-24T14:17:14+00:00",
+      "quote_epoch": 1784902634,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "YUNSA": {
+      "price": 8.87,
+      "quote_time": "2026-07-24T14:16:57+00:00",
+      "quote_epoch": 1784902617,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ZERGY": {
+      "price": 10.56,
+      "quote_time": "2026-07-24T14:19:53+00:00",
+      "quote_epoch": 1784902793,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "YESIL": {
+      "price": 1.29,
+      "quote_time": "2026-07-24T14:17:02+00:00",
+      "quote_epoch": 1784902622,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "ZEDUR": {
+      "price": 8.32,
+      "quote_time": "2026-07-24T14:19:44+00:00",
+      "quote_epoch": 1784902784,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "YKBNK": {
+      "price": 33.46,
+      "quote_time": "2026-07-24T14:17:38+00:00",
+      "quote_epoch": 1784902658,
+      "currency": "TRY",
+      "exchange": "IST"
+    },
+    "YAPRK": {
+      "price": 10.94,
+      "quote_time": "2026-07-24T14:17:32+00:00",
+      "quote_epoch": 1784902652,
       "currency": "TRY",
       "exchange": "IST"
     },
     "YATAS": {
-      "price": 34.9,
-      "quote_time": "2026-07-24T12:48:58+00:00",
-      "quote_epoch": 1784897338,
+      "price": 34.88,
+      "quote_time": "2026-07-24T14:17:32+00:00",
+      "quote_epoch": 1784902652,
       "currency": "TRY",
       "exchange": "IST"
     },
@@ -4286,43 +4321,8 @@
     },
     "YKSLN": {
       "price": 3.19,
-      "quote_time": "2026-07-24T12:47:29+00:00",
-      "quote_epoch": 1784897249,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ZRGYO": {
-      "price": 17.93,
-      "quote_time": "2026-07-24T12:45:51+00:00",
-      "quote_epoch": 1784897151,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "YYLGD": {
-      "price": 10.49,
-      "quote_time": "2026-07-24T12:49:08+00:00",
-      "quote_epoch": 1784897348,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "YUNSA": {
-      "price": 8.88,
-      "quote_time": "2026-07-24T12:48:59+00:00",
-      "quote_epoch": 1784897339,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "ZERGY": {
-      "price": 10.82,
-      "quote_time": "2026-07-24T12:49:22+00:00",
-      "quote_epoch": 1784897362,
-      "currency": "TRY",
-      "exchange": "IST"
-    },
-    "YAPRK": {
-      "price": 10.95,
-      "quote_time": "2026-07-24T12:47:55+00:00",
-      "quote_epoch": 1784897275,
+      "quote_time": "2026-07-24T14:16:31+00:00",
+      "quote_epoch": 1784902591,
       "currency": "TRY",
       "exchange": "IST"
     },
@@ -4333,17 +4333,17 @@
       "currency": "TRY",
       "exchange": "IST"
     },
-    "ZEDUR": {
-      "price": 8.33,
-      "quote_time": "2026-07-24T12:48:37+00:00",
-      "quote_epoch": 1784897317,
+    "YIGIT": {
+      "price": 21.74,
+      "quote_time": "2026-07-24T14:17:32+00:00",
+      "quote_epoch": 1784902652,
       "currency": "TRY",
       "exchange": "IST"
     },
-    "YESIL": {
-      "price": 1.29,
-      "quote_time": "2026-07-24T12:49:06+00:00",
-      "quote_epoch": 1784897346,
+    "ZRGYO": {
+      "price": 17.91,
+      "quote_time": "2026-07-24T14:19:45+00:00",
+      "quote_epoch": 1784902785,
       "currency": "TRY",
       "exchange": "IST"
     }

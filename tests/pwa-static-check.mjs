@@ -33,9 +33,9 @@ for (const file of requiredFiles) {
 }
 
 for (const localRuntime of [
-  "./vendor/pako.min.js?v=24",
-  "./vendor/sql-wasm.js?v=24",
-  "./vendor/apexcharts.min.js?v=24",
+  "./vendor/pako.min.js?v=25",
+  "./vendor/sql-wasm.js?v=25",
+  "./vendor/apexcharts.min.js?v=25",
 ]) {
   if (!indexHtml.includes(localRuntime)) {
     throw new Error(`index.html does not reference local runtime: ${localRuntime}`);
@@ -46,8 +46,8 @@ if (/cdnjs\.cloudflare\.com\/ajax\/libs\/(?:pako|sql\.js)|cdn\.jsdelivr\.net\/np
   throw new Error("Core PWA runtime still depends on an external CDN.");
 }
 
-if (!serviceWorker.includes("bist-picker-shell-v24")) {
-  throw new Error("Service worker cache version was not bumped to v24.");
+if (!serviceWorker.includes("bist-picker-shell-v25")) {
+  throw new Error("Service worker cache version was not bumped to v25.");
 }
 
 if (!appJs.includes("Snapshot bütünlük kontrolü başarısız")) {
@@ -62,11 +62,11 @@ if (!appJs.includes("MobileInv-feed/live-data/live_prices.json")) {
   throw new Error("PWA near-live price feed URL is missing.");
 }
 
-if (!appJs.includes("./vendor/${filename}?v=24")) {
-  throw new Error("sql.js WASM locateFile cache version was not bumped to v24.");
+if (!appJs.includes("./vendor/${filename}?v=25")) {
+  throw new Error("sql.js WASM locateFile cache version was not bumped to v25.");
 }
 
-if (!indexHtml.includes("./portfolio-costs.js?v=24")) {
+if (!indexHtml.includes("./portfolio-costs.js?v=25")) {
   throw new Error("Portfolio cost profile runtime is missing.");
 }
 
@@ -90,6 +90,17 @@ if (!appJs.includes("pos.signal_date")
   || !appJs.includes("cycle_date <= :todayDate")
   || !appJs.includes("exit_date <= :todayDate")) {
   throw new Error("Pre-open T-1 signal / T execution contract is missing from the PWA.");
+}
+
+// A rotation published before its effective session is not owned yet: the
+// card must show a neutral "will be bought" chip instead of marking a
+// T-1 close to market, and must not warn about a stop it cannot breach.
+if (!appJs.includes("pos.selection_date > todayDate")
+  || !appJs.includes("staged-chip")
+  || !appJs.includes("alınacak")
+  || !appJs.includes("!isStaged && stopPrice > 0")
+  || !indexCss.includes(".staged-chip")) {
+  throw new Error("Staged (not yet traded) rotation must not report P&L on the picks card.");
 }
 
 if (!appJs.includes("PortfolioCosts.normalizeSettings")

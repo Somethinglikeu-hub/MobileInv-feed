@@ -1,0 +1,148 @@
+name: Feed Freshness Watchdog
+
+# Why this lives in the feed repo and not next to the pipeline: the publish
+# crons run in the private engine repo, and on 2026-07-27 GitHub's scheduler
+# stalled there for ~4 hours (both 06:17 and 07:17 UTC missed; the backlog
+# only flushed at 10:10). Nothing noticed - the PWA served Friday's data all
+# morning. A watchdog inside the engine repo would have been stuck in the
+# same queue, so this one runs from the public feed repo, on a different
+# scheduler, and checks the published artifact instead of trusting the
+# engine's schedule. Public repo => runner minutes are free.
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Engine publishes 06:17 / 07:17 UTC on weekdays -> check at 09:00.
+    - cron: "0 9 * * 1-5"
+    # Engine publishes 16:17 / 16:47 UTC on weekdays -> check at 18:30.
+    - cron: "30 18 * * 1-5"
+
+permissions:
+  contents: read
+  issues: write
+
+env:
+  MANIFEST_URL: "https://raw.githubusercontent.com/${{ github.repository }}/gh-pages/manifest.json"
+  # Both check times sit ~1.7-2.7h after their publish window, so 3.5h flags
+  # a genuine miss without firing on a merely slow run.
+  MAX_AGE_HOURS: "3.5"
+  ENGINE_REPOSITORY: ${{ vars.ENGINE_REPOSITORY || 'Somethinglikeu-hub/MobileInv' }}
+  ENGINE_WORKFLOW: mobile-feed.yml
+
+jobs:
+  check-freshness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Read published manifest
+        id: check
+        run: |
+          set -euo pipefail
+          curl -fsSL --retry 3 --retry-delay 5 \
+            -H 'Cache-Control: no-cache' \
+            "${MANIFEST_URL}?nocache=${GITHUB_RUN_ID}" -o manifest.json
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+          import os
+          from datetime import datetime, timezone
+
+          with open("manifest.json", encoding="utf-8") as fh:
+              manifest = json.load(fh)
+
+          exported = datetime.fromisoformat(manifest["exported_at"])
+          if exported.tzinfo is None:
+              exported = exported.replace(tzinfo=timezone.utc)
+          age_hours = (datetime.now(timezone.utc) - exported).total_seconds() / 3600.0
+
+          print(f"exported_at={exported.isoformat()}")
+          print(f"age_hours={age_hours:.2f}")
+          print("price_date=" + str(manifest.get("live_tickers", {}).get("latest_price_date", "unknown")))
+          print("cycle_start=" + str(manifest.get("rotation", {}).get("cycle_start", "unknown")))
+          print("stale=" + ("true" if age_hours > float(os.environ["MAX_AGE_HOURS"]) else "false"))
+          PY
+
+      - name: Write run summary
+        run: |
+          {
+            echo "### Feed freshness"
+            echo ""
+            echo "- exported_at: \`${{ steps.check.outputs.exported_at }}\`"
+            echo "- age: ${{ steps.check.outputs.age_hours }} h (limit ${MAX_AGE_HOURS} h)"
+            echo "- latest price date: \`${{ steps.check.outputs.price_date }}\`"
+            echo "- rotation cycle: \`${{ steps.check.outputs.cycle_start }}\`"
+            echo "- stale: \`${{ steps.check.outputs.stale }}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Ask the engine to publish (self-heal)
+        if: steps.check.outputs.stale == 'true'
+        continue-on-error: true
+        env:
+          ENGINE_DISPATCH_TOKEN: ${{ secrets.ENGINE_DISPATCH_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "${ENGINE_DISPATCH_TOKEN:-}" ]; then
+            echo "ENGINE_DISPATCH_TOKEN is not set - alerting only, no self-heal."
+            echo "Add a PAT with actions:write on ${ENGINE_REPOSITORY} to enable it."
+            exit 0
+          fi
+          curl -fsS -X POST \
+            -H "Authorization: Bearer ${ENGINE_DISPATCH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${ENGINE_REPOSITORY}/actions/workflows/${ENGINE_WORKFLOW}/dispatches" \
+            -d '{"ref":"main"}'
+          echo "Dispatched ${ENGINE_WORKFLOW} on ${ENGINE_REPOSITORY}."
+
+      - name: Open or update the stale-feed issue
+        if: steps.check.outputs.stale == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = '[feed] Publish is stale';
+            const body = [
+              'The published feed is older than the watchdog threshold.',
+              '',
+              `- **exported_at:** \`${{ steps.check.outputs.exported_at }}\``,
+              `- **age:** ${{ steps.check.outputs.age_hours }} h (limit ${process.env.MAX_AGE_HOURS} h)`,
+              `- **latest price date:** \`${{ steps.check.outputs.price_date }}\``,
+              `- **rotation cycle:** \`${{ steps.check.outputs.cycle_start }}\``,
+              '',
+              'Usual cause: the engine repo\'s scheduled runs were dropped or delayed by',
+              'GitHub. If `ENGINE_DISPATCH_TOKEN` is configured this run already asked the',
+              'engine to publish; otherwise dispatch **Publish Mobile Feed** manually.',
+              '',
+              '_Opened automatically by the Feed Freshness Watchdog; it closes itself once a fresh manifest lands._',
+            ].join('\n');
+            const { owner, repo } = context.repo;
+            const open = await github.rest.issues.listForRepo({
+              owner, repo, state: 'open', labels: 'feed-stale', per_page: 50,
+            });
+            const match = open.data.find(i => i.title === title);
+            if (match) {
+              await github.rest.issues.createComment({ owner, repo, issue_number: match.number, body });
+              core.info(`Commented on existing stale-feed issue #${match.number}`);
+            } else {
+              const created = await github.rest.issues.create({
+                owner, repo, title, body, labels: ['feed-stale'],
+              });
+              core.info(`Opened stale-feed issue #${created.data.number}`);
+            }
+
+      - name: Close the stale-feed issue when fresh
+        if: steps.check.outputs.stale == 'false'
+        continue-on-error: true
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const open = await github.rest.issues.listForRepo({
+              owner, repo, state: 'open', labels: 'feed-stale', per_page: 50,
+            });
+            for (const issue of open.data) {
+              await github.rest.issues.createComment({
+                owner, repo, issue_number: issue.number,
+                body: `Resolved: fresh manifest at \`${{ steps.check.outputs.exported_at }}\` (${{ steps.check.outputs.age_hours }} h old).`,
+              });
+              await github.rest.issues.update({ owner, repo, issue_number: issue.number, state: 'closed' });
+              core.info(`Closed stale-feed issue #${issue.number}`);
+            }

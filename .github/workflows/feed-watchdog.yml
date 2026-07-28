@@ -11,6 +11,14 @@ name: Feed Freshness Watchdog
 
 on:
   workflow_dispatch:
+    inputs:
+      max_age_hours:
+        description: >-
+          Staleness threshold override in hours. Set it low (e.g. 0.01) to
+          force the stale path once and prove the alert and self-heal wiring
+          works, instead of waiting for a real outage.
+        required: false
+        default: ""
   schedule:
     # Engine publishes 06:17 / 07:17 UTC on weekdays -> check at 09:00.
     - cron: "0 9 * * 1-5"
@@ -24,8 +32,9 @@ permissions:
 env:
   MANIFEST_URL: "https://raw.githubusercontent.com/${{ github.repository }}/gh-pages/manifest.json"
   # Both check times sit ~1.7-2.7h after their publish window, so 3.5h flags
-  # a genuine miss without firing on a merely slow run.
-  MAX_AGE_HOURS: "3.5"
+  # a genuine miss without firing on a merely slow run. Scheduled runs always
+  # get the default; the input only applies to a manual dispatch.
+  MAX_AGE_HOURS: ${{ inputs.max_age_hours || '3.5' }}
   ENGINE_REPOSITORY: ${{ vars.ENGINE_REPOSITORY || 'Somethinglikeu-hub/MobileInv' }}
   ENGINE_WORKFLOW: mobile-feed.yml
 

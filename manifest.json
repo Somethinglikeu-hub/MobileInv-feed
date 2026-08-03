@@ -283,10 +283,10 @@
     "trail_max_pct": 0.35,
     "trail_min_pct": 0.2
   },
-  "exported_at": "2026-08-03T10:18:02+00:00",
+  "exported_at": "2026-08-03T18:12:25+00:00",
   "live_tickers": {
     "filename": "live_tickers.json",
-    "latest_price_date": "2026-07-31",
+    "latest_price_date": "2026-08-03",
     "ticker_count": 624,
     "url": "https://raw.githubusercontent.com/Somethinglikeu-hub/MobileInv-feed/gh-pages/live_tickers.json"
   },
@@ -308,7 +308,7 @@
         "total_return_pct": 32.8542
       }
     },
-    "generated_at": "2026-08-03T10:18:01+00:00",
+    "generated_at": "2026-08-03T18:12:24+00:00",
     "nominal": {
       "alpha_pct": 952.8977,
       "benchmark_return_pct": 552.5892,
@@ -330,8 +330,8 @@
   "snapshot": {
     "compression": "gzip",
     "filename": "mobile_snapshot.db.gz",
-    "sha256": "2b97e1b9b1bc829ed895f2fc2a72b8e002cf579f2c106263e1953b0190176787",
-    "size_bytes": 10069604,
+    "sha256": "2345396aea87a1cb4fbd269abe272ee2ea9c3010c65318a2ca93ffb15e07558a",
+    "size_bytes": 10084476,
     "url": "https://raw.githubusercontent.com/Somethinglikeu-hub/MobileInv-feed/gh-pages/mobile_snapshot.db.gz"
   },
   "snapshot_version": 13

@@ -1288,6 +1288,7 @@ function renderStaleFeedBanner() {
 
 // --- PAGE 1: PICKS (Home) ---
 function renderPicksPage() {
+  const todayDate = localIsoDate();
   const home = queryOne('SELECT * FROM home_summary WHERE id = 1');
   const updateDateEl = document.getElementById('app-update-date');
   const priceState = getPriceDataState();
@@ -1322,6 +1323,12 @@ function renderPicksPage() {
       // to History, where gross and cost-adjusted model returns can be compared.
       const pnl = ((live / entry) - 1) * 100;
       const pnlClass = pnl >= 0 ? 'pos-text' : 'neg-text';
+      // Pre-open contract: the next rotation is published days before it can
+      // trade. Its model reference is a T-1 close, but the fill happens at
+      // T's open, so marking it to market reports a gain/loss on a position
+      // nobody holds yet. History already filters these rows out; the card
+      // must not contradict it.
+      const isStaged = Boolean(pos.selection_date) && pos.selection_date > todayDate;
       const safeTicker = escapeHtml(pos.ticker);
       const safeName = escapeHtml(pos.fullname || pos.name || '—');
       const quoteStatus = getQuoteStatus(pos.ticker);
@@ -1336,7 +1343,7 @@ function renderPicksPage() {
       // position is actually carried from an earlier rotation.
       const cycleRef = finiteNumber(pos.cycle_ref_price, null);
       let periodLine = '';
-      if (cycleRef != null && cycleRef > 0 && live > 0
+      if (!isStaged && cycleRef != null && cycleRef > 0 && live > 0
           && pos.cycle_ref_date && pos.cycle_ref_date !== pos.selection_date) {
         const periodPnl = ((live / cycleRef) - 1) * 100;
         const periodClass = periodPnl >= 0 ? 'pos-text' : 'neg-text';
@@ -1368,7 +1375,8 @@ function renderPicksPage() {
       // a vanishing chip would read as "danger passed").
       const stopPrice = finiteNumber(pos.stop_loss_price, 0);
       let stopChip = '';
-      if (stopPrice > 0 && live > 0) {
+      // A stop cannot be breached on a position that has not been bought.
+      if (!isStaged && stopPrice > 0 && live > 0) {
         if (live <= stopPrice) {
           stopChip = `<div class="stop-chip danger tabular-nums" title="Stop: ${stopPrice.toFixed(2)} TL">Stop kırıldı</div>`;
         } else {
@@ -1394,9 +1402,11 @@ function renderPicksPage() {
         </div>
         <div style="text-align: right;">
           <div class="tabular-nums" style="font-weight:700; font-size:14px;">${live.toFixed(2)} TL</div>
-          <div class="${pnlClass} tabular-nums" style="font-size:11px; font-weight:800; margin-top:2px;">
+          ${isStaged
+            ? `<div class="staged-chip" title="Bu pozisyon henüz alınmadı. Model referansı ${formatDateToTurkish(pos.signal_date || pos.selection_date)} kapanışıdır; gerçek alış ${formatDateToTurkish(pos.selection_date)} açılışında oluşur, bu yüzden kâr/zarar gösterilmez.">${formatDateToTurkish(pos.selection_date)} alınacak</div>`
+            : `<div class="${pnlClass} tabular-nums" style="font-size:11px; font-weight:800; margin-top:2px;">
             ${pnl >= 0 ? '+' : ''}${pnl.toFixed(2)}%
-          </div>
+          </div>`}
           ${periodLine}
           ${stopChip}
         </div>
@@ -2943,7 +2953,7 @@ async function initApp() {
     progressFill.style.width = '90%';
     
     const SQL = await initSqlJs({
-      locateFile: filename => `./vendor/${filename}?v=24`
+      locateFile: filename => `./vendor/${filename}?v=25`
     });
 
     try {

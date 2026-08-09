@@ -550,6 +550,21 @@ body {
   color: var(--danger);
 }
 
+/* Staged rotation: published before it can trade, so it carries no P&L.
+   Deliberately neutral — a green/red tone would read as a result. */
+.staged-chip {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 3px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  font-size: 9px;
+  font-weight: 800;
+  background: var(--surface-2, rgba(148, 163, 184, 0.12));
+  border: 1px solid var(--outline);
+  color: var(--text-muted);
+}
+
 /* Compact 0-100 score bar (browse rows) */
 .score-bar {
   width: 64px;

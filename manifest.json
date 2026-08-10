@@ -283,7 +283,7 @@
     "trail_max_pct": 0.35,
     "trail_min_pct": 0.2
   },
-  "exported_at": "2026-08-09T17:55:49+00:00",
+  "exported_at": "2026-08-10T08:24:11+00:00",
   "live_tickers": {
     "filename": "live_tickers.json",
     "latest_price_date": "2026-08-07",
@@ -293,45 +293,45 @@
   "real_returns": {
     "deflated": {
       "cpi_real": {
-        "cagr_pct": 3.3635,
+        "cagr_pct": 3.2198,
         "max_drawdown_pct": -45.2791,
-        "total_return_pct": 31.8415
+        "total_return_pct": 30.4755
       },
       "gram_gold": {
-        "cagr_pct": -9.6231,
+        "cagr_pct": -10.628,
         "max_drawdown_pct": -70.9252,
-        "total_return_pct": -57.0641
+        "total_return_pct": -61.0621
       },
       "usd": {
-        "cagr_pct": 3.4582,
+        "cagr_pct": 3.22,
         "max_drawdown_pct": -59.2008,
-        "total_return_pct": 32.8542
+        "total_return_pct": 30.478
       }
     },
-    "generated_at": "2026-08-09T17:55:48+00:00",
+    "generated_at": "2026-08-10T08:24:10+00:00",
     "nominal": {
-      "alpha_pct": 952.8977,
-      "benchmark_return_pct": 552.5892,
-      "cagr_pct": 39.4061,
+      "alpha_pct": 936.1706,
+      "benchmark_return_pct": 552.682,
+      "cagr_pct": 39.0222,
       "max_drawdown_pct": -28.2972,
-      "sharpe": 1.3435,
-      "total_return_pct": 1505.4869
+      "sharpe": 1.3353,
+      "total_return_pct": 1488.8526
     },
     "window": {
-      "end": "2026-07-27",
+      "end": "2026-08-10",
       "start": "2018-03-19"
     }
   },
   "rotation": {
-    "cycle_start": "2026-07-27",
-    "next_rotation_date": "2026-08-10",
+    "cycle_start": "2026-08-10",
+    "next_rotation_date": "2026-08-24",
     "rotation_weeks": 2
   },
   "snapshot": {
     "compression": "gzip",
     "filename": "mobile_snapshot.db.gz",
-    "sha256": "1423f3aa6c857790090a5fe9936821ed9f1157e3d0f9147bc021e21ca24e0d07",
-    "size_bytes": 10099023,
+    "sha256": "a443013797a2fc1c4bb68c56566b2eb85a0e0862df5372d5d78b162bab03bd7b",
+    "size_bytes": 10081018,
     "url": "https://raw.githubusercontent.com/Somethinglikeu-hub/MobileInv-feed/gh-pages/mobile_snapshot.db.gz"
   },
   "snapshot_version": 13

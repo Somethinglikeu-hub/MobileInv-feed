@@ -283,55 +283,55 @@
     "trail_max_pct": 0.35,
     "trail_min_pct": 0.2
   },
-  "exported_at": "2026-08-23T17:41:48+00:00",
+  "exported_at": "2026-08-24T07:50:34+00:00",
   "live_tickers": {
     "filename": "live_tickers.json",
-    "latest_price_date": "2026-08-21",
+    "latest_price_date": "2026-08-24",
     "ticker_count": 629,
     "url": "https://raw.githubusercontent.com/Somethinglikeu-hub/MobileInv-feed/gh-pages/live_tickers.json"
   },
   "real_returns": {
     "deflated": {
       "cpi_real": {
-        "cagr_pct": 3.2198,
+        "cagr_pct": 3.2467,
         "max_drawdown_pct": -45.2791,
-        "total_return_pct": 30.4755
+        "total_return_pct": 30.9222
       },
       "gram_gold": {
-        "cagr_pct": -10.4999,
+        "cagr_pct": -11.2933,
         "max_drawdown_pct": -70.9252,
-        "total_return_pct": -60.5911
+        "total_return_pct": -63.5968
       },
       "usd": {
-        "cagr_pct": 3.2257,
+        "cagr_pct": 3.1544,
         "max_drawdown_pct": -59.2008,
-        "total_return_pct": 30.539
+        "total_return_pct": 29.9378
       }
     },
-    "generated_at": "2026-08-23T17:41:48+00:00",
+    "generated_at": "2026-08-24T07:50:33+00:00",
     "nominal": {
-      "alpha_pct": 936.1706,
-      "benchmark_return_pct": 552.682,
-      "cagr_pct": 39.0222,
+      "alpha_pct": 908.5115,
+      "benchmark_return_pct": 585.7811,
+      "cagr_pct": 38.8704,
       "max_drawdown_pct": -28.2972,
-      "sharpe": 1.3353,
-      "total_return_pct": 1488.8526
+      "sharpe": 1.3336,
+      "total_return_pct": 1494.2925
     },
     "window": {
-      "end": "2026-08-10",
+      "end": "2026-08-24",
       "start": "2018-03-19"
     }
   },
   "rotation": {
-    "cycle_start": "2026-08-10",
-    "next_rotation_date": "2026-08-24",
+    "cycle_start": "2026-08-24",
+    "next_rotation_date": "2026-09-07",
     "rotation_weeks": 2
   },
   "snapshot": {
     "compression": "gzip",
     "filename": "mobile_snapshot.db.gz",
-    "sha256": "d7525930be25f0b774516000fde6d95e880f216e1efe5cab51f92ab04581b217",
-    "size_bytes": 10108215,
+    "sha256": "1821006c38f930ab2ffde336681edcec12100e2d6b3cf9a237b59539377a9b6c",
+    "size_bytes": 10087891,
     "url": "https://raw.githubusercontent.com/Somethinglikeu-hub/MobileInv-feed/gh-pages/mobile_snapshot.db.gz"
   },
   "snapshot_version": 13

@@ -138,7 +138,7 @@
             "total_return_pct": 36.4921
           }
         },
-        "friction_round_trip_pct": 1,
+        "friction_round_trip_pct": 1.0,
         "max_drawdown_pct": -30.0917,
         "max_weekly_return_pct": 20.6531,
         "min_weekly_return_pct": -12.2779,
@@ -252,7 +252,7 @@
     "intra_window_trailing": true,
     "price_jump_audit": {
       "flag_count": 0,
-      "ratio_threshold": 5,
+      "ratio_threshold": 5.0,
       "sample": [],
       "scanned_price_rows": 1013979
     },
@@ -290,10 +290,10 @@
     "trail_max_pct": 0.35,
     "trail_min_pct": 0.2
   },
-  "exported_at": "2026-09-18T15:26:35+00:00",
+  "exported_at": "2026-09-18T19:10:58+00:00",
   "live_tickers": {
     "filename": "live_tickers.json",
-    "latest_price_date": "2026-09-17",
+    "latest_price_date": "2026-09-18",
     "ticker_count": 632,
     "url": "https://raw.githubusercontent.com/Somethinglikeu-hub/MobileInv-feed/gh-pages/live_tickers.json"
   },
@@ -315,7 +315,7 @@
         "total_return_pct": 28.9368
       }
     },
-    "generated_at": "2026-09-18T11:31:10+00:00",
+    "generated_at": "2026-09-18T19:10:57+00:00",
     "nominal": {
       "alpha_pct": 930.9036,
       "benchmark_return_pct": 562.5244,
@@ -335,12 +335,11 @@
     "rotation_weeks": 4,
     "target_portfolio_size": 8
   },
-  "target_portfolio_size": 8,
   "snapshot": {
     "compression": "gzip",
     "filename": "mobile_snapshot.db.gz",
-    "sha256": "0e01afab4bf0b055c40afc0ec395e2c99542a19819362fb1d4977aa998b4e054",
-    "size_bytes": 10196444,
+    "sha256": "484bd45b3aa79237f85ab0c210d051440d7f73a7a32c02f4c7bec58bd66ed326",
+    "size_bytes": 10176925,
     "url": "https://raw.githubusercontent.com/Somethinglikeu-hub/MobileInv-feed/gh-pages/mobile_snapshot.db.gz"
   },
   "snapshot_version": 13

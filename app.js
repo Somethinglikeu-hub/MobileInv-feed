@@ -1468,7 +1468,7 @@ function rotationCountdownText() {
 // predates the field. Next rotation = last rotation Monday + N weeks.
 function getRotationInfo(rotationDate) {
   const weeks = Number(window.feedManifest?.rotation?.rotation_weeks) > 0
-    ? Number(window.feedManifest.rotation.rotation_weeks) : 2;
+    ? Number(window.feedManifest.rotation.rotation_weeks) : 4;
   let next = null;
   if (window.feedManifest?.rotation?.next_rotation_date) {
     const d = new Date(window.feedManifest.rotation.next_rotation_date + 'T00:00:00');
@@ -2136,7 +2136,9 @@ function renderDecisionSummary(home, positions) {
     ? `Fiyat kaynağı: ${formatQuoteCoverage(quoteSummary)}`
     : 'Fiyat kaynağı: portföy boş';
 
-  let weeklyRule = 'AL/SAT/TUT sinyallerine göre 5 hisse hedefini koru; aldığını sonraki rotasyona kadar (2 hafta) tut.';
+  const targetCount = Number(window.feedManifest?.target_portfolio_size) || positions.length || 8;
+  const rotWeeks = Number(window.feedManifest?.rotation?.rotation_weeks) || 4;
+  let weeklyRule = `AL/SAT/TUT sinyallerine göre ${targetCount} hisse hedefini koru; aldığını sonraki rotasyona kadar (${rotWeeks} hafta) tut.`;
   if (positions.length === 0) {
     weeklyRule = 'Portföy boş; veri yenile ve Main V2 seçimlerini kontrol et.';
   } else if (cashState === 'RISK_OFF') {
@@ -2160,7 +2162,7 @@ function renderDecisionSummary(home, positions) {
     }
   }
 
-  setTextById('decision-position-count', `${positions.length} / 5`);
+  setTextById('decision-position-count', `${positions.length} / ${targetCount}`);
   setTextById('decision-cash-state', `${cashState} • ${Math.round(cashPct * 100)}%`);
   setTextById('decision-model-return', baseCase ? formatPercent(baseCase.total_return_pct, 1) : '—');
   setTextById('decision-bist-return', baseCase ? formatPercent(baseCase.benchmark_return_pct, 1) : '—');
@@ -2263,7 +2265,8 @@ function openStockDetail(ticker) {
     banner.className = 'signal-banner pos-text';
     banner.style.backgroundColor = 'rgba(34, 197, 94, 0.08)';
     banner.style.borderColor = 'rgba(34, 197, 94, 0.2)';
-    bannerText.textContent = 'Model bu hisseyi bu rotasyonda portföye aldı — ALIŞ. 2 hafta tut; sonraki rotasyona kadar satma (stop uyarısı hariç).';
+    const rotWeeks = Number(window.feedManifest?.rotation?.rotation_weeks) || 4;
+    bannerText.textContent = `Model bu hisseyi bu rotasyonda portföye aldı — ALIŞ. ${rotWeeks} hafta tut; sonraki rotasyona kadar satma (stop uyarısı hariç).`;
   } else {
     banner.style.display = 'none';
   }

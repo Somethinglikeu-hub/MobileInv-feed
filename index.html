@@ -168,7 +168,7 @@
               <span class="material-symbols-rounded tint-tertiary">psychology</span>
               <h3>Zeki Sinyaller</h3>
             </div>
-            <p class="signals-desc">Modelin gerçekleşen rotasyon kararları (pozisyon verisinden). Rotasyon 2 haftada bir Pazartesi yapılır; alınan hisse sonraki rotasyona kadar tutulur.</p>
+            <p class="signals-desc">Modelin gerçekleşen rotasyon kararları (pozisyon verisinden). Rotasyon 4 haftada bir (aylık) Pazartesi yapılır; alınan hisse sonraki rotasyona kadar tutulur.</p>
             <div id="signals-list" class="list-container spaced-y">
               <!-- Dynamically populated suggested actions -->
             </div>
@@ -382,25 +382,28 @@
               <li><strong>Sektöre özel modeller:</strong> Banka (CAR/NIM/NPL), Holding (NAD iskontosu), GYO, Sigorta ayrı ölçülür.</li>
             </ul>
 
-            <p><strong>2. Portföy kurgusu (Index-Aware V2)</strong></p>
+            <p><strong>2. Portföy kurgusu (Index-Aware V2 — 8 Hisse & Likidite Kalkanı)</strong></p>
             <ul>
-              <li>Model skoru + XU100'e göreli güç + teknik harmanı ile en iyi 5 hisse.</li>
-              <li>En az 2 BIST100 hissesi, en fazla 2 BIST100-dışı; sektör başına en fazla 2, banka en fazla 2.</li>
+              <li>Buffett kalite + Graham değer + XU100'e göreli güç harmanı ile dengeli <strong>8 hisse</strong>.</li>
+              <li><strong>En az 6 BIST 100 dev şirketi</strong>, en fazla 2 BIST 100-dışı; sektör başına en fazla 2, banka en fazla 2.</li>
+              <li>Minimum 50 milyon TL 20 günlük ortalama hacim likidite filtresi; sığ yan tahtalara sermaye teslim edilmez.</li>
               <li>Aşırı benzer hisseleri elemek için korelasyon filtresi (0,70).</li>
-              <li>Tutulan güçlü hisseyi gereksiz yere değiştirmeme (turnover koruması).</li>
+              <li>Mevcut hisseyi koruyan %15 turnover koruması (gereksiz al-sat komisyonunu ve makas kaybını keser).</li>
             </ul>
 
             <p><strong>3. Zamanlama & disiplin</strong></p>
             <ul>
-              <li><strong>2 haftada bir rotasyon</strong> (Pazartesi); aldığını sonraki rotasyona kadar tut.</li>
-              <li><strong>4 seviyeli nakit rejimi</strong> (NORMAL / CAUTION / DEFENSIVE / RISK_OFF): volatilite + makro (CDS, reel faiz) harmanı, ani gidiş-gelişi önleyen histerezis.</li>
+              <li><strong>4 haftada bir (aylık) rotasyon</strong> (Pazartesi); aldığını sonraki rotasyona kadar tut.</li>
+              <li><strong>Dinamik nakit tamponu & 4 seviyeli rejim:</strong> Yüksek faiz ortamında (%50 TCMB) Para Piyasası Fonu faiz kalkanı (%20 nakit).</li>
             </ul>
 
-            <p><strong>4. Risk yönetimi</strong></p>
+            <p><strong>4. Risk yönetimi (Akıllı Kırıcılar & Koruma)</strong></p>
             <ul>
-              <li><strong>ATR-tabanlı stop-loss</strong> (hissenin kendi oynaklığına göre) + yukarı kilitlenen <strong>trailing stop</strong>.</li>
+              <li><strong>Gürültüye Dayanıklı %18 ATR Stop-Loss:</strong> Kaliteli şirketleri piyasa gürültüsünde dipte satmayı engelleyen esnek bant.</li>
+              <li><strong>Temel Bozulma Kırıcı (Fundamental Breaker):</strong> Şirketin Piotroski F-Skoru 4'ün altına düşerse rotasyon beklenmeden anında çıkış.</li>
+              <li><strong>Zaman Aşımı Kırıcı (Time Breaker):</strong> 60 gün boyunca BIST 100'ün %10 gerisinde kalan hareketsiz ölü sermayeden rotasyonda otomatik çıkış.</li>
               <li>Hedef fiyat: DCF içsel değeri ya da model-implied (kartta hangisi olduğu belirtilir).</li>
-              <li>Günlük çıkış kontrolü; stop/hedef tetiklenince Telegram uyarısı, boşalan yer sonraki rotasyona kadar nakitte.</li>
+              <li>Günlük çıkış kontrolü; stop/hedef tetiklenince Telegram uyarısı, boşalan yer sonraki rotasyona kadar nakitte risksiz faizde kalır.</li>
               <li>Pozisyon sürekliliği: tutulan hisse orijinal model maliyet esasını korur (her rotasyonda sıfırlanmaz).</li>
             </ul>
 
@@ -426,11 +429,11 @@
             <div class="usage-flow">
               <div class="flow-step">
                 <span>1</span>
-                <p><strong>Rotasyon 2 haftada bir Pazartesi yapılır.</strong> Portföy önceki tamamlanmış seans verisiyle borsa açılmadan hazırlanır. Önce SAT, sonra AL emirlerini ilk açılışta ver. Ekrandaki model referansı model denetimi içindir; History sekmesinde getiriyi maliyetsiz veya seçtiğin broker maliyetleriyle karşılaştırabilirsin. <strong>Aldığın hisseyi 2 hafta tutacaksın</strong> — stop uyarısı hariç sonraki rotasyona kadar işlem yapma.</p>
+                <p><strong>Rotasyon 4 haftada bir (aylık) Pazartesi yapılır.</strong> Portföy önceki tamamlanmış seans verisiyle borsa açılmadan hazırlanır. Önce SAT, sonra AL emirlerini ilk açılışta ver. Ekrandaki model referansı model denetimi içindir; History sekmesinde getiriyi maliyetsiz veya seçtiğin broker maliyetleriyle karşılaştırabilirsin. <strong>Aldığın hisseyi 4 hafta tutacaksın</strong> — stop uyarısı hariç sonraki rotasyona kadar işlem yapma.</p>
               </div>
               <div class="flow-step">
                 <span>2</span>
-                <p><strong>Rotasyonlar arasında yalnızca kırmızı uyarılara tepki ver.</strong> Model stop-loss / hedef fiyat tetiklenirse pozisyonu otomatik kapatır ve ekranda "Rotasyon Arasında Çıkıldı" bölümünde gösterir — aynı gün sen de sat; yeri sonraki rotasyona kadar nakitte kalır. Uyarı yoksa hiçbir şey yapma; ara haftadaki skor oynamalarına göre işlem yapma, erken satış modelin ölçülmüş avantajını bozar.</p>
+                <p><strong>Rotasyonlar arasında yalnızca kırmızı uyarılara tepki ver.</strong> Model stop-loss / hedef fiyat / temel bozulma tetiklenirse pozisyonu otomatik kapatır ve ekranda "Rotasyon Arasında Çıkıldı" bölümünde gösterir — aynı gün sen de sat; yeri sonraki rotasyona kadar nakitte faiz kazanır. Uyarı yoksa hiçbir şey yapma; ara günlerdeki skor oynamalarına göre erken satış yapmak modelin kâr potansiyelini bozar.</p>
               </div>
               <div class="flow-step">
                 <span>3</span>
@@ -474,29 +477,29 @@
           </div>
 
           <div class="about-card">
-            <h3>Model Ağırlıkları (ALPHA temel set)</h3>
+            <h3>Model Ağırlıkları (ALPHA V2 Temel Set)</h3>
             <div class="about-weight-row">
-              <span>Değer — Graham + DCF İçsel Değer</span>
-              <strong>%30</strong>
+              <span>Buffett Kalite (Reel ROE, Düşük Borç, Owner Earnings)</span>
+              <strong>%35</strong>
             </div>
             <div class="about-weight-row">
-              <span>Momentum (12-1, akademik skip)</span>
-              <strong>%25</strong>
+              <span>Graham Değer (İçsel Değer İskontosu & DCF)</span>
+              <strong>%20</strong>
             </div>
             <div class="about-weight-row">
-              <span>Buffett Kalite (Reel ROE, Owner Earnings)</span>
+              <span>Temettü Verimi & Sürdürülebilir Dağıtım</span>
               <strong>%15</strong>
             </div>
             <div class="about-weight-row">
-              <span>Piotroski F-Score Finansal Güç</span>
+              <span>Momentum (12-1 Göreli Güç & Trend)</span>
               <strong>%15</strong>
             </div>
             <div class="about-weight-row">
-              <span>Büyüme (Lynch PEG, Magic Formula)</span>
+              <span>Teknik Trend Onayı (200 Günlük Ağırlıklı Ortalama)</span>
               <strong>%10</strong>
             </div>
             <div class="about-weight-row">
-              <span>Teknik Trend Onayı</span>
+              <span>Piotroski F-Score Finansal Sağlamlık</span>
               <strong>%5</strong>
             </div>
             <p class="signals-desc" style="margin-top:10px;">Piyasa rejimi (BULL / BEAR / volatilite) değiştiğinde motor bu ağırlıkları rejim setine göre otomatik kaydırır — örn. ayı piyasasında kalite ve değer ağırlığı artar, büyüme azalır. Banka, holding, GYO ve sigorta şirketleri kendi sektörel modelleriyle puanlanır.</p>
@@ -505,11 +508,11 @@
           <div class="about-card">
             <h3>Portföy Yönetim Kuralları</h3>
             <ul class="about-rules-list">
-              <li><strong>Konsantre Portföy:</strong> Model her rebalansta en fazla 5 ideal şirkete odaklanır; sektör başına en fazla 2 hisse ve yüksek korelasyonlu çiftler filtrelenir.</li>
-              <li><strong>2 Haftalık Rotasyon:</strong> Portföy 2 haftada bir Pazartesi sabahı rebalans edilir; alınan hisse bir sonraki rotasyona kadar (2 hafta) tutulur. Kadans, 2018-2026 walk-forward backtest kalibrasyonuyla seçildi (haftalık al-sata göre daha yüksek getiri, daha düşük drawdown ve yarıya yakın işlem maliyeti). Stop-loss kontrolü ise her gün çalışmaya devam eder.</li>
-              <li><strong>Turnover Koruması:</strong> Portföydeki hisse, üst sıralamadan belirgin şekilde düşmedikçe modelde tutulur; gereksiz al-sat maliyeti azaltılır.</li>
-              <li><strong>Otomatik Stop-Loss:</strong> Fiyat ATR-tabanlı stop seviyesinin (girişten ~%10-25) altına inerse veya hedef fiyata ulaşırsa model pozisyonu hafta içinde otomatik kapatır ve ekranda gösterir.</li>
-              <li><strong>Nakit Koruma:</strong> Piyasa ve makro stres birleşince model otomatik olarak nakit koruma kademelerini (CAUTION, DEFENSIVE, RISK_OFF) etkinleştirir; kademeler yapışkandır, günlük gürültüyle değişmez.</li>
+              <li><strong>Dengeli 8 Hisse Portföy:</strong> Model her rebalansta en az 6 tanesi BIST 100 dev şirketine ait 8 güçlü hisseye odaklanır; sektör başına en fazla 2 hisse ve yüksek korelasyonlu çiftler filtrelenir.</li>
+              <li><strong>Aylık (4 Haftalık) Rotasyon:</strong> Portföy 4 haftada bir Pazartesi sabahı rebalans edilir; alınan hisse sonraki rotasyona kadar (4 hafta) tutulur. Aylık kadans gereksiz işlem komisyonunu ve makas kaybını önler.</li>
+              <li><strong>Turnover Koruması (%15 Eşik):</strong> Portföydeki hisse, üst sıralamadaki yeni adaydan en az %15 daha düşük kalmadıkça modelde tutulur; gereksiz al-sat maliyeti kesilir.</li>
+              <li><strong>Akıllı Çıkış Kırıcıları:</strong> Fiyat %18 ATR stop seviyesinin altına inerse, bilanço F-Skoru 4'ün altına gerilerse ya da hisse 60 gün endeksin %10 gerisinde kalırsa pozisyon otomatik kapatılır.</li>
+              <li><strong>Nakit ve Faiz Tamponu:</strong> TCMB politika faizinin yüksek olduğu dönemlerde model nakit tamponunu (%20) Para Piyasası Fonunda işleterek hem riski düşürür hem risksiz getiri üretir.</li>
             </ul>
           </div>
 

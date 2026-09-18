@@ -331,9 +331,10 @@
   },
   "rotation": {
     "cycle_start": "2026-09-07",
-    "next_rotation_date": "2026-09-21",
-    "rotation_weeks": 2
+    "next_rotation_date": "2026-10-05",
+    "rotation_weeks": 4
   },
+  "target_portfolio_size": 8,
   "snapshot": {
     "compression": "gzip",
     "filename": "mobile_snapshot.db.gz",

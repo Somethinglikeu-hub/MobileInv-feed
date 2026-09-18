@@ -101,8 +101,8 @@ if (!appJs.includes("PortfolioCosts.normalizeSettings")
   throw new Error("Broker-cost profile (gross/net) wiring is incomplete.");
 }
 
-if (!appJs.includes("sonraki rotasyona kadar") || !indexHtml.includes("2 haftada bir Pazartesi")) {
-  throw new Error("Bi-weekly rotation hold-rule copy is missing from the PWA.");
+if (!appJs.includes("sonraki rotasyona kadar") || (!indexHtml.includes("4 haftada bir Pazartesi") && !indexHtml.includes("2 haftada bir Pazartesi"))) {
+  throw new Error("Rotation hold-rule copy is missing from the PWA.");
 }
 
 // B1 continuity (v16): rotation detection must prefer cycle_ref_date and the

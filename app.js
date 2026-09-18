@@ -2946,7 +2946,7 @@ async function initApp() {
     progressFill.style.width = '90%';
     
     const SQL = await initSqlJs({
-      locateFile: filename => `./vendor/${filename}?v=24`
+      locateFile: filename => `./vendor/${filename}?v=25`
     });
 
     try {

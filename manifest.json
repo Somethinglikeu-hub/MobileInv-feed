@@ -138,7 +138,7 @@
             "total_return_pct": 36.4921
           }
         },
-        "friction_round_trip_pct": 1.0,
+        "friction_round_trip_pct": 1,
         "max_drawdown_pct": -30.0917,
         "max_weekly_return_pct": 20.6531,
         "min_weekly_return_pct": -12.2779,
@@ -252,7 +252,7 @@
     "intra_window_trailing": true,
     "price_jump_audit": {
       "flag_count": 0,
-      "ratio_threshold": 5.0,
+      "ratio_threshold": 5,
       "sample": [],
       "scanned_price_rows": 1013979
     },
@@ -330,9 +330,10 @@
     }
   },
   "rotation": {
-    "cycle_start": "2026-09-07",
-    "next_rotation_date": "2026-10-05",
-    "rotation_weeks": 4
+    "cycle_start": "2026-08-24",
+    "next_rotation_date": "2026-09-21",
+    "rotation_weeks": 4,
+    "target_portfolio_size": 8
   },
   "target_portfolio_size": 8,
   "snapshot": {

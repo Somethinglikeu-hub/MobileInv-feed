@@ -19,7 +19,7 @@
 
   <!-- Icons for PWA -->
   <link rel="apple-touch-icon" href="./icons/icon-192.png">
-  <link rel="manifest" href="./manifest.webmanifest?v=25">
+  <link rel="manifest" href="./manifest.webmanifest?v=26">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,16 +30,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
 
   <!-- Stylesheet -->
-  <link rel="stylesheet" href="./index.css?v=25">
+  <link rel="stylesheet" href="./index.css?v=26">
 
   <!-- Local runtime dependencies: first launch must not depend on a CDN. -->
-  <script src="./vendor/pako.min.js?v=25"></script>
-  <script src="./vendor/sql-wasm.js?v=25"></script>
-  <script src="./vendor/apexcharts.min.js?v=25"></script>
-  <script src="./portfolio-costs.js?v=25"></script>
+  <script src="./vendor/pako.min.js?v=26"></script>
+  <script src="./vendor/sql-wasm.js?v=26"></script>
+  <script src="./vendor/apexcharts.min.js?v=26"></script>
+  <script src="./portfolio-costs.js?v=26"></script>
 
   <!-- Main Application Logic (deferred) -->
-  <script src="./app.js?v=25" defer></script>
+  <script src="./app.js?v=26" defer></script>
 </head>
 <body>
 
@@ -388,20 +388,20 @@
               <li><strong>En az 6 BIST 100 dev şirketi</strong>, en fazla 2 BIST 100-dışı; sektör başına en fazla 2, banka en fazla 2.</li>
               <li>Minimum 50 milyon TL 20 günlük ortalama hacim likidite filtresi; sığ yan tahtalara sermaye teslim edilmez.</li>
               <li>Aşırı benzer hisseleri elemek için korelasyon filtresi (0,70).</li>
-              <li>Mevcut hisseyi koruyan %15 turnover koruması (gereksiz al-sat komisyonunu ve makas kaybını keser).</li>
+              <li>Turnover koruması: ilk sıralarda kalan mevcut hisse, yeni aday ondan en az %5 yüksek skor almadıkça korunur (gereksiz al-sat maliyetini keser).</li>
             </ul>
 
             <p><strong>3. Zamanlama & disiplin</strong></p>
             <ul>
               <li><strong>4 haftada bir (aylık) rotasyon</strong> (Pazartesi); aldığını sonraki rotasyona kadar tut.</li>
-              <li><strong>Dinamik nakit tamponu & 4 seviyeli rejim:</strong> Yüksek faiz ortamında (%50 TCMB) Para Piyasası Fonu faiz kalkanı (%20 nakit).</li>
+              <li><strong>4 seviyeli nakit rejimi</strong> (NORMAL %0 / CAUTION %25 / DEFENSIVE %50 / RISK_OFF %75): XU100 trendi + oynaklık ve makro (reel faiz) harmanı; her gün değerlendirilir, geçiş için 5 gün onay ve 20 gün bekleme şartı vardır. Boşta kalan nakdi para piyasası fonunda tutmak senin tercihin; backtest nakde faiz eklemez.</li>
             </ul>
 
             <p><strong>4. Risk yönetimi (Akıllı Kırıcılar & Koruma)</strong></p>
             <ul>
-              <li><strong>Gürültüye Dayanıklı %18 ATR Stop-Loss:</strong> Kaliteli şirketleri piyasa gürültüsünde dipte satmayı engelleyen esnek bant.</li>
-              <li><strong>Temel Bozulma Kırıcı (Fundamental Breaker):</strong> Şirketin Piotroski F-Skoru 4'ün altına düşerse rotasyon beklenmeden anında çıkış.</li>
-              <li><strong>Zaman Aşımı Kırıcı (Time Breaker):</strong> 60 gün boyunca BIST 100'ün %10 gerisinde kalan hareketsiz ölü sermayeden rotasyonda otomatik çıkış.</li>
+              <li><strong>ATR tabanlı stop-loss:</strong> giriş stopu hissenin oynaklığına göre 2×ATR (girişin %10–25 altı), sonra yukarı kilitlenen trailing stop (%20–35).</li>
+              <li><strong>Temel bozulma kırıcı:</strong> Piotroski F-Skoru 4'ün altına düşerse günlük kontrolde çıkış (rotasyon beklenmez).</li>
+              <li><strong>Zaman kırıcı:</strong> en az 60 gündür tutulan ve girişten beri BIST 100'ün %10'dan fazla gerisinde kalan hisse günlük kontrolde kapatılır.</li>
               <li>Hedef fiyat: DCF içsel değeri ya da model-implied (kartta hangisi olduğu belirtilir).</li>
               <li>Günlük çıkış kontrolü; stop/hedef tetiklenince Telegram uyarısı, boşalan yer sonraki rotasyona kadar nakitte risksiz faizde kalır.</li>
               <li>Pozisyon sürekliliği: tutulan hisse orijinal model maliyet esasını korur (her rotasyonda sıfırlanmaz).</li>
@@ -487,12 +487,12 @@
               <strong>%20</strong>
             </div>
             <div class="about-weight-row">
-              <span>Temettü Verimi & Sürdürülebilir Dağıtım</span>
-              <strong>%15</strong>
+              <span>Büyüme (Lynch PEG, Magic Formula)</span>
+              <strong>%10</strong>
             </div>
             <div class="about-weight-row">
               <span>Momentum (12-1 Göreli Güç & Trend)</span>
-              <strong>%15</strong>
+              <strong>%20</strong>
             </div>
             <div class="about-weight-row">
               <span>Teknik Trend Onayı (200 Günlük Ağırlıklı Ortalama)</span>
@@ -510,9 +510,9 @@
             <ul class="about-rules-list">
               <li><strong>Dengeli 8 Hisse Portföy:</strong> Model her rebalansta en az 6 tanesi BIST 100 dev şirketine ait 8 güçlü hisseye odaklanır; sektör başına en fazla 2 hisse ve yüksek korelasyonlu çiftler filtrelenir.</li>
               <li><strong>Aylık (4 Haftalık) Rotasyon:</strong> Portföy 4 haftada bir Pazartesi sabahı rebalans edilir; alınan hisse sonraki rotasyona kadar (4 hafta) tutulur. Aylık kadans gereksiz işlem komisyonunu ve makas kaybını önler.</li>
-              <li><strong>Turnover Koruması (%15 Eşik):</strong> Portföydeki hisse, üst sıralamadaki yeni adaydan en az %15 daha düşük kalmadıkça modelde tutulur; gereksiz al-sat maliyeti kesilir.</li>
-              <li><strong>Akıllı Çıkış Kırıcıları:</strong> Fiyat %18 ATR stop seviyesinin altına inerse, bilanço F-Skoru 4'ün altına gerilerse ya da hisse 60 gün endeksin %10 gerisinde kalırsa pozisyon otomatik kapatılır.</li>
-              <li><strong>Nakit ve Faiz Tamponu:</strong> TCMB politika faizinin yüksek olduğu dönemlerde model nakit tamponunu (%20) Para Piyasası Fonunda işleterek hem riski düşürür hem risksiz getiri üretir.</li>
+              <li><strong>Turnover Koruması (%5 Eşik):</strong> İlk sıralarda kalan mevcut hisse, yeni aday ondan en az %5 yüksek skor almadıkça tutulur; gereksiz al-sat maliyeti kesilir.</li>
+              <li><strong>Akıllı Çıkış Kırıcıları:</strong> Fiyat ATR/trailing stopun altına inerse, F-Skoru 4'ün altına gerilerse ya da en az 60 gündür tutulan hisse endeksin %10'dan fazla gerisinde kalırsa pozisyon günlük kontrolde kapatılır. Stop ve zaman kırıcı backtest'te de aynı kuralla uygulanır.</li>
+              <li><strong>Nakit Rejimi:</strong> Piyasa ve makro stres birleşince model nakit hedefini kademeli yükseltir (%25/%50/%75); kararlar her gün verilir, gidiş-gelişi önleyen onay ve bekleme süreleri vardır. Nakit tavsiyedir, otomatik satış yapmaz.</li>
             </ul>
           </div>
 

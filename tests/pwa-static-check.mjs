@@ -33,9 +33,9 @@ for (const file of requiredFiles) {
 }
 
 for (const localRuntime of [
-  "./vendor/pako.min.js?v=25",
-  "./vendor/sql-wasm.js?v=25",
-  "./vendor/apexcharts.min.js?v=25",
+  "./vendor/pako.min.js?v=26",
+  "./vendor/sql-wasm.js?v=26",
+  "./vendor/apexcharts.min.js?v=26",
 ]) {
   if (!indexHtml.includes(localRuntime)) {
     throw new Error(`index.html does not reference local runtime: ${localRuntime}`);
@@ -46,8 +46,8 @@ if (/cdnjs\.cloudflare\.com\/ajax\/libs\/(?:pako|sql\.js)|cdn\.jsdelivr\.net\/np
   throw new Error("Core PWA runtime still depends on an external CDN.");
 }
 
-if (!serviceWorker.includes("bist-picker-shell-v25")) {
-  throw new Error("Service worker cache version was not bumped to v25.");
+if (!serviceWorker.includes("bist-picker-shell-v26")) {
+  throw new Error("Service worker cache version was not bumped to v26.");
 }
 
 if (!appJs.includes("Snapshot bütünlük kontrolü başarısız")) {
@@ -62,11 +62,11 @@ if (!appJs.includes("MobileInv-feed/live-data/live_prices.json")) {
   throw new Error("PWA near-live price feed URL is missing.");
 }
 
-if (!appJs.includes("./vendor/${filename}?v=25")) {
-  throw new Error("sql.js WASM locateFile cache version was not bumped to v25.");
+if (!appJs.includes("./vendor/${filename}?v=26")) {
+  throw new Error("sql.js WASM locateFile cache version was not bumped to v26.");
 }
 
-if (!indexHtml.includes("./portfolio-costs.js?v=25")) {
+if (!indexHtml.includes("./portfolio-costs.js?v=26")) {
   throw new Error("Portfolio cost profile runtime is missing.");
 }
 

@@ -477,32 +477,33 @@
           </div>
 
           <div class="about-card">
-            <h3>Model Ağırlıkları (ALPHA V2 Temel Set)</h3>
+            <h3>Model Ağırlıkları (V2)</h3>
+            <p class="signals-desc">Reel politika faizi pozitifken (şu anki durum) kullanılan set:</p>
             <div class="about-weight-row">
               <span>Buffett Kalite (Reel ROE, Düşük Borç, Owner Earnings)</span>
               <strong>%35</strong>
             </div>
             <div class="about-weight-row">
-              <span>Graham Değer (İçsel Değer İskontosu & DCF)</span>
-              <strong>%20</strong>
+              <span>Graham + DCF Değer (İçsel Değer İskontosu)</span>
+              <strong>%25</strong>
+            </div>
+            <div class="about-weight-row">
+              <span>Momentum (12-1 Göreli Güç & Trend)</span>
+              <strong>%15</strong>
             </div>
             <div class="about-weight-row">
               <span>Büyüme (Lynch PEG, Magic Formula)</span>
               <strong>%10</strong>
             </div>
             <div class="about-weight-row">
-              <span>Momentum (12-1 Göreli Güç & Trend)</span>
-              <strong>%20</strong>
-            </div>
-            <div class="about-weight-row">
-              <span>Teknik Trend Onayı (200 Günlük Ağırlıklı Ortalama)</span>
+              <span>Teknik Trend Onayı (200 Günlük Ortalama, RSI)</span>
               <strong>%10</strong>
             </div>
             <div class="about-weight-row">
               <span>Piotroski F-Score Finansal Sağlamlık</span>
               <strong>%5</strong>
             </div>
-            <p class="signals-desc" style="margin-top:10px;">Piyasa rejimi (BULL / BEAR / volatilite) değiştiğinde motor bu ağırlıkları rejim setine göre otomatik kaydırır — örn. ayı piyasasında kalite ve değer ağırlığı artar, büyüme azalır. Banka, holding, GYO ve sigorta şirketleri kendi sektörel modelleriyle puanlanır.</p>
+            <p class="signals-desc" style="margin-top:10px;">Reel faiz sıfır veya negatife dönerse temel sete geçilir: Kalite %35, Değer %20, Momentum %20, Büyüme %10, Teknik %10, Piotroski %5. Seçilen set ardından makro rejime göre hafifçe kaydırılır (RISK_ON'da büyüme/momentum, RISK_OFF'ta kalite/değer ağırlığı artar). Temettü verimi ayrı skor olarak hesaplanır ama ALPHA ağırlığı %0'dır. Banka, holding, GYO ve sigorta şirketleri kendi sektörel modelleriyle puanlanır.</p>
           </div>
 
           <div class="about-card">

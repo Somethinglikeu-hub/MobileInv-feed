@@ -290,7 +290,7 @@
     "trail_max_pct": 0.35,
     "trail_min_pct": 0.2
   },
-  "exported_at": "2026-10-04T20:14:42+00:00",
+  "exported_at": "2026-10-05T14:56:08+00:00",
   "live_tickers": {
     "filename": "live_tickers.json",
     "latest_price_date": "2026-10-02",
@@ -300,32 +300,32 @@
   "real_returns": {
     "deflated": {
       "cpi_real": {
-        "cagr_pct": -10.4507,
-        "max_drawdown_pct": -60.9081,
-        "total_return_pct": -60.9081
+        "cagr_pct": -10.7773,
+        "max_drawdown_pct": -62.2703,
+        "total_return_pct": -62.2703
       },
       "gram_gold": {
-        "cagr_pct": -22.036,
+        "cagr_pct": -21.7053,
         "max_drawdown_pct": -88.0612,
-        "total_return_pct": -87.9746
+        "total_return_pct": -87.65
       },
       "usd": {
-        "cagr_pct": -10.1994,
+        "cagr_pct": -10.4111,
         "max_drawdown_pct": -72.0966,
-        "total_return_pct": -59.9649
+        "total_return_pct": -60.9259
       }
     },
-    "generated_at": "2026-10-04T20:14:41+00:00",
+    "generated_at": "2026-10-05T14:56:07+00:00",
     "nominal": {
-      "alpha_pct": -109.5855,
-      "benchmark_return_pct": 507.9241,
-      "cagr_pct": 20.7738,
+      "alpha_pct": -69.3361,
+      "benchmark_return_pct": 459.1609,
+      "cagr_pct": 20.4286,
       "max_drawdown_pct": -26.9903,
-      "sharpe": 0.8858,
-      "total_return_pct": 398.3386
+      "sharpe": 0.8752,
+      "total_return_pct": 389.8248
     },
     "window": {
-      "end": "2026-09-21",
+      "end": "2026-10-05",
       "start": "2018-03-19"
     }
   },
@@ -338,8 +338,8 @@
   "snapshot": {
     "compression": "gzip",
     "filename": "mobile_snapshot.db.gz",
-    "sha256": "d0ce4fc4c1d8572c08deb083539b7267459e82b1343517287a0a7cf7ffa41010",
-    "size_bytes": 10147270,
+    "sha256": "90ce4b0518572a8bb5385b611a1faf4bed7c2c448d34626ffabe9f90b7ea5ff9",
+    "size_bytes": 10126949,
     "url": "https://raw.githubusercontent.com/Somethinglikeu-hub/MobileInv-feed/gh-pages/mobile_snapshot.db.gz"
   },
   "snapshot_version": 13

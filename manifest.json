@@ -8,12 +8,12 @@
         "case": "base",
         "deflated": {
           "cpi_real": {
-            "alpha_pct": 18.565,
-            "benchmark_total_return_pct": -52.3119,
-            "cagr_pct": -4.723,
+            "alpha_pct": 18.2295,
+            "benchmark_total_return_pct": -53.1737,
+            "cagr_pct": -4.9269,
             "max_drawdown_pct": -50.9096,
-            "sharpe": -0.0742,
-            "total_return_pct": -33.7469
+            "sharpe": -0.0825,
+            "total_return_pct": -34.9442
           },
           "gram_gold": {
             "alpha_pct": 5.7109,
@@ -61,12 +61,12 @@
         "case": "stress_0.75pct",
         "deflated": {
           "cpi_real": {
-            "alpha_pct": 11.2993,
-            "benchmark_total_return_pct": -52.3119,
-            "cagr_pct": -6.0147,
+            "alpha_pct": 11.095,
+            "benchmark_total_return_pct": -53.1737,
+            "cagr_pct": -6.216,
             "max_drawdown_pct": -53.7386,
-            "sharpe": -0.1292,
-            "total_return_pct": -41.0126
+            "sharpe": -0.1374,
+            "total_return_pct": -42.0787
           },
           "gram_gold": {
             "alpha_pct": 3.4758,
@@ -114,12 +114,12 @@
         "case": "stress_1.00pct",
         "deflated": {
           "cpi_real": {
-            "alpha_pct": 6.5965,
-            "benchmark_total_return_pct": -52.3119,
-            "cagr_pct": -6.9279,
+            "alpha_pct": 6.4773,
+            "benchmark_total_return_pct": -53.1737,
+            "cagr_pct": -7.1272,
             "max_drawdown_pct": -55.6619,
-            "sharpe": -0.1685,
-            "total_return_pct": -45.7154
+            "sharpe": -0.1766,
+            "total_return_pct": -46.6964
           },
           "gram_gold": {
             "alpha_pct": 2.0292,
@@ -167,12 +167,12 @@
         "case": "stress_1.50pct",
         "deflated": {
           "cpi_real": {
-            "alpha_pct": -1.7269,
-            "benchmark_total_return_pct": -52.3119,
-            "cagr_pct": -8.7308,
+            "alpha_pct": -1.6957,
+            "benchmark_total_return_pct": -53.1737,
+            "cagr_pct": -8.9262,
             "max_drawdown_pct": -59.2787,
-            "sharpe": -0.2467,
-            "total_return_pct": -54.0388
+            "sharpe": -0.2548,
+            "total_return_pct": -54.8694
           },
           "gram_gold": {
             "alpha_pct": -0.5313,
@@ -214,7 +214,7 @@
         "years": 8.5092
       }
     ],
-    "end_date": "2026-10-04",
+    "end_date": "2026-10-11",
     "execution_mode": "same_day_open",
     "gates": [
       {
@@ -248,13 +248,13 @@
         "status": "warn"
       }
     ],
-    "generated_at": "2026-10-04T09:54:08+00:00",
+    "generated_at": "2026-10-11T10:05:45+00:00",
     "intra_window_trailing": true,
     "price_jump_audit": {
       "flag_count": 0,
       "ratio_threshold": 5.0,
       "sample": [],
-      "scanned_price_rows": 1023561
+      "scanned_price_rows": 1026696
     },
     "rebalance_anchor_date": "2026-06-29",
     "rebalance_every_n_weeks": 4,
@@ -290,7 +290,7 @@
     "trail_max_pct": 0.35,
     "trail_min_pct": 0.2
   },
-  "exported_at": "2026-10-09T20:55:47+00:00",
+  "exported_at": "2026-10-11T21:00:51+00:00",
   "live_tickers": {
     "filename": "live_tickers.json",
     "latest_price_date": "2026-10-09",
@@ -315,7 +315,7 @@
         "total_return_pct": -60.9544
       }
     },
-    "generated_at": "2026-10-09T20:55:46+00:00",
+    "generated_at": "2026-10-11T21:00:50+00:00",
     "nominal": {
       "alpha_pct": -69.3361,
       "benchmark_return_pct": 459.1609,
@@ -338,8 +338,8 @@
   "snapshot": {
     "compression": "gzip",
     "filename": "mobile_snapshot.db.gz",
-    "sha256": "78241681a6333fadf3f5d2fde64df9a52c1994df2be93bfca8f0f6d8ba1513c8",
-    "size_bytes": 10183519,
+    "sha256": "03843752515039563cdf7bbc9285a7f9e13f46aebf0df05fe3c399da3511f466",
+    "size_bytes": 10144159,
     "url": "https://raw.githubusercontent.com/Somethinglikeu-hub/MobileInv-feed/gh-pages/mobile_snapshot.db.gz"
   },
   "snapshot_version": 13

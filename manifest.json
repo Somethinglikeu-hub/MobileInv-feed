@@ -214,7 +214,7 @@
         "years": 8.5859
       }
     ],
-    "end_date": "2026-10-25",
+    "end_date": "2026-11-01",
     "execution_mode": "same_day_open",
     "gates": [
       {
@@ -248,13 +248,13 @@
         "status": "warn"
       }
     ],
-    "generated_at": "2026-10-25T08:31:04+00:00",
+    "generated_at": "2026-11-01T10:31:56+00:00",
     "intra_window_trailing": true,
     "price_jump_audit": {
       "flag_count": 0,
       "ratio_threshold": 5.0,
       "sample": [],
-      "scanned_price_rows": 1032663
+      "scanned_price_rows": 1035519
     },
     "rebalance_anchor_date": "2026-06-29",
     "rebalance_every_n_weeks": 4,
@@ -290,7 +290,7 @@
     "trail_max_pct": 0.35,
     "trail_min_pct": 0.2
   },
-  "exported_at": "2026-10-30T20:53:57+00:00",
+  "exported_at": "2026-11-01T21:17:00+00:00",
   "live_tickers": {
     "filename": "live_tickers.json",
     "latest_price_date": "2026-10-30",
@@ -315,7 +315,7 @@
         "total_return_pct": -62.4814
       }
     },
-    "generated_at": "2026-10-30T20:53:56+00:00",
+    "generated_at": "2026-11-01T21:16:59+00:00",
     "nominal": {
       "alpha_pct": -52.4159,
       "benchmark_return_pct": 426.6083,
@@ -338,8 +338,8 @@
   "snapshot": {
     "compression": "gzip",
     "filename": "mobile_snapshot.db.gz",
-    "sha256": "0c91b1012c26173c498f27c3800fa6b9189ad6d21ed76285cfcc3c25f7378a45",
-    "size_bytes": 10183518,
+    "sha256": "585ac71d4ab46a7c6fd812987c87e1dbbae67628ff7aa236ecbcf288d6b4acf1",
+    "size_bytes": 10145212,
     "url": "https://raw.githubusercontent.com/Somethinglikeu-hub/MobileInv-feed/gh-pages/mobile_snapshot.db.gz"
   },
   "snapshot_version": 13

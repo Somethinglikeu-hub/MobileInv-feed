@@ -290,32 +290,32 @@
     "trail_max_pct": 0.35,
     "trail_min_pct": 0.2
   },
-  "exported_at": "2026-11-02T23:36:50+00:00",
+  "exported_at": "2026-11-03T14:33:16+00:00",
   "live_tickers": {
     "filename": "live_tickers.json",
     "latest_price_date": "2026-11-02",
-    "ticker_count": 631,
+    "ticker_count": 632,
     "url": "https://raw.githubusercontent.com/Somethinglikeu-hub/MobileInv-feed/gh-pages/live_tickers.json"
   },
   "real_returns": {
     "deflated": {
       "cpi_real": {
-        "cagr_pct": -11.6296,
-        "max_drawdown_pct": -65.5699,
-        "total_return_pct": -65.5699
+        "cagr_pct": -11.8902,
+        "max_drawdown_pct": -66.4357,
+        "total_return_pct": -66.4357
       },
       "gram_gold": {
-        "cagr_pct": -22.0528,
-        "max_drawdown_pct": -88.3356,
-        "total_return_pct": -88.3356
+        "cagr_pct": -22.0813,
+        "max_drawdown_pct": -88.3723,
+        "total_return_pct": -88.3723
       },
       "usd": {
-        "cagr_pct": -11.451,
+        "cagr_pct": -11.4458,
         "max_drawdown_pct": -72.0966,
-        "total_return_pct": -64.965
+        "total_return_pct": -64.9474
       }
     },
-    "generated_at": "2026-11-02T23:36:49+00:00",
+    "generated_at": "2026-11-03T14:33:15+00:00",
     "nominal": {
       "alpha_pct": -48.6338,
       "benchmark_return_pct": 395.6219,
@@ -338,8 +338,8 @@
   "snapshot": {
     "compression": "gzip",
     "filename": "mobile_snapshot.db.gz",
-    "sha256": "6878d6120b70f84e16dbdec0aaf1030a784f6c80234ad1bccdde56375c5ffe3e",
-    "size_bytes": 10141959,
+    "sha256": "4476afc83ab141ddb4405244d7d1c00311b993457ed0bf28f1d2ebe450c8b0e2",
+    "size_bytes": 10147342,
     "url": "https://raw.githubusercontent.com/Somethinglikeu-hub/MobileInv-feed/gh-pages/mobile_snapshot.db.gz"
   },
   "snapshot_version": 13

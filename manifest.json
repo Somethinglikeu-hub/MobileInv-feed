@@ -8,12 +8,12 @@
         "case": "base",
         "deflated": {
           "cpi_real": {
-            "alpha_pct": 21.3872,
-            "benchmark_total_return_pct": -59.8863,
-            "cagr_pct": -5.5045,
+            "alpha_pct": 20.8494,
+            "benchmark_total_return_pct": -60.8951,
+            "cagr_pct": -5.7844,
             "max_drawdown_pct": -51.5579,
-            "sharpe": -0.1065,
-            "total_return_pct": -38.4991
+            "sharpe": -0.1176,
+            "total_return_pct": -40.0457
           },
           "gram_gold": {
             "alpha_pct": 6.9538,
@@ -61,12 +61,12 @@
         "case": "stress_0.75pct",
         "deflated": {
           "cpi_real": {
-            "alpha_pct": 14.6168,
-            "benchmark_total_return_pct": -59.8863,
-            "cagr_pct": -6.7795,
+            "alpha_pct": 14.2492,
+            "benchmark_total_return_pct": -60.8951,
+            "cagr_pct": -7.0556,
             "max_drawdown_pct": -54.3502,
-            "sharpe": -0.161,
-            "total_return_pct": -45.2695
+            "sharpe": -0.172,
+            "total_return_pct": -46.6459
           },
           "gram_gold": {
             "alpha_pct": 4.7525,
@@ -114,12 +114,12 @@
         "case": "stress_1.00pct",
         "deflated": {
           "cpi_real": {
-            "alpha_pct": 10.2364,
-            "benchmark_total_return_pct": -59.8863,
-            "cagr_pct": -7.6808,
+            "alpha_pct": 9.9791,
+            "benchmark_total_return_pct": -60.8951,
+            "cagr_pct": -7.9543,
             "max_drawdown_pct": -56.2486,
-            "sharpe": -0.1999,
-            "total_return_pct": -49.6499
+            "sharpe": -0.2108,
+            "total_return_pct": -50.916
           },
           "gram_gold": {
             "alpha_pct": 3.3283,
@@ -167,12 +167,12 @@
         "case": "stress_1.50pct",
         "deflated": {
           "cpi_real": {
-            "alpha_pct": 2.4875,
-            "benchmark_total_return_pct": -59.8863,
-            "cagr_pct": -9.4604,
+            "alpha_pct": 2.425,
+            "benchmark_total_return_pct": -60.8951,
+            "cagr_pct": -9.7285,
             "max_drawdown_pct": -59.8183,
-            "sharpe": -0.2776,
-            "total_return_pct": -57.3988
+            "sharpe": -0.2882,
+            "total_return_pct": -58.4701
           },
           "gram_gold": {
             "alpha_pct": 0.8088,
@@ -214,7 +214,7 @@
         "years": 8.5859
       }
     ],
-    "end_date": "2026-11-01",
+    "end_date": "2026-11-08",
     "execution_mode": "same_day_open",
     "gates": [
       {
@@ -248,13 +248,13 @@
         "status": "warn"
       }
     ],
-    "generated_at": "2026-11-01T10:31:56+00:00",
+    "generated_at": "2026-11-08T10:29:25+00:00",
     "intra_window_trailing": true,
     "price_jump_audit": {
       "flag_count": 0,
       "ratio_threshold": 5.0,
       "sample": [],
-      "scanned_price_rows": 1035519
+      "scanned_price_rows": 1038362
     },
     "rebalance_anchor_date": "2026-06-29",
     "rebalance_every_n_weeks": 4,
@@ -290,7 +290,7 @@
     "trail_max_pct": 0.35,
     "trail_min_pct": 0.2
   },
-  "exported_at": "2026-11-06T21:33:02+00:00",
+  "exported_at": "2026-11-08T21:16:17+00:00",
   "live_tickers": {
     "filename": "live_tickers.json",
     "latest_price_date": "2026-11-06",
@@ -315,7 +315,7 @@
         "total_return_pct": -64.9474
       }
     },
-    "generated_at": "2026-11-06T21:33:02+00:00",
+    "generated_at": "2026-11-08T21:16:16+00:00",
     "nominal": {
       "alpha_pct": -48.6338,
       "benchmark_return_pct": 395.6219,
@@ -338,8 +338,8 @@
   "snapshot": {
     "compression": "gzip",
     "filename": "mobile_snapshot.db.gz",
-    "sha256": "4115b5c3d5f19158d007239037606a4ca2b99b7f3870e97388ae4a0383a5b062",
-    "size_bytes": 10186041,
+    "sha256": "c126fbade8eccd0ea5bd6022379460154034fe69b2bf2e45df90189717bf3cfa",
+    "size_bytes": 10144028,
     "url": "https://raw.githubusercontent.com/Somethinglikeu-hub/MobileInv-feed/gh-pages/mobile_snapshot.db.gz"
   },
   "snapshot_version": 13
